@@ -1,4 +1,4 @@
-# LabGenie — Marketing Site
+# LabGenie — Landing Page
 
 The AI operating system for F&B ingredient manufacturers. A multi-page,
 dark "deep-tech & luminous" marketing site built with **Next.js 14 (App
