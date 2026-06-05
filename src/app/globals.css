@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ===== Brand tokens — swap these to match the official brand guideline =====
+     Colors are stored as space-separated RGB channels so Tailwind can apply
+     opacity modifiers (e.g. text-accent/30). Convenience hex-equivalent vars
+     below are derived for use in raw CSS (gradients, shadows). */
+  --bg-rgb: 6 7 10;
+  --bg-elev-rgb: 11 13 18;
+  --surface-rgb: 17 20 27;
+  --surface-2-rgb: 22 26 35;
+  --text-rgb: 234 236 239;
+  --text-muted-rgb: 154 163 174;
+  --text-dim-rgb: 107 114 128;
+  --accent-rgb: 60 231 192;     /* spectral mint — the "genie" glow */
+  --accent-2-rgb: 77 124 254;   /* electric blue — depth / gradients */
+  --accent-warm-rgb: 255 180 84;/* value highlight — days -> minutes */
+
+  --bg: rgb(var(--bg-rgb));
+  --bg-elev: rgb(var(--bg-elev-rgb));
+  --surface: rgb(var(--surface-rgb));
+  --surface-2: rgb(var(--surface-2-rgb));
+  --text: rgb(var(--text-rgb));
+  --text-muted: rgb(var(--text-muted-rgb));
+  --text-dim: rgb(var(--text-dim-rgb));
+  --accent: rgb(var(--accent-rgb));
+  --accent-2: rgb(var(--accent-2-rgb));
+  --accent-warm: rgb(var(--accent-warm-rgb));
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(60, 231, 192, 0.25);
+  color: #fff;
+}
+
+/* Focus visibility for keyboard nav */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+/* ===== Reusable layout / type utilities ===== */
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-container px-5 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.22em] text-accent/90;
+  }
+
+  .lead {
+    @apply text-lg leading-relaxed text-muted sm:text-xl;
+  }
+
+  .panel {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)) ,
+      var(--surface);
+    @apply rounded-2xl border border-border shadow-panel;
+  }
+
+  .panel-hover {
+    @apply transition-colors duration-300 hover:border-border-strong;
+  }
+
+  /* Spectral text gradient for key phrases */
+  .text-gradient {
+    background: linear-gradient(100deg, var(--text) 10%, var(--accent) 55%, var(--accent-2) 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Hairline grid backdrop */
+  .grid-backdrop {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+  }
+
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium transition-all duration-200 focus-visible:outline-none;
+  }
+  .btn-primary {
+    background: linear-gradient(180deg, var(--accent), #2bc7a4);
+    color: #04130f;
+    @apply font-semibold shadow-[0_8px_30px_-10px_rgba(60,231,192,0.7)];
+  }
+  .btn-primary:hover {
+    box-shadow: 0 10px 40px -8px rgba(60, 231, 192, 0.85);
+    filter: brightness(1.05);
+  }
+  .btn-ghost {
+    @apply border border-border-strong bg-white/[0.02] text-text hover:bg-white/[0.06];
+  }
+}
+
+/* Marquee track */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* Respect reduced motion globally */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+}

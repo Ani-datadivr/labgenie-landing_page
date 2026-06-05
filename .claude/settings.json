@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -NoProfile -Command 'Get-Content '\\\\''C:\\\\Users\\\\ani\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-ani-claude-skills-labgenie-site\\\\b43fbeb2-5140-4848-a38d-760d581862e1\\\\tasks\\\\bkxzwxxsb.output'\\\\'' -Tail 5')"
+    ]
+  }
+}
