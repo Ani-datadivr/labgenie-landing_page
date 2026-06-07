@@ -36,7 +36,7 @@ export default function ReconciliationPanel() {
         <div className="flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-accent/70" />
           <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">
-            COA reconciliation
+            Quality check
           </span>
         </div>
         <span className="font-mono text-[10px] text-dim">live</span>
@@ -67,8 +67,8 @@ export default function ReconciliationPanel() {
             style={{
               top: `calc(${active} * (2.25rem + 0.375rem))`,
               background:
-                "linear-gradient(90deg, rgba(60,231,192,0.0), rgba(60,231,192,0.10), rgba(60,231,192,0.0))",
-              boxShadow: "0 0 0 1px rgba(60,231,192,0.25)",
+                "linear-gradient(90deg, rgba(0,102,255,0.0), rgba(0,102,255,0.14), rgba(0,102,255,0.0))",
+              boxShadow: "0 0 0 1px rgba(0,102,255,0.28)",
             }}
             transition={{ duration: 0.4, ease: "easeOut" }}
           />
@@ -99,7 +99,7 @@ export default function ReconciliationPanel() {
       {/* footer summary */}
       <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
         <span className="font-mono text-[10px] text-dim">
-          {rows.length} parameters · 3 specs reconciled
+          {rows.length} parameters · 3 specs checked
         </span>
         <AnimatePresence>
           {active >= rows.length && (

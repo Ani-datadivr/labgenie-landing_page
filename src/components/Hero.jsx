@@ -1,89 +1,117 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { hero } from "@/lib/content";
-import ReconciliationPanel from "./ReconciliationPanel";
+import { motion, useReducedMotion } from "framer-motion";
+import AetherBackground from "./AetherBackground";
+import AppDashboard from "./AppDashboard";
 
 const ease = [0.22, 1, 0.36, 1];
 
+// Headline animated word by word: each word rises and sharpens from a soft blur.
+function AnimatedHeading() {
+  const reduce = useReducedMotion();
+  const words = [
+    { t: "The" },
+    { t: "only" },
+    { t: "end-to-end" },
+    { t: "platform" },
+    { t: "for" },
+    { t: "F&B", accent: true },
+    { t: "manufacturers.", accent: true },
+  ];
+
+  if (reduce) {
+    return (
+      <h1 className="display mx-auto max-w-[16ch]">
+        The only end-to-end platform for{" "}
+        <span className="text-accent">F&amp;B manufacturers.</span>
+      </h1>
+    );
+  }
+
+  return (
+    <motion.h1
+      className="display mx-auto max-w-[16ch]"
+      initial="hidden"
+      animate="show"
+      transition={{ staggerChildren: 0.08, delayChildren: 0.1 }}
+    >
+      {words.map((w, i) => (
+        <motion.span
+          key={i}
+          className="inline-block"
+          variants={{
+            hidden: { opacity: 0, y: "0.45em", filter: "blur(10px)" },
+            show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease } },
+          }}
+        >
+          <span className={w.accent ? "text-accent" : undefined}>{w.t}</span>
+          {i < words.length - 1 ? " " : ""}
+        </motion.span>
+      ))}
+    </motion.h1>
+  );
+}
+
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden pt-36 sm:pt-40 lg:pt-44">
-      <div className="container-x grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
-        {/* Left: copy */}
-        <div className="relative z-10">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease }}
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-white/[0.03] px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted"
-          >
-            <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent" />
-            {hero.eyebrow}
-          </motion.p>
+    <section className="relative overflow-hidden">
+      {/* Aether particle field */}
+      <div aria-hidden="true" className="absolute inset-0">
+        <AetherBackground />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_25%,transparent_35%,rgb(var(--bg-rgb))_88%)]" />
+      </div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.08, ease }}
-            className="mt-6 text-[2.5rem] leading-[1.04] sm:text-5xl lg:text-[3.6rem]"
-          >
-            The operating system for{" "}
-            <span className="text-gradient">ingredient manufacturers.</span>
-          </motion.h1>
+      <div className="container-x grid-frame relative pb-16 pt-32 text-center sm:pt-36 lg:pb-24 lg:pt-44">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease }}
+          className="kicker kicker-accent justify-center"
+        >
+          <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent" />
+          Quality · Sales · Procurement · Production
+        </motion.span>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.16, ease }}
-            className="mt-6 max-w-xl lead"
-          >
-            {hero.sub}
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.24, ease }}
-            className="mt-8 flex flex-wrap items-center gap-3"
-          >
-            <Link href={hero.primaryCta.href} className="btn btn-primary">
-              {hero.primaryCta.label}
-              <Arrow />
-            </Link>
-            <Link href={hero.secondaryCta.href} className="btn btn-ghost">
-              {hero.secondaryCta.label}
-            </Link>
-          </motion.div>
-
-          {/* Metric */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.34, ease }}
-            className="mt-10 flex items-center gap-5 border-t border-border pt-6"
-          >
-            <div className="flex items-baseline gap-2 font-display">
-              <span className="text-3xl font-semibold text-text">3–5 days</span>
-              <Arrow className="text-dim" />
-              <span className="text-3xl font-semibold text-accent">minutes</span>
-            </div>
-            <p className="max-w-[15rem] text-sm leading-snug text-muted">
-              {hero.metric.caption}
-            </p>
-          </motion.div>
+        <div className="mt-7">
+          <AnimatedHeading />
         </div>
 
-        {/* Right: signature animation */}
-        <motion.div
-          initial={{ opacity: 0, y: 24, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.2, ease }}
-          className="relative z-10"
+        <motion.p
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.55, ease }}
+          className="lead mx-auto mt-6 text-center"
         >
-          <div className="absolute -inset-6 -z-10 rounded-[28px] bg-gradient-to-br from-accent/10 via-transparent to-accent-2/10 blur-2xl" />
-          <ReconciliationPanel />
+          LabGenie connects your quality, sales, procurement, and production workflows through one AI
+          layer, on top of the ERP you already run.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.66, ease }}
+          className="mt-9 flex flex-wrap items-center justify-center gap-3"
+        >
+          <Link href="/contact" className="btn btn-primary">
+            Get early access
+            <Arrow />
+          </Link>
+          <Link href="#operations" className="btn btn-ghost font-mono text-[13px]">
+            <span className="text-dim">{"["}</span>
+            See it in action
+            <span className="text-dim">{"]"}</span>
+          </Link>
+        </motion.div>
+
+        {/* daily-brief dashboard */}
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.8, ease }}
+          className="mx-auto mt-16 max-w-6xl text-left"
+        >
+          <AppDashboard />
         </motion.div>
       </div>
     </section>

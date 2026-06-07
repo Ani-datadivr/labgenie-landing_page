@@ -1,12 +1,12 @@
 import PageHeader from "@/components/PageHeader";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
-import { site, designPartner } from "@/lib/content";
+import { site } from "@/lib/content";
 
 export const metadata = {
   title: "Request a Demo",
   description:
-    "See your COAs reconciled in minutes. We're onboarding a small group of design partners who'll shape LabGenie as we build it.",
+    "See your quality documents checked in minutes. We're onboarding a small group of design partners who'll shape LabGenie as we build it.",
 };
 
 export default function ContactPage() {
@@ -14,7 +14,7 @@ export default function ContactPage() {
     <>
       <PageHeader
         eyebrow="Request a demo"
-        title="See your COAs reconciled in minutes."
+        title="See your quality documents checked in minutes."
         sub="We're onboarding a small group of design partners who'll shape the platform as we build it. Tell us a little about your operation and we'll be in touch within one business day."
       />
 
@@ -23,20 +23,46 @@ export default function ContactPage() {
           <Reveal>
             <div className="space-y-8">
               <div>
-                <p className="eyebrow">Why now</p>
+                <p className="eyebrow">Design partner program</p>
                 <p className="mt-3 text-lg leading-relaxed text-muted">
-                  Design partners get early access, direct influence over the roadmap,
-                  and hands-on support from the founding team — the same way{" "}
-                  <span className="text-text">{designPartner.name}</span>,{" "}
-                  {designPartner.descriptor}, is shaping LabGenie today.
+                  We&apos;re onboarding a small group of design partners who shape
+                  LabGenie as we build it. Partners get direct influence over the
+                  roadmap and hands-on support from the founding team.
                 </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-bg-elev/40 px-4 py-3">
+                <span
+                  className="flex items-center gap-1.5"
+                  role="img"
+                  aria-label="3 of 5 design-partner seats are filled"
+                >
+                  {[true, true, true, false, false].map((filled, i) => (
+                    <span
+                      key={i}
+                      aria-hidden="true"
+                      className={
+                        filled
+                          ? "h-2.5 w-2.5 rounded-full bg-accent"
+                          : "h-2.5 w-2.5 rounded-full border border-border bg-transparent"
+                      }
+                    />
+                  ))}
+                </span>
+                <span className="text-sm text-text">
+                  3 of 5 design-partner seats are filled.{" "}
+                  <span className="text-muted">2 remaining.</span>
+                </span>
               </div>
 
               <ul className="space-y-4">
                 {[
-                  "Early access to live modules: RFP matching, auto-fill, and inquiry routing.",
-                  "A direct line to the team building it.",
-                  "Pricing and terms designed for early partners.",
+                  "Direct line to the founding and product team",
+                  "We prioritize the features your workflows need",
+                  "Hands-on help structuring your data and reading the insights",
+                  "We build the integration to your ERP",
+                  "Early access to the platform before public launch",
+                  "Recognition as a launch reference customer (with your approval)",
                 ].map((t) => (
                   <li key={t} className="flex items-start gap-3 text-sm text-muted">
                     <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-accent/15">

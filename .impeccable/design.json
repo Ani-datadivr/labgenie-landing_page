@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-06T00:00:00Z",
+  "title": "Design System: LabGenie",
+  "extensions": {
+    "colorMeta": {
+      "brand-blue": { "role": "primary", "displayName": "Datadivr Blue", "canonical": "#0066FF", "tonalRamp": ["#001433", "#002766", "#003b99", "#004ecc", "#0066FF", "#3d8bff", "#7db0ff", "#bdd7ff"] },
+      "azure": { "role": "secondary", "displayName": "Azure", "canonical": "#5AA0FF", "tonalRamp": ["#12233b", "#1d3a66", "#2a5491", "#3a72c2", "#5AA0FF", "#85bcff", "#aed5ff", "#d7eaff"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#0E141C", "tonalRamp": ["#0E141C", "#131A24", "#18212E", "#1F2A3A", "#2b3a4d", "#3b4d63", "#6F7D8F", "#A6B2C2"] },
+      "text": { "role": "neutral", "displayName": "Near-White", "canonical": "#EDF1F6", "tonalRamp": ["#0E141C", "#2b3a4d", "#6F7D8F", "#A6B2C2", "#c7d0db", "#EDF1F6", "#f5f7fa", "#ffffff"] },
+      "flag-amber": { "role": "tertiary", "displayName": "Flag Amber", "canonical": "#FFB454", "tonalRamp": ["#33240d", "#664717", "#996b22", "#cc8f2d", "#FFB454", "#ffc579", "#ffd79f", "#ffe8c4"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero and page headlines (Space Grotesk)." },
+      "body": { "displayName": "Body", "purpose": "Prose, capped ~65–75ch (Inter)." },
+      "label": { "displayName": "Label / Mono", "purpose": "Eyebrows, specs, numbers — short strings only (JetBrains Mono)." },
+      "brand": { "displayName": "Brand Wordmark", "purpose": "Official logo lockup only — labgenie.ai (Manrope)." }
+    },
+    "shadows": [
+      { "name": "brand-glow", "value": "0 0 0 1px rgba(0,102,255,0.30), 0 0 40px -8px rgba(0,102,255,0.40)", "purpose": "Brand signal on focused/active interactive surfaces." },
+      { "name": "panel-float", "value": "0 1px 0 0 rgba(255,255,255,0.04) inset, 0 24px 60px -30px rgba(0,0,0,0.8)", "purpose": "Lift under signature panels." },
+      { "name": "cta-lift", "value": "0 8px 30px -10px rgba(0,102,255,0.75)", "purpose": "Primary button only." }
+    ],
+    "motion": [
+      { "name": "ease-out-brand", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default entrance/transition easing." },
+      { "name": "grid-fade", "value": "background-color 2000ms ease-out", "purpose": "Background-grid cell fade-back after hover; instant fill on hover." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "container", "value": "1200px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Logo",
+      "kind": "custom",
+      "refersTo": "logo",
+      "description": "Official LabGenie mark (open dial arc + five brand-blue spectrum dots) with the Manrope wordmark.",
+      "html": "<span class=\"ds-logo\"><svg viewBox=\"0 0 100 100\" width=\"28\" height=\"28\" aria-label=\"LabGenie\"><path d=\"M 66 22.29 A 32 32 0 1 0 66 77.71\" stroke=\"currentColor\" stroke-width=\"10\" stroke-linecap=\"round\" fill=\"none\"/><g fill=\"#0066FF\"><circle cx=\"66\" cy=\"22.29\" r=\"4.5\"/><circle cx=\"77.71\" cy=\"34\" r=\"4.5\"/><circle cx=\"82\" cy=\"50\" r=\"4.5\"/><circle cx=\"77.71\" cy=\"66\" r=\"4.5\"/><circle cx=\"66\" cy=\"77.71\" r=\"4.5\"/></g></svg><span class=\"ds-logo-word\">labgenie<span class=\"ds-logo-tld\">.ai</span></span></span>",
+      "css": ".ds-logo { display: inline-flex; align-items: center; gap: 10px; color: #EDF1F6; } .ds-logo-word { font-family: Manrope, system-ui, sans-serif; font-size: 19px; line-height: 1; letter-spacing: -0.02em; } .ds-logo-tld { color: #0066FF; }"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary CTA — white text on the brand-blue gradient.",
+      "html": "<button class=\"ds-btn-primary\">Request a demo</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(180deg, #1A78FF, #0066FF); color: #fff; font-weight: 600; font-size: 14px; padding: 12px 20px; border: none; border-radius: 14px; box-shadow: 0 8px 30px -10px rgba(0,102,255,0.75); cursor: pointer; transition: filter 0.2s, box-shadow 0.2s; } .ds-btn-primary:hover { filter: brightness(1.08); box-shadow: 0 10px 40px -8px rgba(0,102,255,0.9); } .ds-btn-primary:focus-visible { outline: 2px solid #0066FF; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary CTA — transparent on a strong hairline border.",
+      "html": "<button class=\"ds-btn-ghost\">Explore the platform</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.02); color: #EDF1F6; font-weight: 500; font-size: 14px; padding: 12px 20px; border: 1px solid rgba(255,255,255,0.14); border-radius: 14px; cursor: pointer; transition: background 0.2s; } .ds-btn-ghost:hover { background: rgba(255,255,255,0.06); } .ds-btn-ghost:focus-visible { outline: 2px solid #0066FF; outline-offset: 2px; }"
+    },
+    {
+      "name": "Eyebrow Label",
+      "kind": "chip",
+      "refersTo": "label",
+      "description": "Mono uppercase tag with a pulsing brand-blue dot.",
+      "html": "<span class=\"ds-eyebrow\"><i class=\"ds-eyebrow-dot\"></i>AI operating system</span>",
+      "css": ".ds-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.22em; color: #A6B2C2; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); border-radius: 999px; padding: 6px 12px; } .ds-eyebrow-dot { width: 6px; height: 6px; border-radius: 999px; background: #0066FF; }"
+    },
+    {
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Floating surface used for signature panels (COA reconciliation, modules).",
+      "html": "<div class=\"ds-panel\">COA reconciliation</div>",
+      "css": ".ds-panel { background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0)), #18212E; color: #EDF1F6; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px; box-shadow: 0 1px 0 0 rgba(255,255,255,0.04) inset, 0 24px 60px -30px rgba(0,0,0,0.8); transition: border-color 0.3s; } .ds-panel:hover { border-color: rgba(255,255,255,0.14); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lit Instrument Panel",
+    "overview": "LabGenie is a dark, engineered surface that reads like precision instrumentation glowing in a low-lit control room. The palette is deliberately disciplined: one Datadivr brand blue, one supporting azure, an ink ground, and white. Warmth is rationed to a single amber that means exactly one thing — out of spec. The system is Datadivr-aligned: LabGenie is Datadivr's flagship product and carries its exact mark and brand blue (#0066FF). It rejects generic dark SaaS, legacy enterprise ERP, consumer food branding, and overhyped AI-startup voice.",
+    "keyCharacteristics": [
+      "Ink-grounded dark surface (#0E141C) with cool blue-tinted neutrals stepped above it.",
+      "One electric-blue brand signal; everything else is structural neutral.",
+      "Hairline borders and grid structure over heavy cards or shadows.",
+      "Motion that demonstrates the product working, gated by reduced-motion."
+    ],
+    "rules": [
+      { "name": "The One Signal Rule", "body": "Datadivr Blue is the only saturated hue on any screen. Azure is a tint of the same blue, not a second color.", "section": "colors" },
+      { "name": "The Amber-Means-Failure Rule", "body": "Amber appears only where a value is out of spec. Never as decoration. If nothing has failed, there is no amber on the screen.", "section": "colors" },
+      { "name": "The Mono-For-Data Rule", "body": "JetBrains Mono is for labels, specs, and numbers — never for body sentences.", "section": "typography" },
+      { "name": "The Hairline-First Rule", "body": "Define structure with 1px borders at rgba(255,255,255,0.08) before reaching for a shadow.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Datadivr Blue (#0066FF) as the single saturated signal — CTAs, logo dots, resolved states, focus rings, grid hover.",
+      "Do ground every surface on Ink (#0E141C) and step neutrals upward with cool blue-tinted tiers.",
+      "Do keep body text at #EDF1F6 / #A6B2C2 for AAA contrast on ink; reserve #6F7D8F for tertiary metadata only.",
+      "Do render the logo from the exact official artwork (white arc + five #0066FF dots, labgenie.ai in Manrope).",
+      "Do gate every animation behind prefers-reduced-motion and keep content visible by default.",
+      "Do carry status meaning with an icon plus color, never color alone."
+    ],
+    "donts": [
+      "Don't build generic dark SaaS: no purple-gradient hero, no hero-metric template, no identical icon-card grids.",
+      "Don't drift toward legacy enterprise ERP: no cluttered gray industrial chrome.",
+      "Don't use consumer food-brand warmth: amber is failure-only, not a warm accent.",
+      "Don't adopt overhyped AI-startup voice or visuals: show the mechanism, never claim magic.",
+      "Don't introduce a second saturated color. Azure is a tint of the brand blue.",
+      "Don't use border-left/right > 1px as a colored stripe, gradient-clipped text as a new choice, or decorative glassmorphism.",
+      "Don't set body copy in JetBrains Mono — mono is for labels, specs, and numbers only."
+    ]
+  }
+}

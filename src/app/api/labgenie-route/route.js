@@ -8,7 +8,7 @@ import { STATIONS, ALL_MODULES, MODULE_DESCRIPTIONS, stationIdForModule } from "
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MODEL = "gemini-2.5-flash-lite";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
 
 // Simple in-memory LRU-ish cache so repeated identical questions don't spend
 // quota. Per server instance; fine for low traffic / single-instance deploys.

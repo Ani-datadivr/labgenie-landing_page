@@ -56,37 +56,37 @@ const STATION_ICONS = {
 const STATIONS = STATION_DATA.map((s) => ({ ...s, Icon: STATION_ICONS[s.id] }));
 
 const CHIPS = [
-  { label: "Match RFP for local ingredients", stationId: "qa", module: "RFP Match" },
+  { label: "Match a quote to our catalog", stationId: "qa", module: "Quote matching" },
   { label: "Optimize sugar formulation", stationId: "form", module: "Reverse engineering formulations" },
   { label: "View demand forecasts", stationId: "proc", module: "Demand Planning" },
 ];
 
 const MODULE_RESULTS = {
-  "RFP Match":        { title: "RFP matched",        lines: ["18 specs · 17 in range", "1 flag: moisture 4.2%"] },
-  "RFP Filler":       { title: "RFP auto-filled",    lines: ["32 fields · 30 from spec library", "2 left for your review"] },
-  "New onboarding":   { title: "Onboarding drafted", lines: ["3-step flow · welcome + 2 docs", "KYC checklist attached"] },
+  "Quote matching":   { title: "Quote matched",      lines: ["18 specs · 17 in range", "1 flag: moisture 4.2%"] },
+  "Quote auto-fill":  { title: "Quote auto-filled",  lines: ["32 fields · 30 from catalog", "2 left for your review"] },
+  "New onboarding":   { title: "Onboarding drafted", lines: ["3-step flow · welcome + 2 docs", "Compliance checklist attached"] },
   "Upsell":           { title: "Upsell found",       lines: ["3 accounts · +₹4.2L potential", "Best fit: oleoresin blend"] },
-  "Re-order":         { title: "Re-order ready",     lines: ["5 SKUs below par level", "Draft PO · 2-wk lead time"] },
+  "Re-order":         { title: "Re-order ready",     lines: ["5 products below min stock", "Draft purchase order · 2-wk lead time"] },
   "Inquiry Routing":  { title: "Inquiry routed",     lines: ["→ Key Accounts · SLA 2h", "Priority: high"] },
   "Demand Planning":  { title: "Demand forecast",    chart: { bars: [48, 61, 55, 72, 80], delta: "+12%", caption: "Next 5 wks · units (k)" } },
   "Reverse auction":  { title: "Auction set up",     lines: ["6 suppliers invited", "Floor ₹82/kg · ends 48h"] },
   "Live prices":      { title: "Live prices",        chart: { bars: [132, 128, 134, 139, 141], delta: "+1.2%", caption: "Turmeric · ₹/kg · 7d" } },
   "Price Forecasts":  { title: "Price forecast",     chart: { bars: [141, 144, 143, 149, 152], delta: "+6%", caption: "Next 5 wks · ₹/kg" } },
-  "Shelf life tracker": { title: "Shelf-life checked", lines: ["FIFO ok · 2 lots near expiry", "Oldest lot: 11 days left"] },
-  "FIFO check":       { title: "FIFO verified",      lines: ["Pick order correct", "0 violations across 42 lots"] },
+  "Shelf life tracker": { title: "Shelf-life checked", lines: ["Rotation ok · 2 lots near expiry", "Oldest lot: 11 days left"] },
+  "Stock rotation check": { title: "Rotation verified", lines: ["Pick order correct", "0 issues across 42 lots"] },
   "Vendor Match":     { title: "Vendor matched",     lines: ["4 vendors · 2 approved", "Top: AgroSpice · 96% spec fit"] },
-  "OEE optimizer":    { title: "OEE optimized",      chart: { bars: [68, 71, 70, 75, 78], delta: "+7%", caption: "OEE % · last 5 shifts" } },
+  "Equipment effectiveness": { title: "Effectiveness improved", chart: { bars: [68, 71, 70, 75, 78], delta: "+7%", caption: "Equipment effectiveness % · last 5 shifts" } },
   "Shift Ops":        { title: "Shift plan ready",   lines: ["3 shifts · 18 operators", "1 gap: Line B night"] },
   "Consensus planning": { title: "Consensus aligned", lines: ["Sales vs ops gap −12%", "Plan locked for 5 wks"] },
   "Scheduling":       { title: "Schedule built",     lines: ["24 jobs sequenced", "−1 changeover · +6% throughput"] },
   "Traceability":     { title: "Traceability mapped", lines: ["Lot #A-2231 · 4 hops traced", "Source → batch → ship"] },
   "Fleet tracking":   { title: "Fleet located",      lines: ["7 vehicles live", "2 en route · 1 idle"] },
   "Route optimization": { title: "Route optimized",  lines: ["3 stops · −22% miles", "ETA saved: 48 min"] },
-  "Warehouse management": { title: "Warehouse mapped", lines: ["Bins 78% full", "3 slots reassigned (FIFO)"] },
+  "Warehouse management": { title: "Warehouse mapped", lines: ["Bins 78% full", "3 slots reassigned (stock rotation)"] },
   "Reverse engineering formulations": { title: "Formulation drafted", lines: ["Sugar −18% · sweetness held 1.0×", "Est. cost −9%/kg"] },
   "Wild ideas":       { title: "Ideas generated",   lines: ["6 concepts · 2 high-novelty", "Lead: tamarind cold-brew"] },
   "Trends":           { title: "Trend index",        chart: { bars: [40, 47, 52, 58, 71], delta: "+18%", caption: "Category interest · 6 mo" } },
-  "Competitive":      { title: "Competitive scan",   lines: ["9 SKUs benchmarked", "2 white-space gaps found"] },
+  "Competitive":      { title: "Competitive scan",   lines: ["9 products benchmarked", "2 white-space gaps found"] },
 };
 
 const byId = (id) => STATIONS.find((s) => s.id === id);
@@ -146,13 +146,13 @@ const GROUPBAR_H = 46;
 const ERP_PULSES = 2;
 
 const ERP_LOGOS = [
-  { id: "sap", name: "SAP" },
-  { id: "ramco", name: "Ramco" },
-  { id: "batchmaster", name: "BatchMaster" },
-  { id: "netsuite", name: "NetSuite" },
-  { id: "infor", name: "Infor" },
-  { id: "sage", name: "Sage" },
-  { id: "deacom", name: "Deacom" },
+  { id: "sap", name: "SAP", logo: "/erp/sap.webp" },
+  { id: "sage", name: "Sage", logo: "/erp/sage.webp" },
+  { id: "netsuite", name: "NetSuite", mono: "NS" },
+  { id: "ramco", name: "Ramco", mono: "Ra" },
+  { id: "batchmaster", name: "BatchMaster", mono: "BM" },
+  { id: "infor", name: "Infor", mono: "In" },
+  { id: "deacom", name: "ECI Deacom", mono: "Dc" },
 ];
 
 function bezierPath(x1, y1, x2, y2) {
@@ -261,16 +261,22 @@ function buildLayout(w, h, ids, expandedMap, modCountFn) {
    ErpSource — the customer's ERP, pinned far-left; data streams into LabGenie.
    ========================================================================== */
 
-// One ERP logo tile. Renders /erp/<id>.svg if present, else a wordmark
-// placeholder — so dropping official logo SVGs into public/erp/ "just works".
-function ErpLogo({ id, name }) {
-  const [hasImg, setHasImg] = useState(true);
+// One ERP tile. Shows a real logo (normalized to a soft white mark) when we
+// have one, otherwise a clean monogram so every system reads as a neat symbol.
+function ErpLogo({ logo, name, mono }) {
+  const [hasImg, setHasImg] = useState(Boolean(logo));
   return (
     <span className={styles.erpLogo} title={name}>
       {hasImg ? (
-        <img src={`/erp/${id}.svg`} alt={name} className={styles.erpLogoImg} onError={() => setHasImg(false)} />
+        <img
+          src={logo}
+          alt={name}
+          className={styles.erpLogoImg}
+          style={{ filter: "brightness(0) invert(1)", opacity: 0.85 }}
+          onError={() => setHasImg(false)}
+        />
       ) : (
-        name
+        <span className={styles.erpMono}>{mono ?? name.slice(0, 2)}</span>
       )}
     </span>
   );
@@ -287,7 +293,7 @@ function ErpSource({ position, erpRef }) {
       </div>
       <div className={styles.erpLogos}>
         {ERP_LOGOS.map((l) => (
-          <ErpLogo key={l.id} id={l.id} name={l.name} />
+          <ErpLogo key={l.id} logo={l.logo} name={l.name} mono={l.mono} />
         ))}
       </div>
       <div className={styles.erpFoot}>
@@ -558,7 +564,7 @@ function LabGenieNode({ position, routeTarget, routeResult, thinking, notice, ch
 
       <div className={styles.brainFoot}>
         <span className={styles.footDot} aria-hidden="true" />
-        Synced with your ERP · Checking new RFPs.
+        Synced with your ERP · Checking new customer requests.
       </div>
     </div>
   );
@@ -611,20 +617,37 @@ export default function OperationsCanvas() {
     return buildLayout(dims.w, dims.h, visibleIds, expanded, modCount);
   }, [dims, visibleIds, expanded]);
 
-  /* ---- measure canvas once ---- */
+  /* ---- measure canvas once (RAF first, ResizeObserver as backstop) ---- */
   useEffect(() => {
     const el = canvasRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => {
-      if (initedRef.current) return;
+
+    const tryMeasure = () => {
+      if (initedRef.current) return true;
       const w = el.clientWidth;
       const h = el.clientHeight;
-      if (!w || !h) return;
+      if (!w || !h) return false;
       setDims({ w, h });
       initedRef.current = true;
-    });
+      return true;
+    };
+
+    // Measure synchronously across a few frames so the layout appears even when
+    // a ResizeObserver doesn't fire on first paint (headless / fast hydration).
+    let raf = 0;
+    let tries = 0;
+    const pump = () => {
+      if (tryMeasure() || tries++ > 20) return;
+      raf = requestAnimationFrame(pump);
+    };
+    pump();
+
+    const ro = new ResizeObserver(() => tryMeasure());
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+    };
   }, []);
 
   /* ---- live wires + ERP ingestion particles + comm packet (rAF) ---- */
@@ -861,6 +884,19 @@ export default function OperationsCanvas() {
 
       {/* ---- full-bleed interactive canvas (desktop) ---- */}
       <div className={styles.canvasFull}>
+        <div className={styles.windowChrome}>
+          <span className={styles.winDots} aria-hidden="true">
+            <span /><span /><span />
+          </span>
+          <span className={styles.winTitle}>
+            <span className={styles.winMark} aria-hidden="true" />
+            LabGenie · Operations
+          </span>
+          <span className={styles.winStatus}>
+            <span className={styles.winPulse} aria-hidden="true" />
+            Live
+          </span>
+        </div>
         <div ref={canvasRef} className={styles.canvas}>
           <div className={styles.groupBar} role="tablist" aria-label="Filter stations by team">
             {GROUP_LIST.map((g) => {
@@ -895,15 +931,15 @@ export default function OperationsCanvas() {
                 </feMerge>
               </filter>
               <filter id="lg-wire-glow" x="-40%" y="-40%" width="180%" height="180%">
-                <feGaussianBlur stdDeviation="1.4" result="b" />
+                <feGaussianBlur stdDeviation="0.65" result="b" />
                 <feMerge>
                   <feMergeNode in="b" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
               <linearGradient id="erp-conduit" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stopColor="#4d7cfe" stopOpacity="0.1" />
-                <stop offset="1" stopColor="#7aa7ff" stopOpacity="0.55" />
+                <stop offset="0" stopColor="#0066ff" stopOpacity="0.1" />
+                <stop offset="1" stopColor="#7db8ff" stopOpacity="0.55" />
               </linearGradient>
             </defs>
 
@@ -936,7 +972,7 @@ export default function OperationsCanvas() {
                   className={styles.line}
                   fill="none"
                   stroke={st.accent}
-                  strokeWidth="1.75"
+                  strokeWidth="1.25"
                   filter="url(#lg-wire-glow)"
                 />
               );

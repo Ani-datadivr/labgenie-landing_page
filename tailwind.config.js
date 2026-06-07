@@ -33,7 +33,7 @@ module.exports = {
         "2xl": "20px",
       },
       boxShadow: {
-        glow: "0 0 0 1px rgba(60,231,192,0.25), 0 0 40px -8px rgba(60,231,192,0.35)",
+        glow: "0 0 0 1px rgba(0,102,255,0.30), 0 0 40px -8px rgba(0,102,255,0.40)",
         panel: "0 1px 0 0 rgba(255,255,255,0.04) inset, 0 24px 60px -30px rgba(0,0,0,0.8)",
       },
       keyframes: {

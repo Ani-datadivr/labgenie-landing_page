@@ -1,12 +1,13 @@
 import PageHeader from "@/components/PageHeader";
 import FinalCTA from "@/components/FinalCTA";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
+import IntegrationLogos from "@/components/IntegrationLogos";
 import { integrations } from "@/lib/content";
 
 export const metadata = {
   title: "Integrations",
   description:
-    "LabGenie connects to the ERP, LIMS, QMS, and document systems you already run — reading COAs and spec sheets where they live and writing back trusted compliance documentation.",
+    "LabGenie connects to the ERP, lab, and quality systems you already run, reading quality certificates and spec sheets where they live and writing back trusted compliance paperwork.",
 };
 
 export default function IntegrationsPage() {
@@ -18,22 +19,14 @@ export default function IntegrationsPage() {
         sub={integrations.sub}
       />
 
-      {/* ERP logos */}
+      {/* ERP / CRM / tool logos */}
       <section className="container-x py-12">
         <Reveal>
-          <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
-            Works with the ERPs you already run
+          <p className="mb-8 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
+            Works with the systems you already run
           </p>
         </Reveal>
-        <Stagger className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3 lg:grid-cols-6">
-          {integrations.erps.map((erp) => (
-            <StaggerItem key={erp}>
-              <div className="flex h-24 items-center justify-center bg-surface px-4 text-center transition-colors hover:bg-surface-2">
-                <span className="font-display text-sm font-medium text-muted">{erp}</span>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
+        <IntegrationLogos />
       </section>
 
       {/* Categories */}
@@ -60,8 +53,8 @@ export default function IntegrationsPage() {
             </h2>
             <div className="mt-8 grid gap-6 sm:grid-cols-3">
               {[
-                { step: "01", title: "Read", body: "Ingest COAs, spec sheets, and inbound inquiries from PDF, Excel, email, and your ERP." },
-                { step: "02", title: "Reconcile", body: "Match and reconcile across raw-material, internal, and customer standards." },
+                { step: "01", title: "Read", body: "Ingest quality certificates, spec sheets, and incoming requests from PDF, Excel, email, and your ERP." },
+                { step: "02", title: "Check", body: "Match and compare across raw-material, internal, and customer requirements." },
                 { step: "03", title: "Write back", body: "Populate compliance documentation and route work back into your systems." },
               ].map((s) => (
                 <div key={s.step} className="border-t border-border pt-5">
@@ -75,7 +68,11 @@ export default function IntegrationsPage() {
         </Reveal>
       </section>
 
-      <FinalCTA />
+      <FinalCTA
+        eyebrow="Get started"
+        title="See how cleanly LabGenie fits your stack."
+        sub="Tell us which ERP and tools you run. We'll show you what connects on day one, with no rip-and-replace."
+      />
     </>
   );
 }

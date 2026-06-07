@@ -29,8 +29,7 @@ export default function Footer() {
         <div className="max-w-xs">
           <Logo />
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            The AI operating system for F&amp;B ingredient manufacturers — quality,
-            sales, and procurement in one interface.
+            The F&amp;B manufacturing platform that actually speaks your language.
           </p>
           <p className="mt-4 font-mono text-xs text-dim">{site.domain}</p>
         </div>
@@ -59,7 +58,7 @@ export default function Footer() {
       <div className="border-t border-border">
         <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-xs text-dim sm:flex-row">
           <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
-          <p className="font-mono">Built for flavors · spices · oleoresins · specialty ingredients</p>
+          <p className="font-mono">Dairy · Beverage · Ingredients · Flavors · Specialty F&amp;B</p>
         </div>
       </div>
     </footer>

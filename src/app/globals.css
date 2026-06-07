@@ -7,16 +7,16 @@
      Colors are stored as space-separated RGB channels so Tailwind can apply
      opacity modifiers (e.g. text-accent/30). Convenience hex-equivalent vars
      below are derived for use in raw CSS (gradients, shadows). */
-  --bg-rgb: 6 7 10;
-  --bg-elev-rgb: 11 13 18;
-  --surface-rgb: 17 20 27;
-  --surface-2-rgb: 22 26 35;
-  --text-rgb: 234 236 239;
-  --text-muted-rgb: 154 163 174;
-  --text-dim-rgb: 107 114 128;
-  --accent-rgb: 60 231 192;     /* spectral mint — the "genie" glow */
-  --accent-2-rgb: 77 124 254;   /* electric blue — depth / gradients */
-  --accent-warm-rgb: 255 180 84;/* value highlight — days -> minutes */
+  --bg-rgb: 14 20 28;           /* #0E141C — official Datadivr ink */
+  --bg-elev-rgb: 19 26 36;
+  --surface-rgb: 24 33 46;
+  --surface-2-rgb: 31 42 58;
+  --text-rgb: 237 241 246;
+  --text-muted-rgb: 166 178 194;
+  --text-dim-rgb: 111 125 143;
+  --accent-rgb: 0 102 255;      /* #0066FF — Datadivr brand blue (primary) */
+  --accent-2-rgb: 90 160 255;   /* #5AA0FF — lighter azure: depth / gradients */
+  --accent-warm-rgb: 255 180 84;/* amber — semantic flag / out-of-spec only */
 
   --bg: rgb(var(--bg-rgb));
   --bg-elev: rgb(var(--bg-elev-rgb));
@@ -58,7 +58,7 @@ body {
 }
 
 ::selection {
-  background: rgba(60, 231, 192, 0.25);
+  background: rgba(0, 102, 255, 0.32);
   color: #fff;
 }
 
@@ -71,9 +71,10 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  text-wrap: balance;
 }
 
 /* ===== Reusable layout / type utilities ===== */
@@ -87,8 +88,65 @@ h1, h2, h3, h4 {
   }
 
   .lead {
-    @apply text-lg leading-relaxed text-muted sm:text-xl;
+    @apply max-w-[60ch] text-lg leading-relaxed text-muted sm:text-xl;
   }
+
+  /* ===== Terminal + rig structural language ===== */
+
+  /* Oversized confident display headline (hero / section openers). */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+    text-wrap: balance;
+    font-size: clamp(2.6rem, 6.2vw, 5.25rem);
+  }
+
+  /* Mono label / kicker — the technical voice. */
+  .kicker {
+    @apply inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted;
+  }
+  .kicker-accent {
+    @apply text-accent;
+  }
+
+  /* Mono data label for tables, specs, metrics. */
+  .mono-label {
+    @apply font-mono text-[11px] uppercase tracking-[0.16em] text-dim;
+  }
+
+  /* Big section index numeral (01 / 02 / 03). */
+  .section-index {
+    @apply font-mono text-[13px] font-medium tracking-[0.1em] text-accent;
+  }
+
+  /* Hairline rules / structural frame. */
+  .rule {
+    @apply h-px w-full bg-border;
+  }
+  .framed {
+    @apply border-y border-border;
+  }
+  .framed-x {
+    @apply border-x border-border;
+  }
+
+  /* A full-bleed hairline grid frame: ticks at the section edges. */
+  .grid-frame {
+    position: relative;
+  }
+  .grid-frame::before,
+  .grid-frame::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .grid-frame::before { left: 0; }
+  .grid-frame::after { right: 0; }
 
   .panel {
     background:
@@ -124,17 +182,58 @@ h1, h2, h3, h4 {
     @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium transition-all duration-200 focus-visible:outline-none;
   }
   .btn-primary {
-    background: linear-gradient(180deg, var(--accent), #2bc7a4);
-    color: #04130f;
-    @apply font-semibold shadow-[0_8px_30px_-10px_rgba(60,231,192,0.7)];
+    background: linear-gradient(180deg, #1a78ff, var(--accent));
+    color: #fff;
+    @apply font-semibold shadow-[0_8px_30px_-10px_rgba(0,102,255,0.75)];
   }
   .btn-primary:hover {
-    box-shadow: 0 10px 40px -8px rgba(60, 231, 192, 0.85);
-    filter: brightness(1.05);
+    box-shadow: 0 10px 40px -8px rgba(0, 102, 255, 0.9);
+    filter: brightness(1.08);
   }
   .btn-ghost {
     @apply border border-border-strong bg-white/[0.02] text-text hover:bg-white/[0.06];
   }
+
+  /* Gold "design partner" button: ghost at rest; on hover a glowing gold fill
+     flushes up from the bottom and the label flips to dark. Premium accent. */
+  .btn-partner {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid rgba(202, 162, 74, 0.45);
+    background: transparent;
+    color: #ecc66a;
+    transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-partner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, #f7d278, #c9962f);
+    transform: translateY(101%);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-partner:hover,
+  .btn-partner:focus-visible {
+    color: #2a1d04;
+    border-color: transparent;
+    box-shadow: 0 0 0 1px rgba(231, 188, 92, 0.55), 0 12px 44px -10px rgba(231, 188, 92, 0.6);
+  }
+  .btn-partner:hover::before,
+  .btn-partner:focus-visible::before {
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-partner::before { transition: none; }
+  }
+
+  /* Station status accents: live (green) / building (amber) / roadmap (grey). */
+  .status-live { color: #4ade80; }
+  .status-build { color: #fb923c; }
+  .status-roadmap { color: rgb(var(--text-muted-rgb)); }
+  .glow-live { box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.28), 0 0 28px -8px rgba(74, 222, 128, 0.5); }
+  .glow-build { box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.28), 0 0 28px -8px rgba(251, 146, 60, 0.45); }
 }
 
 /* Marquee track */

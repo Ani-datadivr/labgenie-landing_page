@@ -80,7 +80,11 @@ export default function ManufacturersPage() {
 
       <DesignPartner />
       <ClientTicker label="Building with ingredient manufacturers" />
-      <FinalCTA />
+      <FinalCTA
+        eyebrow="Get started"
+        title="Built for your plant, not a generic demo."
+        sub="Show us the workflow that eats your team's week. We'll show you what it looks like solved on your own data."
+      />
     </>
   );
 }

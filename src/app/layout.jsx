@@ -1,5 +1,5 @@
 import "./globals.css";
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono, Manrope } from "next/font/google";
 import { site } from "@/lib/content";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -21,6 +21,13 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
   variable: "--font-mono",
 });
+// Brand wordmark face (official logo lockup uses Manrope).
+const manrope = Manrope({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-brand",
+});
 
 export const metadata = {
   metadataBase: new URL("https://labgenie.ai"),
@@ -29,20 +36,20 @@ export const metadata = {
     template: "%s · LabGenie",
   },
   description:
-    "LabGenie reads messy COAs and spec sheets, reconciles them across raw-material, internal, and customer standards, and orchestrates quality, sales, and procurement from a single chat interface. Built for flavors, spices, oleoresins, and specialty ingredient manufacturers.",
+    "LabGenie reads your quality documents and spec sheets, checks them against your raw-material, internal, and customer requirements, and runs quality, sales, and procurement from a single chat interface. Built for flavors, spices, oleoresins, and specialty ingredient manufacturers.",
   keywords: [
     "F&B manufacturing software",
-    "COA reconciliation",
+    "quality certificate software",
     "ingredient manufacturers",
     "oleoresins",
     "spices",
     "AI quality compliance",
-    "RFP matching",
+    "quote matching",
   ],
   openGraph: {
     title: "LabGenie — The AI operating system for F&B manufacturers",
     description:
-      "Reconcile COAs against customer specs in minutes, not days. Quality, sales, and procurement in one AI-native interface.",
+      "Check your quality documents against every customer's specs in minutes, not days. Quality, sales, and procurement in one AI-native interface.",
     url: "https://labgenie.ai",
     siteName: site.name,
     type: "website",
@@ -51,7 +58,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#06070a",
+  themeColor: "#0E141C",
   width: "device-width",
   initialScale: 1,
 };
@@ -60,7 +67,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable} ${manrope.variable}`}
     >
       <body>
         <MotionProvider>

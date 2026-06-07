@@ -11,7 +11,7 @@ export default function DesignPartner() {
             className="pointer-events-none absolute inset-0 opacity-60"
             style={{
               background:
-                "radial-gradient(ellipse 50% 100% at 100% 50%, rgba(77,124,254,0.10), transparent 70%)",
+                "radial-gradient(ellipse 50% 100% at 100% 50%, rgba(90,160,255,0.10), transparent 70%)",
             }}
           />
           <div className="relative max-w-3xl">

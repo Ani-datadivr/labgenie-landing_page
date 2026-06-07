@@ -19,6 +19,9 @@ next-env.d.ts
 .env.development.local
 .env.production.local
 
+# Claude Code per-machine local settings (machine-specific paths/permissions)
+.claude/settings.local.json
+
 # misc
 .DS_Store
 *.pem

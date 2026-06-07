@@ -7,16 +7,18 @@ import { site } from "@/lib/content";
 const fields = [
   { name: "name", label: "Full name", type: "text", required: true, placeholder: "Jane Doe", half: true },
   { name: "email", label: "Work email", type: "email", required: true, placeholder: "jane@company.com", half: true },
-  { name: "company", label: "Company", type: "text", required: true, placeholder: "Your manufacturing company", half: true },
-  { name: "role", label: "Your role", type: "text", required: false, placeholder: "Head of Quality", half: true },
+  { name: "company", label: "Company", type: "text", required: false, placeholder: "Your manufacturing company", half: true },
+  { name: "phone", label: "Phone", type: "tel", required: false, placeholder: "+1 555 000 0000", half: true },
+  { name: "country", label: "Country", type: "text", required: false, placeholder: "United States", half: true },
+  { name: "teamSize", label: "Team size / interest", type: "text", required: false, placeholder: "20 scientists", half: true },
 ];
 
-// NOTE: This form is wired to a placeholder handler. To go live, connect the
-// onSubmit to your backend/CRM (e.g. an API route, Formspree, or HubSpot).
+// Submits the lead to /api/contact, which forwards a rich message to Slack
+// server-side. The Slack webhook URL is never exposed to the browser.
 export default function ContactForm() {
   const [status, setStatus] = useState("idle"); // idle | submitting | success | error
   const [values, setValues] = useState({
-    name: "", email: "", company: "", role: "", interest: "demo", message: "",
+    name: "", email: "", company: "", phone: "", country: "", teamSize: "", message: "",
   });
 
   const update = (k) => (e) => setValues((v) => ({ ...v, [k]: e.target.value }));
@@ -25,10 +27,17 @@ export default function ContactForm() {
     e.preventDefault();
     setStatus("submitting");
     try {
-      // TODO: replace with real endpoint, e.g.:
-      // await fetch("/api/contact", { method: "POST", body: JSON.stringify(values) });
-      await new Promise((r) => setTimeout(r, 900));
-      setStatus("success");
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data?.ok) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+      }
     } catch {
       setStatus("error");
     }
@@ -79,31 +88,15 @@ export default function ContactForm() {
         ))}
 
         <div className="sm:col-span-2">
-          <label htmlFor="interest" className="mb-2 block text-sm font-medium text-text">
-            I&apos;m interested in
-          </label>
-          <select
-            id="interest"
-            name="interest"
-            value={values.interest}
-            onChange={update("interest")}
-            className="w-full cursor-pointer rounded-xl border border-border bg-bg-elev/60 px-4 py-3 text-sm text-text transition-colors focus:border-accent/50 focus:outline-none"
-          >
-            <option value="demo">Requesting a demo</option>
-            <option value="partner">Becoming a design partner</option>
-            <option value="security">Security documentation</option>
-            <option value="other">Something else</option>
-          </select>
-        </div>
-
-        <div className="sm:col-span-2">
           <label htmlFor="message" className="mb-2 block text-sm font-medium text-text">
             What are you hoping to solve?
+            <span className="ml-1 text-accent">*</span>
           </label>
           <textarea
             id="message"
             name="message"
             rows={4}
+            required
             value={values.message}
             onChange={update("message")}
             placeholder="Tell us about your spec-reconciliation or sales-ops workflow today."

@@ -20,10 +20,10 @@ export const nav = [
 ];
 
 export const hero = {
-  eyebrow: "AI operating system · Flavors · Spices · Oleoresins",
+  eyebrow: "The AI operating system for F&B manufacturers",
   title: "The operating system for ingredient manufacturers.",
   highlight: "ingredient manufacturers",
-  sub: "LabGenie reads messy COAs and spec sheets, reconciles them across raw-material, internal, and customer standards, and orchestrates quality, sales, and procurement from a single chat interface.",
+  sub: "LabGenie reads your quality documents and spec sheets, checks them against your raw-material, internal, and customer requirements, and runs quality, sales, and procurement from a single chat interface.",
   primaryCta: { label: "Request a demo", href: "/contact" },
   secondaryCta: { label: "Explore the platform", href: "/platform" },
   metric: {
@@ -31,7 +31,7 @@ export const hero = {
     fromUnit: "days per batch",
     to: "minutes",
     caption:
-      "Reconciling COAs against customer specs once took 3–5 days per batch. LabGenie cuts it to minutes.",
+      "Checking a batch's quality certificate against customer specs once took 3 to 5 days. LabGenie cuts it to minutes.",
   },
 };
 
@@ -52,8 +52,8 @@ export const reconciliation = {
 };
 
 export const stats = [
-  { value: "3–5 days", label: "of COA reconciliation, before", mono: "→ minutes with LabGenie" },
-  { value: "3 specs", label: "reconciled at once", mono: "raw · internal · customer" },
+  { value: "3–5 days", label: "of quality-document checks, before", mono: "→ minutes with LabGenie" },
+  { value: "3 specs", label: "checked at once", mono: "raw · internal · customer" },
   { value: "1000s", label: "of inbound inquiries triaged", mono: "auto-routed" },
   { value: "1 interface", label: "across every station", mono: "chat-native" },
 ];
@@ -65,18 +65,18 @@ export const modules = {
     tone: "accent",
     items: [
       {
-        name: "RFP matching",
+        name: "Quote matching",
         blurb:
           "Instantly answer the question that gates every deal: does this incoming customer spec match something we already make?",
         detail:
           "LabGenie parses an inbound spec sheet and matches it against your existing product catalog and historical batches — surfacing the closest fit and exactly where it diverges.",
       },
       {
-        name: "RFP auto-fill",
+        name: "Quote auto-fill",
         blurb:
-          "Auto-populate compliance comparisons against a customer's spec sheet — no more manual cell-by-cell reconciliation.",
+          "Auto-fill the compliance comparison against a customer's spec sheet. No more manual, cell-by-cell checking.",
         detail:
-          "It reconciles the incoming raw-material spec, your internal standard, and the customer's outgoing spec simultaneously, then fills the compliance documentation for review.",
+          "It checks the incoming raw-material spec, your internal standard, and the customer's spec all at once, then fills in the compliance paperwork for review.",
       },
       {
         name: "Inquiry routing",
@@ -102,7 +102,7 @@ export const modules = {
     tone: "muted",
     items: [
       { name: "Procurement intelligence", blurb: "Live prices, demand planning, reverse auctions." },
-      { name: "Inventory management", blurb: "Shelf life, FIFO, vendor matching." },
+      { name: "Inventory management", blurb: "Shelf life, stock rotation, vendor matching." },
       { name: "Logistics", blurb: "Movement and fulfillment, orchestrated." },
       { name: "Market intelligence", blurb: "Trends and competitive tracking." },
     ],
@@ -114,7 +114,7 @@ export const orchestration = {
   eyebrow: "One interface, every station",
   title: "Ask a question that used to take three people and a week.",
   prompt:
-    "Can we fulfil this RFQ with current cardamom stock at acceptable margin?",
+    "Can we fill this customer order with current cardamom stock at an acceptable margin?",
   steps: [
     { station: "Quality", action: "Confirms incoming lots meet the customer spec." },
     { station: "Inventory", action: "Checks on-hand cardamom and shelf life by lot." },
@@ -126,11 +126,11 @@ export const orchestration = {
 
 export const buyer = {
   eyebrow: "For F&B manufacturers",
-  title: "Built for the people who supply the world's brands — not the brands themselves.",
-  sub: "Mid-to-large B2B ingredient manufacturers: flavors, spices, oleoresins, and specialty ingredients.",
+  title: "Built for the suppliers of the world's biggest brands.",
+  sub: "B2B food and beverage manufacturers of every kind: dairy, beverage, ingredients, flavors, spices, and specialty products.",
   economic: [
     { role: "COO", pain: "Operations run on email threads and tribal knowledge across disconnected stations." },
-    { role: "Head of Quality", pain: "Every batch burns days reconciling COAs against three different spec formats." },
+    { role: "Head of Quality", pain: "Every batch burns days checking quality certificates against three different customer spec formats." },
     { role: "Head of Procurement", pain: "Buying decisions lag the market because data lives in silos." },
   ],
   daily: [
@@ -155,18 +155,18 @@ export const designPartner = {
   name: "Synthite",
   descriptor: "the world's largest oleoresin producer",
   quote:
-    "LabGenie collapses the spec-reconciliation work that defines our quality and sales operations from days into minutes.",
+    "LabGenie collapses the quality-document checking that defines our quality and sales operations from days into minutes.",
 };
 
 export const integrations = {
   eyebrow: "Integrations",
   title: "Sits on top of the systems you already run.",
-  sub: "LabGenie connects to your ERP and document systems — it reads your spec sheets and COAs where they already live, and writes back compliance documentation you can trust.",
+  sub: "LabGenie connects to your ERP and document systems. It reads your spec sheets and quality certificates where they already live, and writes back compliance paperwork you can trust.",
   erps: ["SAP", "Oracle NetSuite", "Microsoft Dynamics 365", "Infor", "Sage", "Odoo"],
   categories: [
     { name: "ERP & MRP", note: "SAP, Oracle, Dynamics, Infor, Sage, Odoo." },
-    { name: "LIMS & QMS", note: "Read lab results and quality records." },
-    { name: "Documents", note: "COAs and spec sheets in any format — PDF, Excel, email." },
+    { name: "Lab & quality systems", note: "Read lab results and quality records." },
+    { name: "Documents", note: "Quality certificates and spec sheets in any format: PDF, Excel, email." },
     { name: "Email & CRM", note: "Ingest and route inbound inquiries." },
   ],
 };
@@ -188,7 +188,7 @@ export const about = {
   title: "We're building the operating system for an industry that runs on spreadsheets.",
   body: [
     "F&B ingredient manufacturing is one of the largest, most quality-critical industries on earth — and it still runs on email, PDFs, and tribal knowledge spread across disconnected stations.",
-    "LabGenie started with the most painful, most universal problem: reconciling certificates of analysis against customer specifications. From that wedge, we're building outward — quality, sales, procurement, inventory, logistics — into a single AI-native operating system.",
+    "LabGenie started with the most painful, most universal problem: checking quality certificates against each customer's specifications. From that wedge, we're building outward across quality, sales, procurement, inventory, and logistics into a single AI-native operating system.",
     "We're early, and we're building it hand-in-hand with the manufacturers who'll run on it.",
   ],
   values: [
@@ -201,7 +201,7 @@ export const about = {
 export const careers = {
   eyebrow: "Careers",
   title: "Help us build the system an industry will run on.",
-  sub: "We're a small, senior team building deep-tech AI for a category that has never had real software. If reconciling the messy real world into something elegant excites you, talk to us.",
+  sub: "We're a small, senior team building deep-tech AI for a category that has never had real software. If turning the messy real world into something elegant excites you, talk to us.",
   perks: [
     "Work directly with design partners like Synthite",
     "Senior, low-ego team — ownership from day one",
@@ -217,8 +217,8 @@ export const careers = {
 };
 
 export const finalCta = {
-  title: "See your COAs reconciled in minutes.",
-  sub: "We're onboarding a small group of design partners who'll shape the platform as we build it. If you manufacture flavors, spices, oleoresins, or specialty ingredients, let's talk.",
+  title: "See your quality documents checked in minutes.",
+  sub: "We're onboarding a small group of design partners who'll shape the platform as we build it. If you manufacture food or beverage products at scale, let's talk.",
   primary: { label: "Request a demo", href: "/contact" },
   secondary: { label: "Become a design partner", href: "/contact?type=partner" },
 };

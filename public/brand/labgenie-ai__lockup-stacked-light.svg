@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 275.07 222.00" width="275" height="222">
+  <defs><style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400&display=swap');</style></defs>
+  <rect width="100%" height="100%" fill="#FFFFFF"/>
+  <g transform="translate(89.53 32.00) scale(0.9600)"><path d="M 66 22.29 A 32 32 0 1 0 66 77.71" stroke="#0E141C" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <g fill="#0066FF">
+    <circle cx="66" cy="22.29" r="4.5"/>
+    <circle cx="77.71" cy="34" r="4.5"/>
+    <circle cx="82" cy="50" r="4.5"/>
+    <circle cx="77.71" cy="66" r="4.5"/>
+    <circle cx="66" cy="77.71" r="4.5"/>
+  </g></g>
+  <text x="32.00" y="182.08" font-family="Manrope, sans-serif" font-weight="400" font-size="44" letter-spacing="-0.88" fill="#0E141C">labgenie</text>
+  <text x="198.96" y="182.08" font-family="Manrope, sans-serif" font-weight="400" font-size="44" letter-spacing="-0.88" fill="#0066FF">.ai</text>
+</svg>
