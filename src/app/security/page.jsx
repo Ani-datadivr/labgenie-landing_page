@@ -36,9 +36,9 @@ const securityEmail = "security@labgenie.ai";
 // claimed as certified. Tags are paired with text + a dot pattern so meaning
 // never rests on color alone.
 const STATUS = {
-  certified: { label: "Certified", style: "text-accent" },
-  progress: { label: "In progress", style: "text-muted" },
-  aligned: { label: "Aligned", style: "text-muted" },
+  certified: { label: "Certified", style: "border-accent/40 bg-accent/10 text-accent" },
+  progress: { label: "In progress", style: "border-[#fb923c]/45 bg-[#fb923c]/10 text-[#fb923c]" },
+  aligned: { label: "Aligned", style: "border-[#4ade80]/45 bg-[#4ade80]/10 text-[#4ade80]" },
 };
 
 const compliance = [
@@ -157,7 +157,7 @@ function StatusTag({ status }) {
   const s = STATUS[status];
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] ${s.style}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] ${s.style}`}
     >
       <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-current" />
       {s.label}
@@ -188,9 +188,9 @@ export default function SecurityPage() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-4 lead">
-                We map our controls to the standards your auditors expect. Each
-                item below carries an honest status, not a claim we have not
-                earned.
+                We are pre-certification. We map our controls to the standards your
+                auditors expect, and each badge below shows its real status, in
+                progress or aligned, never a certification we have not earned.
               </p>
             </Reveal>
           </div>
@@ -253,16 +253,19 @@ export default function SecurityPage() {
           </Reveal>
         </div>
 
-        <Stagger className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Stagger className="mt-10 divide-y divide-border border-t border-border">
           {pillars.map(({ name, Icon, body }) => (
-            <StaggerItem key={name} className="h-full">
-              <div className="panel panel-hover flex h-full flex-col p-6">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-accent/30 bg-accent/[0.08]">
-                  <Icon aria-hidden="true" className="h-5 w-5 text-accent" strokeWidth={1.6} />
-                </span>
-                <h3 className="mt-4 text-lg font-medium text-text">{name}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
-              </div>
+            <StaggerItem
+              key={name}
+              variant="left"
+              as="div"
+              className="grid items-start gap-3 py-7 sm:grid-cols-[320px_1fr] sm:gap-12"
+            >
+              <h3 className="flex items-center gap-3 text-lg font-medium text-text">
+                <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-accent" strokeWidth={1.6} />
+                {name}
+              </h3>
+              <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{body}</p>
             </StaggerItem>
           ))}
         </Stagger>
@@ -357,7 +360,7 @@ export default function SecurityPage() {
                   <Link href="/contact" className="btn btn-primary">
                     Request security documentation
                   </Link>
-                  <Link href="/contact" className="btn btn-ghost">
+                  <Link href="/contact" className="btn btn-orange">
                     Talk to our security team
                   </Link>
                 </div>

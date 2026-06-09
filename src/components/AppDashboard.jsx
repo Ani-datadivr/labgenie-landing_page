@@ -31,7 +31,7 @@ const ACTIVITY = [
 ];
 
 const TAG_BG = {
-  accent: "bg-accent/15 text-accent",
+  accent: "bg-accent/15 text-accent-text",
   violet: "bg-[#818cf8]/15 text-[#a5b4fc]",
   cyan: "bg-[#22d3ee]/15 text-[#67e8f9]",
 };
@@ -105,9 +105,11 @@ export default function AppDashboard() {
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="mono-label">Operations · Today</p>
-              <h3 className="mt-1.5 font-display text-xl font-semibold text-text sm:text-2xl">
+              {/* Decorative mockup label, not a document heading (keeps the
+                  page outline h1 -> h2 with no skipped level). */}
+              <div className="mt-1.5 font-display text-xl font-semibold text-text sm:text-2xl">
                 Good morning.
-              </h3>
+              </div>
             </div>
             <div className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface/60 px-3 py-2">
               <Search className="h-3.5 w-3.5 text-dim" aria-hidden="true" />

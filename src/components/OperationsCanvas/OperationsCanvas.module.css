@@ -15,7 +15,7 @@
   --border-2: #2c374a;
   --ink: #edf1f6;
   --ink-2: #a6b2c2;
-  --ink-3: #6f7d8f;
+  --ink-3: #97a4b6; /* lifted to ~7.3:1 on ink for AAA (was #6f7d8f, ~4.4:1) */
   --accent: #0066ff;
   --accent-hover: #3378ff;
   --accent-ring: rgba(0, 102, 255, 0.3);
@@ -25,10 +25,11 @@
   --radius-lg: 14px;
 
   position: relative;
-  border-top: 1px solid var(--border);
   padding-top: 120px;
   padding-bottom: 120px;
-  background: var(--bg);
+  /* Transparent so the page's single continuous backdrop flows through; the
+     canvas window then reads as a floating panel, not a box on a black field. */
+  background: transparent;
   color: var(--ink);
 }
 
@@ -138,11 +139,9 @@
   overflow: hidden;
   background-color: transparent;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
     radial-gradient(circle at 20% 16%, rgba(0, 102, 255, 0.16), transparent 42%),
     radial-gradient(circle at 84% 82%, rgba(51, 120, 255, 0.1), transparent 46%);
-  background-size: 30px 30px, 30px 30px, 100% 100%, 100% 100%;
+  background-size: 100% 100%, 100% 100%;
   touch-action: none;
 }
 
@@ -939,45 +938,34 @@
   color: var(--ink);
 }
 .erpLogos {
+  position: relative;
+  z-index: 1;
   width: 100%;
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  align-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
 }
 .erpLogo {
   display: grid;
   place-items: center;
-  height: 30px;
-  padding: 0 5px;
-  border-radius: 7px;
+  height: 34px;
+  width: 100%;
+  padding: 0 10px;
+  border-radius: 8px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.035);
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--ink-2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  background: rgba(255, 255, 255, 0.045);
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 .erpLogo:hover {
-  color: var(--ink);
-  border-color: var(--border-2);
-  background: rgba(255, 255, 255, 0.06);
-}
-/* a lone trailing logo spans both columns, centred */
-.erpLogo:last-child:nth-child(odd) {
-  grid-column: 1 / -1;
-  justify-self: center;
-  width: 62%;
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.6);
 }
 .erpLogoImg {
-  max-width: 100%;
-  max-height: 18px;
+  max-width: 88%;
+  max-height: 19px;
   object-fit: contain;
 }
 .erpMono {
@@ -1016,6 +1004,35 @@
   stroke: #bcd4ff;
   stroke-width: 2;
   opacity: 0.9;
+}
+.erpFlowB {
+  stroke: #7db8ff;
+  stroke-width: 2;
+  opacity: 0.8;
+}
+
+/* brand-color wash behind the ERP tiles, revealed on logo hover */
+.erpFill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease, background-color 0.28s ease;
+}
+.erpHead,
+.erpFoot {
+  position: relative;
+  z-index: 1;
+}
+.erpEtc {
+  align-self: center;
+  margin-top: 1px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
 }
 
 /* ===========================================================================
@@ -1296,9 +1313,9 @@
 .mCard {
   padding: 14px;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  background: color-mix(in srgb, var(--surface-2) 85%, transparent);
+  border: 1px solid rgba(0, 102, 255, 0.22);
+  background: linear-gradient(180deg, rgba(0, 102, 255, 0.05), transparent 60%),
+    color-mix(in srgb, var(--surface-2) 85%, transparent);
 }
 .mCardHead {
   display: flex;

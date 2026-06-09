@@ -146,13 +146,10 @@ const GROUPBAR_H = 46;
 const ERP_PULSES = 2;
 
 const ERP_LOGOS = [
-  { id: "sap", name: "SAP", logo: "/erp/sap.webp" },
-  { id: "sage", name: "Sage", logo: "/erp/sage.webp" },
-  { id: "netsuite", name: "NetSuite", mono: "NS" },
-  { id: "ramco", name: "Ramco", mono: "Ra" },
-  { id: "batchmaster", name: "BatchMaster", mono: "BM" },
-  { id: "infor", name: "Infor", mono: "In" },
-  { id: "deacom", name: "ECI Deacom", mono: "Dc" },
+  { id: "sap", name: "SAP", logo: "/erp/sap.webp", color: "#0aa0e1" },
+  { id: "sage", name: "Sage", logo: "/erp/sage.webp", color: "#00d639" },
+  { id: "infor", name: "Infor", logo: "/erp/infor.svg", color: "#d4002a" },
+  { id: "ramco", name: "Ramco", logo: "/erp/ramco.svg", color: "#f47216" },
 ];
 
 function bezierPath(x1, y1, x2, y2) {
@@ -261,30 +258,42 @@ function buildLayout(w, h, ids, expandedMap, modCountFn) {
    ErpSource — the customer's ERP, pinned far-left; data streams into LabGenie.
    ========================================================================== */
 
-// One ERP tile. Shows a real logo (normalized to a soft white mark) when we
-// have one, otherwise a clean monogram so every system reads as a neat symbol.
-function ErpLogo({ logo, name, mono }) {
+// One ERP tile: the full logo (white mark at rest). On hover it reports its
+// brand color up so the whole panel fills with that company's theme.
+function ErpLogo({ logo, name, color, onHover }) {
   const [hasImg, setHasImg] = useState(Boolean(logo));
   return (
-    <span className={styles.erpLogo} title={name}>
+    <span
+      className={styles.erpLogo}
+      title={name}
+      onMouseEnter={() => onHover(color)}
+      onMouseLeave={() => onHover(null)}
+    >
       {hasImg ? (
         <img
           src={logo}
           alt={name}
           className={styles.erpLogoImg}
-          style={{ filter: "brightness(0) invert(1)", opacity: 0.85 }}
+          style={{ filter: "brightness(0) invert(1)" }}
           onError={() => setHasImg(false)}
         />
       ) : (
-        <span className={styles.erpMono}>{mono ?? name.slice(0, 2)}</span>
+        <span className={styles.erpMono}>{name}</span>
       )}
     </span>
   );
 }
 
 function ErpSource({ position, erpRef }) {
+  const [fill, setFill] = useState(null);
   return (
     <div ref={erpRef} className={styles.erp} style={{ left: position.x, top: position.y, height: position.h }}>
+      {/* brand-color wash: fills the panel with the hovered system's theme */}
+      <span
+        className={styles.erpFill}
+        aria-hidden="true"
+        style={{ backgroundColor: fill ?? "transparent", opacity: fill ? 0.92 : 0 }}
+      />
       <div className={styles.erpHead}>
         <span className={styles.erpIcon} aria-hidden="true">
           <Database size={15} strokeWidth={1.9} />
@@ -293,8 +302,9 @@ function ErpSource({ position, erpRef }) {
       </div>
       <div className={styles.erpLogos}>
         {ERP_LOGOS.map((l) => (
-          <ErpLogo key={l.id} logo={l.logo} name={l.name} mono={l.mono} />
+          <ErpLogo key={l.id} logo={l.logo} name={l.name} color={l.color} onHover={setFill} />
         ))}
+        <span className={styles.erpEtc}>and more</span>
       </div>
       <div className={styles.erpFoot}>
         <span className={styles.erpSync} aria-hidden="true" />
@@ -587,6 +597,9 @@ export default function OperationsCanvas() {
   const erpPathRef = useRef(null);
   const erpFlowRefs = useRef([]);
   const erpDashRef = useRef(0);
+  const erpPathRefB = useRef(null);
+  const erpFlowRefsB = useRef([]);
+  const erpDashRefB = useRef(0);
   const initedRef = useRef(false);
   const toastTimer = useRef(null);
   const resultTimer = useRef(null);
@@ -653,6 +666,7 @@ export default function OperationsCanvas() {
   /* ---- live wires + ERP ingestion particles + comm packet (rAF) ---- */
   useEffect(() => {
     let raf = 0;
+    let running = false;
 
     const completeRoute = (id, module, reply) => {
       flowRef.current = { id: null, module: null, reply: null, phase: null, t: 0, hold: 0 };
@@ -693,28 +707,47 @@ export default function OperationsCanvas() {
             }
           });
 
-          // ERP → LabGenie ingestion conduit — a premium glowing beam with soft
-          // light pulses sweeping toward LabGenie (no discrete dots)
+          // ERP ⇄ LabGenie: a two-lane conduit. The upper lane streams pulses
+          // ERP → LabGenie (ingestion); the lower lane streams LabGenie → ERP
+          // (write-back), so the link reads as live two-way communication.
           const erpEl = erpRef.current;
-          if (erpEl && erpPathRef.current) {
+          if (erpEl && erpPathRef.current && erpPathRefB.current) {
             const er = erpEl.getBoundingClientRect();
             const ex = er.right - cb.left - 6;
             const ey = er.top - cb.top + er.height / 2;
             const blx = bb.left - cb.left;
             const bly = by;
-            const ed = bezierPath(ex, ey, blx, bly);
-            erpPathRef.current.setAttribute("d", ed);
-            const elen = erpPathRef.current.getTotalLength();
-            const cycle = elen + 90;
-            const seg = 38;
-            erpDashRef.current = (erpDashRef.current + 2.3) % cycle;
+            const OFF = 5;
+            const seg = 30;
+
+            // lane A — ERP → LabGenie (upper)
+            const edA = bezierPath(ex, ey - OFF, blx, bly - OFF);
+            erpPathRef.current.setAttribute("d", edA);
+            const elenA = erpPathRef.current.getTotalLength();
+            const cycleA = elenA + 90;
+            erpDashRef.current = (erpDashRef.current + 2.3) % cycleA;
             for (let i = 0; i < ERP_PULSES; i++) {
               const fp = erpFlowRefs.current[i];
               if (!fp) continue;
-              fp.setAttribute("d", ed);
-              fp.setAttribute("stroke-dasharray", `${seg} ${cycle}`);
-              const phase = (erpDashRef.current + (i * cycle) / ERP_PULSES) % cycle;
-              fp.setAttribute("stroke-dashoffset", String(elen + seg - phase));
+              fp.setAttribute("d", edA);
+              fp.setAttribute("stroke-dasharray", `${seg} ${cycleA}`);
+              const phase = (erpDashRef.current + (i * cycleA) / ERP_PULSES) % cycleA;
+              fp.setAttribute("stroke-dashoffset", String(elenA + seg - phase));
+            }
+
+            // lane B — LabGenie → ERP (lower), pulses travel the opposite way
+            const edB = bezierPath(ex, ey + OFF, blx, bly + OFF);
+            erpPathRefB.current.setAttribute("d", edB);
+            const elenB = erpPathRefB.current.getTotalLength();
+            const cycleB = elenB + 90;
+            erpDashRefB.current = (erpDashRefB.current + 2.0) % cycleB;
+            for (let i = 0; i < ERP_PULSES; i++) {
+              const fp = erpFlowRefsB.current[i];
+              if (!fp) continue;
+              fp.setAttribute("d", edB);
+              fp.setAttribute("stroke-dasharray", `${seg} ${cycleB}`);
+              const phase = (erpDashRefB.current + (i * cycleB) / ERP_PULSES) % cycleB;
+              fp.setAttribute("stroke-dashoffset", String(phase));
             }
           }
 
@@ -765,11 +798,38 @@ export default function OperationsCanvas() {
           }
         }
       }
-      raf = requestAnimationFrame(tick);
+      if (running) raf = requestAnimationFrame(tick);
     };
 
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    // Run the wire/particle loop only while the canvas is on-screen and the tab
+    // is visible; otherwise it idles instead of burning frames in the background.
+    let onScreen = true;
+    const start = () => {
+      if (running || !onScreen) return;
+      running = true;
+      raf = requestAnimationFrame(tick);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+    const onVis = () => (document.hidden ? stop() : start());
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        onScreen ? start() : stop();
+      },
+      { rootMargin: "200px" }
+    );
+    if (canvasRef.current) io.observe(canvasRef.current);
+    document.addEventListener("visibilitychange", onVis);
+    start();
+
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", onVis);
+      cancelAnimationFrame(raf);
+    };
   }, []);
 
   useEffect(() => {
@@ -846,7 +906,11 @@ export default function OperationsCanvas() {
       if (data?.stationId && data?.module) {
         startRoute(data.stationId, data.module, { mode: "twoway", reply: data.reply });
       } else if (data?.error === "unconfigured") {
-        showToast("AI routing needs a GEMINI_API_KEY in .env.local.");
+        // No AI key configured: fall back to instant local routing, and if the
+        // phrase doesn't match a known workflow, guide the user (no dev jargon).
+        const local = localMatch(text);
+        if (local) startRoute(local.stationId, local.module, { mode: "twoway" });
+        else showNotice('Try a workflow like "match this RFP" or "route inbound inquiries".');
       } else if (data?.reply) {
         showNotice(data.reply);
       } else {
@@ -941,18 +1005,36 @@ export default function OperationsCanvas() {
                 <stop offset="0" stopColor="#0066ff" stopOpacity="0.1" />
                 <stop offset="1" stopColor="#7db8ff" stopOpacity="0.55" />
               </linearGradient>
+              <linearGradient id="erp-conduit-rev" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stopColor="#5aa0ff" stopOpacity="0.55" />
+                <stop offset="1" stopColor="#0066ff" stopOpacity="0.1" />
+              </linearGradient>
             </defs>
 
-            {/* ERP → LabGenie ingestion conduit + flowing light pulses */}
+            {/* ERP ⇄ LabGenie: two-lane conduit, opposite-flowing pulses */}
             <path ref={erpPathRef} className={styles.erpWire} fill="none" stroke="url(#erp-conduit)" filter="url(#lg-wire-glow)" />
+            <path ref={erpPathRefB} className={styles.erpWire} fill="none" stroke="url(#erp-conduit-rev)" filter="url(#lg-wire-glow)" />
             {Array.from({ length: ERP_PULSES }).map((_, i) => (
               <path
-                key={i}
+                key={`a${i}`}
                 ref={(el) => {
                   if (el) erpFlowRefs.current[i] = el;
                   else delete erpFlowRefs.current[i];
                 }}
                 className={styles.erpFlow}
+                fill="none"
+                strokeLinecap="round"
+                filter="url(#lg-flow-glow)"
+              />
+            ))}
+            {Array.from({ length: ERP_PULSES }).map((_, i) => (
+              <path
+                key={`b${i}`}
+                ref={(el) => {
+                  if (el) erpFlowRefsB.current[i] = el;
+                  else delete erpFlowRefsB.current[i];
+                }}
+                className={styles.erpFlowB}
                 fill="none"
                 strokeLinecap="round"
                 filter="url(#lg-flow-glow)"

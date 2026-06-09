@@ -6,9 +6,11 @@
 // wordmarks in the same cell, so the grid never ships a broken image.
 import { Stagger, StaggerItem } from "@/components/Reveal";
 
+// ERP systems render as a uniform set of wordmarks so the grid reads as one
+// deliberate index rather than a mix of a couple of logos and a lot of text.
 const ERP_LOGOS = [
-  { name: "SAP", src: "/logos/erp/sap.webp" },
-  { name: "Sage", src: "/logos/erp/sage.webp" },
+  { name: "SAP" },
+  { name: "Sage" },
   { name: "Oracle NetSuite" },
   { name: "Microsoft Dynamics 365" },
   { name: "Infor" },
@@ -18,6 +20,7 @@ const ERP_LOGOS = [
   { name: "BatchMaster" },
   { name: "ECI Deacom" },
   { name: "QuickBooks" },
+  { name: "Aptean" },
 ];
 
 const CRM_LOGOS = [

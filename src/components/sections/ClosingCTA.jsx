@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ChatMockup from "../ChatMockup";
+import Reveal from "../Reveal";
 
 // Bookend the page with the product in action: the buyer's own context typed
 // into LabGenie, answered with a concrete first step.
@@ -10,9 +11,9 @@ const CLOSE_STATIONS = [
 
 export default function ClosingCTA() {
   return (
-    <section className="container-x grid-frame border-y border-border py-20 lg:py-28">
+    <section className="container-x py-20 lg:py-28">
       <div className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
-        <div>
+        <Reveal variant="left">
           <h2 className="text-4xl sm:text-5xl lg:text-[3.2rem]">
             Your operation is complex. Getting started isn&apos;t.
           </h2>
@@ -21,9 +22,9 @@ export default function ClosingCTA() {
             your existing ERP in weeks.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link href="/contact" className="btn btn-primary">
+            <Link href="/contact" className="btn btn-primary group">
               Book a demo
-              <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden="true">
+              <svg viewBox="0 0 16 16" className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" aria-hidden="true">
                 <path d="M3 8h9M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
@@ -33,14 +34,16 @@ export default function ClosingCTA() {
               <span className="text-dim">{"]"}</span>
             </Link>
           </div>
-        </div>
+        </Reveal>
 
-        <ChatMockup
-          query="We handle 400+ customer requests a month and spend 3 days a batch checking quality certificates. Where do we start?"
-          stations={CLOSE_STATIONS}
-          answer="Start with the Quality Assurance Station. Here's what week one looks like."
-          typed="Where do we start?"
-        />
+        <Reveal variant="scale" delay={0.1} duration={0.85}>
+          <ChatMockup
+            query="We handle 400+ customer requests a month and spend 3 days a batch checking quality certificates. Where do we start?"
+            stations={CLOSE_STATIONS}
+            answer="Start with the Quality Assurance Station. Here's what week one looks like."
+            typed="Where do we start?"
+          />
+        </Reveal>
       </div>
     </section>
   );

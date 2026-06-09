@@ -110,9 +110,22 @@ export default function AetherBackground({ className = "" }) {
       connect();
     };
 
-    const animate = () => {
+    // Loop runs only while the hero is on-screen and the tab is visible, so the
+    // particle field doesn't burn CPU/GPU when scrolled past or backgrounded.
+    let active = false;
+    let onScreen = true;
+    const loop = () => {
       render();
-      raf = requestAnimationFrame(animate);
+      raf = requestAnimationFrame(loop);
+    };
+    const start = () => {
+      if (reduce || active || !onScreen) return;
+      active = true;
+      raf = requestAnimationFrame(loop);
+    };
+    const stop = () => {
+      active = false;
+      cancelAnimationFrame(raf);
     };
 
     const resize = () => {
@@ -147,17 +160,30 @@ export default function AetherBackground({ className = "" }) {
     ro.observe(parent);
     resize();
 
+    const onVis = () => (document.hidden ? stop() : start());
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        onScreen = entry.isIntersecting;
+        onScreen ? start() : stop();
+      },
+      { rootMargin: "120px" }
+    );
+
     if (!reduce) {
       window.addEventListener("mousemove", onMove);
       window.addEventListener("mouseout", onLeave);
-      animate();
+      document.addEventListener("visibilitychange", onVis);
+      io.observe(parent);
+      start();
     }
 
     return () => {
       ro.disconnect();
+      io.disconnect();
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseout", onLeave);
-      cancelAnimationFrame(raf);
+      document.removeEventListener("visibilitychange", onVis);
+      stop();
     };
   }, []);
 

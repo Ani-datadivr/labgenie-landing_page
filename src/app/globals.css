@@ -13,9 +13,10 @@
   --surface-2-rgb: 31 42 58;
   --text-rgb: 237 241 246;
   --text-muted-rgb: 166 178 194;
-  --text-dim-rgb: 111 125 143;
-  --accent-rgb: 0 102 255;      /* #0066FF — Datadivr brand blue (primary) */
+  --text-dim-rgb: 151 164 182;  /* #97A4B6 — lifted to ~7.3:1 on ink for AAA */
+  --accent-rgb: 0 102 255;      /* #0066FF — Datadivr brand blue (primary: fills, CTAs, large) */
   --accent-2-rgb: 90 160 255;   /* #5AA0FF — lighter azure: depth / gradients */
+  --accent-text-rgb: 107 170 255; /* #6BAAFF — accent for SMALL text: ~7.8:1 on ink (AAA) */
   --accent-warm-rgb: 255 180 84;/* amber — semantic flag / out-of-spec only */
 
   --bg: rgb(var(--bg-rgb));
@@ -27,6 +28,7 @@
   --text-dim: rgb(var(--text-dim-rgb));
   --accent: rgb(var(--accent-rgb));
   --accent-2: rgb(var(--accent-2-rgb));
+  --accent-text: rgb(var(--accent-text-rgb));
   --accent-warm: rgb(var(--accent-warm-rgb));
 
   --border: rgba(255, 255, 255, 0.08);
@@ -35,6 +37,11 @@
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Motion easing — natural deceleration, no bounce. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -46,8 +53,32 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Lenis smooth scroll: when active it controls scrolling, so native
+   scroll-behavior must yield. (No-op when Lenis is disabled / reduced motion.) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 body {
-  background: var(--bg);
+  /* One continuous backdrop: a single soft vertical gradient over the ink, so
+     the whole page reads as one surface (no per-section background seams). */
+  background:
+    radial-gradient(120% 70% at 50% -10%, rgba(0, 102, 255, 0.06), transparent 60%),
+    linear-gradient(180deg, #0c1118 0%, var(--bg) 30%, #0b1016 100%);
+  background-attachment: fixed;
   color: var(--text);
   font-family: var(--font-body);
   font-size: 16px;
@@ -84,7 +115,8 @@ h1, h2, h3, h4 {
   }
 
   .eyebrow {
-    @apply font-mono text-[11px] uppercase tracking-[0.22em] text-accent/90;
+    @apply font-mono text-[11px] uppercase tracking-[0.22em];
+    color: var(--accent-text); /* AAA-safe lighter blue for small text */
   }
 
   .lead {
@@ -108,7 +140,7 @@ h1, h2, h3, h4 {
     @apply inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-muted;
   }
   .kicker-accent {
-    @apply text-accent;
+    color: var(--accent-text);
   }
 
   /* Mono data label for tables, specs, metrics. */
@@ -118,7 +150,8 @@ h1, h2, h3, h4 {
 
   /* Big section index numeral (01 / 02 / 03). */
   .section-index {
-    @apply font-mono text-[13px] font-medium tracking-[0.1em] text-accent;
+    @apply font-mono text-[13px] font-medium tracking-[0.1em];
+    color: var(--accent-text);
   }
 
   /* Hairline rules / structural frame. */
@@ -132,21 +165,11 @@ h1, h2, h3, h4 {
     @apply border-x border-border;
   }
 
-  /* A full-bleed hairline grid frame: ticks at the section edges. */
+  /* Grid frame retained as a positioning context only. The vertical edge
+     hairlines were removed so the page reads as one continuous surface. */
   .grid-frame {
     position: relative;
   }
-  .grid-frame::before,
-  .grid-frame::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: var(--border);
-  }
-  .grid-frame::before { left: 0; }
-  .grid-frame::after { right: 0; }
 
   .panel {
     background:
@@ -156,17 +179,17 @@ h1, h2, h3, h4 {
   }
 
   .panel-hover {
-    @apply transition-colors duration-300 hover:border-border-strong;
+    transition:
+      transform 0.4s var(--ease-out-quint),
+      border-color 0.4s var(--ease-out-quint),
+      box-shadow 0.4s var(--ease-out-quint);
+  }
+  .panel-hover:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+    box-shadow: 0 18px 50px -28px rgba(0, 102, 255, 0.55);
   }
 
-  /* Spectral text gradient for key phrases */
-  .text-gradient {
-    background: linear-gradient(100deg, var(--text) 10%, var(--accent) 55%, var(--accent-2) 95%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-  }
 
   /* Hairline grid backdrop */
   .grid-backdrop {
@@ -228,19 +251,149 @@ h1, h2, h3, h4 {
     .btn-partner::before { transition: none; }
   }
 
+  /* Ghost button whose fill flushes up in bright orange on hover. Used for the
+     "Talk to our security team" action. */
+  .btn-orange {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text);
+    transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-orange::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, #ff8c2e, #ff6a00);
+    transform: translateY(101%);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-orange:hover,
+  .btn-orange:focus-visible {
+    color: #2a1402;
+    border-color: transparent;
+    box-shadow: 0 0 0 1px rgba(255, 122, 24, 0.6), 0 12px 44px -10px rgba(255, 122, 24, 0.6);
+  }
+  .btn-orange:hover::before,
+  .btn-orange:focus-visible::before {
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-orange::before { transition: none; }
+  }
+
   /* Station status accents: live (green) / building (amber) / roadmap (grey). */
   .status-live { color: #4ade80; }
   .status-build { color: #fb923c; }
   .status-roadmap { color: rgb(var(--text-muted-rgb)); }
   .glow-live { box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.28), 0 0 28px -8px rgba(74, 222, 128, 0.5); }
   .glow-build { box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.28), 0 0 28px -8px rgba(251, 146, 60, 0.45); }
+
+  /* Live telemetry dot: a solid core with an expanding sonar ring. The ring is
+     a ::after so a single element carries the whole effect. Color is inherited
+     via currentColor, so set text color on the dot for live/build/etc. */
+  .live-dot {
+    position: relative;
+    border-radius: 9999px;
+    background: currentColor;
+  }
+  .live-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    box-shadow: 0 0 0 0 currentColor;
+    animation: sonar 2.4s var(--ease-out-quint) infinite;
+  }
+
+  /* Hover lift for panels/cards: rises, brightens its border, and casts a soft
+     brand shadow. Pair with .panel. GPU-friendly (transform + shadow only). */
+  .lift {
+    transition:
+      transform 0.4s var(--ease-out-quint),
+      border-color 0.4s var(--ease-out-quint),
+      box-shadow 0.4s var(--ease-out-quint);
+    will-change: transform;
+  }
+  .lift:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-strong);
+    box-shadow: 0 18px 50px -28px rgba(0, 102, 255, 0.55);
+  }
+
+  /* A one-time light sheen that sweeps across a surface when it enters view.
+     Add .sheen and toggle .sheen-run (e.g. from an in-view observer / framer). */
+  .sheen {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      105deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.07) 50%,
+      transparent 65%
+    );
+    transform: translateX(-120%);
+  }
+  .sheen.sheen-run::before {
+    animation: sheen-x 1.1s var(--ease-out-quint) forwards;
+  }
+
+  /* Flowing connector line: a dashed brand stroke that streams along its path. */
+  .flow-stroke {
+    stroke-dasharray: 5 7;
+    animation: flow-dash 1.1s linear infinite;
+  }
+}
+
+/* ===== Continuous-life keyframes ===== */
+@keyframes sonar {
+  0% { box-shadow: 0 0 0 0 currentColor; opacity: 0.55; }
+  70% { box-shadow: 0 0 0 8px transparent; opacity: 0; }
+  100% { box-shadow: 0 0 0 0 transparent; opacity: 0; }
+}
+@keyframes sheen-x {
+  to { transform: translateX(120%); }
+}
+@keyframes flow-dash {
+  to { stroke-dashoffset: -24; }
+}
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Reconciliation scan line sweep (scrollytelling "Read" stage). */
+.scan-line,
+.scan-edge {
+  animation: scan-sweep 2.6s var(--ease-out-quint) infinite;
+}
+@keyframes scan-sweep {
+  0% { top: -12%; }
+  100% { top: 104%; }
 }
 
 /* Marquee track */
 .marquee-track {
   display: flex;
   width: max-content;
-  animation: marquee 38s linear infinite;
+  animation: marquee 32s linear infinite;
+}
+/* Defined here (not only in tailwind.config) so it can't be purged: the row is
+   duplicated, so translating -50% scrolls it continuously right-to-left. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 .marquee-mask {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);

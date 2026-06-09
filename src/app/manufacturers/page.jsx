@@ -41,15 +41,16 @@ export default function ManufacturersPage() {
             The pain shows up in the corner office.
           </h2>
         </Reveal>
-        <Stagger className="mt-10 grid gap-4 md:grid-cols-3">
+        <Stagger className="mt-8 divide-y divide-border border-t border-border">
           {buyer.economic.map((b) => (
-            <StaggerItem key={b.role}>
-              <div className="panel panel-hover h-full p-6">
-                <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
-                  {b.role}
-                </span>
-                <p className="mt-4 text-[15px] leading-relaxed text-muted">{b.pain}</p>
-              </div>
+            <StaggerItem
+              key={b.role}
+              variant="left"
+              as="div"
+              className="grid gap-1.5 py-6 sm:grid-cols-[220px_1fr] sm:gap-10"
+            >
+              <span className="font-mono text-[12px] uppercase tracking-[0.16em] text-accent">{b.role}</span>
+              <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{b.pain}</p>
             </StaggerItem>
           ))}
         </Stagger>
@@ -63,23 +64,26 @@ export default function ManufacturersPage() {
             The win shows up on the floor.
           </h2>
         </Reveal>
-        <Stagger className="mt-10 grid gap-4 md:grid-cols-3">
+        <Stagger className="mt-8 divide-y divide-border border-t border-border">
           {buyer.daily.map((d) => (
-            <StaggerItem key={d.role}>
-              <div className="panel panel-hover h-full p-6">
-                <div className="flex items-center gap-2.5">
-                  <span className="h-2 w-2 rounded-full bg-accent" />
-                  <span className="font-medium text-text">{d.role}</span>
-                </div>
-                <p className="mt-4 text-[15px] leading-relaxed text-muted">{d.win}</p>
-              </div>
+            <StaggerItem
+              key={d.role}
+              variant="left"
+              as="div"
+              className="grid gap-1.5 py-6 sm:grid-cols-[220px_1fr] sm:gap-10"
+            >
+              <span className="flex items-center gap-2.5 font-medium text-text">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                {d.role}
+              </span>
+              <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{d.win}</p>
             </StaggerItem>
           ))}
         </Stagger>
       </section>
 
       <DesignPartner />
-      <ClientTicker label="Building with ingredient manufacturers" />
+      <ClientTicker />
       <FinalCTA
         eyebrow="Get started"
         title="Built for your plant, not a generic demo."

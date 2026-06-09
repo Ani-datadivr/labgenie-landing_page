@@ -10,7 +10,7 @@ export default function FinalCTA({
   sub = finalCta.sub,
 }) {
   return (
-    <section className="container-x grid-frame border-y border-border">
+    <section className="container-x">
       <div className="relative overflow-hidden py-24 text-center lg:py-32">
         <div
           aria-hidden="true"

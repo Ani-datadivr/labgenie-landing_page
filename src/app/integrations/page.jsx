@@ -1,6 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 import FinalCTA from "@/components/FinalCTA";
-import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
+import Reveal from "@/components/Reveal";
 import IntegrationLogos from "@/components/IntegrationLogos";
 import { integrations } from "@/lib/content";
 
@@ -27,20 +27,6 @@ export default function IntegrationsPage() {
           </p>
         </Reveal>
         <IntegrationLogos />
-      </section>
-
-      {/* Categories */}
-      <section className="container-x py-12">
-        <Stagger className="grid gap-4 sm:grid-cols-2">
-          {integrations.categories.map((c) => (
-            <StaggerItem key={c.name}>
-              <div className="panel panel-hover h-full p-6">
-                <h3 className="text-lg font-medium text-text">{c.name}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">{c.note}</p>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
       </section>
 
       {/* How it connects */}

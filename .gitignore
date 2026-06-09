@@ -23,6 +23,8 @@ next-env.d.ts
 .claude/settings.local.json
 
 # misc
+.next-dev.log
+.impeccable/critique/
 .DS_Store
 *.pem
 npm-debug.log*

@@ -16,20 +16,28 @@ export const metadata = {
 
 const STATIONS = [
   {
-    name: "Quality Assurance",
+    name: "Quality Agent",
     status: "Live",
-    headline: "Match every customer RFP to what you already make.",
-    body: "A customer sends an RFP or spec sheet in their own format. LabGenie compares it line by line against the product information (PI sheets) already in your ERP, and shows exactly where you comply and where you diverge. A compliance check that took your team days takes minutes.",
+    headline: "RFP specification matching",
+    body: "The Quality Agent matches customer RFP specifications against your product information sheets in minutes. A two-day review becomes a five-minute task.",
+    points: [
+      "Instantly compare customer specs against your full product catalog",
+      "Surface non-conformities and gaps before they reach the customer",
+      "Free senior QC staff from routine document work for higher-value decisions",
+    ],
     Mockup: QaMockup,
-    flip: false,
   },
   {
-    name: "Sales",
+    name: "Sales Agent",
     status: "Live",
-    headline: "Turn inquiry overload into a pipeline.",
-    body: "Every incoming customer request gets sorted, qualified, and routed instantly. LabGenie matches the customer's specs against your existing catalog before anyone touches the lab.",
+    headline: "Intelligent sales response",
+    body: "Match inbound customer queries to the right SKUs using your full ERP history, in minutes.",
+    points: [
+      "Parse unstructured customer emails and extract product requirements",
+      "Match queries against full ERP history with confidence scores",
+      "Hand off between sales and quality teams without losing context",
+    ],
     Mockup: SalesMockup,
-    flip: true,
   },
   {
     name: "Procurement",
@@ -68,8 +76,8 @@ const STATIONS = [
 export default function PlatformPage() {
   return (
     <>
-      <section className="container-x grid-frame pb-10 pt-32 sm:pt-36 lg:pt-44">
-        <div className="flex items-center justify-between border-b border-border pb-5">
+      <section className="container-x pb-10 pt-32 sm:pt-36 lg:pt-44">
+        <div className="flex items-center justify-between pb-5">
           <span className="kicker kicker-accent">
             <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent" />
             The platform
@@ -90,7 +98,7 @@ export default function PlatformPage() {
         </div>
       </section>
 
-      <section className="container-x grid-frame">
+      <section className="container-x">
         {STATIONS.map(({ Mockup, ...s }) => (
           <StationFeature key={s.name} {...s}>
             <Mockup />

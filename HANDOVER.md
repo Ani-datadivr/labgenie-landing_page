@@ -1,20 +1,23 @@
-# LabGenie — Project Handover
+# LabGenie — Engineering Handover
 
-A practical map of this repo so a fresh machine (and a fresh Claude Code session)
-can pull, run, and keep building without ramp-up. Pair this with `PRODUCT.md`
-(strategy/brand) and `DESIGN.md` (visual system).
+A complete map of this repo so a fresh machine (and a fresh AI coding assistant)
+can pull, run, and keep building without ramp-up. Pair this with `README.md`
+(friendlier overview), `PRODUCT.md` (strategy/brand/users), and `DESIGN.md`
+(visual system + tokens).
 
 ---
 
 ## 1. What this is
 
 The marketing site for **LabGenie**, the AI operating system for **F&B
-manufacturers** (dairy, beverage, ingredients, flavors, specialty, and more),
-built by **Datadivr**. Dark "Datadivr blue on ink" brand. Multi-page Next.js
-site, iterated with the **`impeccable`** design skill.
+manufacturers** (flavors, spices, oleoresins, specialty ingredients), built by
+**Datadivr**. Dark "Datadivr blue on ink" brand. Multi-page Next.js site,
+iterated heavily with the **`impeccable`** design skill (see §13).
 
-**Stack:** Next.js 14 (App Router, JSX — not TypeScript) · Tailwind CSS 3 ·
-Framer Motion · lucide-react · Google Vertex/Gemini (chat) · Slack webhook (leads).
+**Stack:** Next.js 14 (App Router, **JSX, not TypeScript**) · React 18 · Tailwind
+CSS 3 · Framer Motion · Lenis (smooth scroll) · lucide-react · Google
+Vertex/Gemini (chat) · Slack webhook (leads) · sharp (build-time logo
+processing only).
 
 ---
 
@@ -22,115 +25,241 @@ Framer Motion · lucide-react · Google Vertex/Gemini (chat) · Slack webhook (l
 
 ```bash
 npm install
-cp .env.example .env.local   # then fill in keys (see §3)
+cp .env.example .env.local   # then fill keys (optional, see §3)
 npm run dev                  # http://localhost:3000
 npm run build && npm start   # production
 ```
 
-Node 18+ recommended. The site **runs fine without any env vars** — the two
-live features (chat, contact-to-Slack) just no-op gracefully until keys exist.
+Node 18+. The site **runs fine with no env vars** — the two live features (chat,
+contact-to-Slack) degrade gracefully (see §3).
+
+### ⚠️ Critical dev gotchas (read before debugging)
+- **The `.next` dev cache corrupts under rapid edits.** Symptoms: spurious `404`
+  on `/`, `ENOENT … *.pack.gz`, "Could not find module … in the React Client
+  Manifest", or the dev server going unresponsive. **Fix: stop the dev server,
+  `rm -rf .next`, restart.** This happened repeatedly during development; it is
+  the single most common false alarm.
+- **The OperationsCanvas layout is gated on a measured canvas size.** After large
+  HMR edits its nodes/wires can fail to render until a **clean dev restart**
+  (`rm -rf .next` + restart). If the canvas looks empty (no nodes, no wires), that
+  is the cause, not a code bug.
+- **Don't run `next build` while `npm run dev` is running** — it overwrites
+  `.next` and dev starts 500ing.
+- **Server → Client prop rule:** never pass a function (e.g. a lucide icon
+  component) as a prop from a Server Component into a Client Component; it 500s.
+  Pass a rendered node, or keep the component server-side (this is why
+  `ComplianceBadge` is a server component).
 
 ---
 
 ## 3. Environment variables
 
-`.env.local` is **gitignored and NOT in the repo**. Recreate it from
-`.env.example`:
+`.env.local` is gitignored. Recreate from `.env.example`.
 
 | Var | Used by | Notes |
 |---|---|---|
-| `GEMINI_API_KEY` | "Ask LabGenie" chat in the Operations Dashboard (`/api/labgenie-route`) | Get one at aistudio.google.com/apikey. **Real keys start with `AIzaSy…`.** The key used during dev was an `AQ.Ab8…` token, which may not authenticate via this route — generate a proper API key. |
+| `GEMINI_API_KEY` | "Ask LabGenie" chat in the Operations Dashboard (`/api/labgenie-route`) | Get one at aistudio.google.com/apikey. **Real keys start with `AIzaSy…`.** |
 | `GEMINI_MODEL` | same | Optional. Defaults to `gemini-2.5-flash-lite`. |
 | `SLACK_WEBHOOK_URL` | `/contact` form (`/api/contact`) | Posts each lead to Slack, server-side only. |
 
-> **Rotate** any key/webhook that was shared in chat or pasted anywhere public.
+**Graceful degradation (verified):** with no `GEMINI_API_KEY`, the chat route
+returns `{reply:null, error:"unconfigured"}` and the UI falls back to instant
+local keyword routing plus a friendly hint (no dev jargon shown to users). With
+no `SLACK_WEBHOOK_URL`, the contact form shows a clean error with an email
+fallback. Neither crashes.
 
 ---
 
-## 4. Routes (`src/app`)
+## 4. Routes & homepage structure
 
 | Route | File | What it is |
 |---|---|---|
-| `/` | `page.jsx` | Home: Hero → Problem → ProductVision (+ station map) → **OperationsCanvas** → Differentiation → SocialProof → ClosingCTA |
-| `/platform` | `platform/page.jsx` | The 6 stations broken out, alternating, each with a product mockup + status colour |
-| `/manufacturers` | `manufacturers/page.jsx` | Buyer roles + customer logo ticker |
-| `/integrations` | `integrations/page.jsx` | ERP / CRM logos + "how it connects" |
-| `/security` | `security/page.jsx` | Compliance badges + data-handling (from the design-partner agreement) |
-| `/about` | `about/page.jsx` | Datadivr story |
-| `/careers` | `careers/page.jsx` | Team framing + 4 open roles |
-| `/contact` | `contact/page.jsx` | Request a demo: design-partner perks + "2 of 5 seats" + form |
-| `/api/labgenie-route` | `api/labgenie-route/route.js` | Gemini chat backend for the Operations Dashboard |
-| `/api/contact` | `api/contact/route.js` | Contact form → Slack webhook (server-side) |
+| `/` | `src/app/page.jsx` | Home (see order below) |
+| `/platform` | `platform/page.jsx` | The stations broken out, each with a product screen + scroll-linked entrance |
+| `/manufacturers` | `manufacturers/page.jsx` | Buyer roles (editorial rows) + the partner logo ticker |
+| `/integrations` | `integrations/page.jsx` | ERP + CRM logos + "how it connects" |
+| `/security` | `security/page.jsx` | Compliance program (pre-certification) + data handling |
+| `/about` | `about/page.jsx` | Datadivr story (F&B vertical, not spice-specific) |
+| `/careers` | `careers/page.jsx` | Team framing + open roles |
+| `/contact` | `contact/page.jsx` | Request a demo: perks + form |
+| `/api/labgenie-route` | `api/labgenie-route/route.js` | Gemini chat backend |
+| `/api/contact` | `api/contact/route.js` | Contact form → Slack |
+
+**Homepage order (canvas-led, deliberately distilled to two product moments):**
+`Hero → Problem → ProductVision (compact StationMap) → OperationsCanvas → Differentiation → SocialProof → FAQ → ClosingCTA`.
+
+> A Terminal-Industries-style **pinned scrollytelling** component
+> (`OperationsStory.jsx`) exists in the repo but was **retired from the homepage**
+> (it duplicated the platform story and caused scroll-jacking). It is **not
+> mounted anywhere** — reuse it on `/platform` only if you re-add a skip/progress
+> affordance and shorten the stages.
 
 ---
 
-## 5. Key components (`src/components`)
+## 5. Design system & tokens (`globals.css` `:root`)
 
-- **Hero.jsx** — stacked hero: word-by-word animated headline + `AetherBackground` + `AppDashboard`.
-- **AppDashboard.jsx** — the polished product-dashboard mockup that is the hero visual (browser chrome, sidebar, KPI sparklines, throughput chart, live-activity feed).
-- **AetherBackground.jsx** — interactive particle field (hero only).
-- **AmbientBackground.jsx** — site-wide animated aurora + light beams (mounted in `layout.jsx`).
-- **Navbar.jsx** — tubelight pill nav. **Logo.jsx** — official mark + Manrope wordmark.
-- **OperationsCanvas/** — the interactive node-graph "Operations Dashboard": ERP cylinder (logo tiles), fanned station nodes, the central LabGenie chat (wired to `/api/labgenie-route`). Driven by `src/lib/operations.js`. Has its own scoped CSS module.
-- **StationMap.jsx** — clean architecture diagram (GTM / Factory / Innovation), status-coded (green live / amber build / grey roadmap).
-- **stations/StationFeature.jsx** + **stations/mockups/** — the 6 per-station product mockups (QA = RFP-vs-PI-sheet, Sales, Procurement, Production, Formulation, Market Intel).
-- **ChatMockup.jsx**, **ReconciliationPanel.jsx**, **ClientTicker.jsx** (right-to-left logo marquee), **IntegrationLogos.jsx**, **ComplianceBadge.jsx**, **ContactForm.jsx**, **FinalCTA.jsx** (contextual per page + gold "Become a design partner" button), **ScrollRevealText.jsx**, **sections/** (Problem, ProductVision, Differentiation, SocialProof, ClosingCTA).
+Dark, near-monochrome "blue on ink." Colors are space-separated RGB channels so
+Tailwind opacity modifiers (`text-accent/30`) work. Full system in `DESIGN.md`.
 
----
+| Token | Value | Use |
+|---|---|---|
+| `--bg` | `#0E141C` | Ink ground (everything sits on this) |
+| `--bg-elev / --surface / --surface-2` | cool blue-tinted tiers | Panels/cards |
+| `--text` | `#EDF1F6` | Primary text (~16:1, AAA) |
+| `--text-muted` | `#A6B2C2` | Body/secondary (~8.6:1, AAA) |
+| `--text-dim` | `#97A4B6` | Tertiary (**lifted to ~7.3:1 for AAA**, was `#6F7D8F`) |
+| `--accent` | `#0066FF` | Datadivr brand blue: **fills, CTAs, dots, graphical only** |
+| `--accent-2` | `#5AA0FF` | Azure (a tint, depth/gradients) |
+| `--accent-text` | `#6BAAFF` | **Brand blue for small/secondary TEXT** (~7.8:1, AAA). Tailwind: `text-accent-text` |
+| `--accent-warm` | `#FFB454` | Amber — out-of-spec / "in progress" status ONLY |
 
-## 6. Content & design system
+**Fonts** (`layout.jsx`, `next/font`): Space Grotesk (display), Inter (body),
+JetBrains Mono (labels/data), Manrope (logo lockup only).
 
-- **`src/lib/content.js`** — the copy source of truth. Edit words here.
-- **`src/lib/operations.js`** — stations + modules for the Operations Dashboard and the Gemini router (keep labels in sync across both; the chat returns module labels).
-- **`PRODUCT.md`** — register/users/brand/principles. **`DESIGN.md`** + **`.impeccable/design.json`** — the visual system (tokens, rules, do/don'ts).
-- **Brand:** primary `#0066FF`, ink `#0E141C`. Fonts: Space Grotesk (display), Inter (body), JetBrains Mono (labels/data), Manrope (logo lockup only). All tokens live in `src/app/globals.css`.
-
-## 7. Assets / logos
-
-- `public/logos/clients/*` → customer ticker · `public/logos/erp/*` + `public/logos/crm/*` → Integrations grid · `public/erp/*.webp` → ERP cylinder in the Operations Dashboard.
-- Raw source logos in `/logos`. Brand kit in `/labgenie-ai__logo-assets` and `Datadivr Brand Guide.pdf`.
-
----
-
-## 8. Continuing with `impeccable`
-
-The skill is committed at `.claude/skills/impeccable` (so `/impeccable …` works on
-pull). To update it: `npx impeccable skills install`.
-
-**Not yet done (your next steps):**
-- `/impeccable audit` — a11y, contrast, performance, responsive.
-- `/impeccable critique` — scored UX review.
-- `/impeccable polish` — final pass.
+**Accessibility — holding WCAG AAA (mostly):** body/muted/dim/mono/eyebrow tiers
+all clear AAA after the token lifts. **The one accepted exception:** raw
+`#0066FF` as *large* text (3.8:1) on the hero headline accent ("F&B
+manufacturers.") and the logo ".ai" — that passes AA-large (≥3:1) and is the
+sanctioned brand treatment, but it is **not** AAA-large (4.5:1). To make the hero
+strictly AAA, switch those to `text-accent-text` (one-line change, softer look).
+All small/secondary blue text already uses `accent-text`.
 
 ---
 
-## 9. Gotchas (read before editing)
+## 6. Backgrounds — one continuous surface
 
-- **Do not run `next build` while `npm run dev` is running.** It overwrites
-  `.next` and the dev server starts returning 500s. Fix: stop dev, `rm -rf .next`,
-  restart. (This bit us repeatedly.)
-- **OperationsCanvas measures its canvas on mount.** After large edits, do a clean
-  dev restart so the station nodes render (they're gated on a measured size).
-- **Server → Client prop rule:** don't pass a function (e.g. a lucide icon
-  component) as a prop from a server component into a client component — it 500s.
-  Pass a rendered node, or keep the component server-side. (This is why
-  `ComplianceBadge` is a server component.)
-- **House style:** no em dashes; avoid "COA" and lab jargon (write "quality
-  documents / certificates"); the economic buyer is a COO/procurement head, not a
-  lab analyst. See `DESIGN.md` Do's & Don'ts.
-- **AAA caveat:** brand blue as *small* text is ~3.8:1 (fine for large/graphical,
-  below AAA for small text). The audit will flag it; bump to a lighter blue where
-  it's small body text.
-- **Compliance badges** on `/security` are **original designs, not official seals**
-  (LabGenie is pre-certification). Swap in real seals once each audit completes.
+The page is **one backdrop**, not per-section panels. Don't reintroduce seams:
+- `body` has a single fixed soft gradient over the ink.
+- `.grid-frame` is a **positioning context only** (its vertical edge hairlines
+  were removed); section divider `border-t`/`border-y` were stripped sitewide.
+- `OperationsCanvas`'s section is `background: transparent` (no border-top, no
+  interior grid pattern) so the canvas window floats on the continuous backdrop
+  instead of reading as a black box.
 
 ---
 
-## 10. Status snapshot
+## 7. Motion system (reuse it; don't reinvent per component)
 
-Built: full rebrand to Datadivr blue/ink, animated hero + product dashboard,
-type-led structural sections, interactive Operations Dashboard with live Gemini
-chat, `/platform` station breakout, integrations/security/about/careers/contact
-pages, customer logo ticker, contact-to-Slack, design-partner perks + scarcity,
-animated background. Pending: `audit` + `critique` + `polish`, and verifying the
-Gemini key authenticates.
+- **`Reveal` / `Stagger` / `StaggerItem`** (`components/Reveal.jsx`) — scroll-in
+  entrances. `Reveal` takes `variant`: `up | fade | scale | blur | clip | left | right`.
+  Pick the variant that fits the content; do NOT apply one uniform fade-up to
+  everything (that is the AI tell). `Stagger` orchestrates sibling stagger via
+  parent variants.
+- **`Parallax`** (`components/Parallax.jsx`) — scroll-linked Y drift; reduced-motion no-ops.
+- **`StationFeature`** (`stations/StationFeature.jsx`) — **scroll-LINKED** reveal
+  (scrubbed to scroll position via `useScroll`, not a one-shot): text glides from
+  left, screen from right. Slower/Terminal-like by design.
+- **`DaysToMinutes`** (`components/DaysToMinutes.jsx`) — the brand-spine signature
+  ("3 days" struck through → arrow → "minutes"). Used in SocialProof.
+- **`BrandMark`** (`components/BrandMark.jsx`) — inline partner logo, `tone="light"`
+  (white silhouette for ink) / `tone="dark"`. (`SynthiteMark.jsx` is the older
+  Synthite-specific equivalent, still used in SocialProof/DesignPartner.)
+- **`.live-dot`** (globals) — pulsing sonar status dot (set text color for hue).
+  **`.panel-hover`** lifts (translateY + brand shadow). **`.flow-stroke`** —
+  streaming dashed connector. **`.btn-partner`** (gold flush-fill), **`.btn-orange`**
+  (bright-orange flush-fill, used on the security "Talk to our security team" CTA).
+- **Lenis smooth scroll** (`components/SmoothScroll.jsx`, dep `lenis`) wraps the app
+  in `layout.jsx`; disabled under reduced motion. Requires `suppressHydrationWarning`
+  on `<html>` (Lenis mutates html classes) + the Lenis CSS block in globals. The
+  live instance is exposed as `window.lenis` (use `window.lenis.scrollTo(y,{immediate:true})`
+  for programmatic scroll; native `window.scrollTo` is RAF-reset by Lenis).
+- **Marquee gotcha:** `@keyframes marquee` is defined **directly in `globals.css`**
+  (not only tailwind.config) — Tailwind purges config keyframes when no
+  `animate-marquee` utility is used, which left the ticker static. Keyframe
+  `translateX(0 → -50%)` on the duplicated row = right-to-left scroll.
+- **Reduced motion is honored everywhere:** `MotionProvider` sets
+  `reducedMotion="user"`, components branch on `useReducedMotion()`, and the
+  globals `@media (prefers-reduced-motion: reduce)` block kills CSS animations.
+- **Performance:** `AetherBackground` (hero particles) and the `OperationsCanvas`
+  rAF tick loop **pause when scrolled offscreen** (IntersectionObserver) and on
+  tab-switch (`visibilitychange`). Do NOT add a `document.hidden` guard to their
+  `start()` — headless/preview reports `document.hidden=true` and would freeze them.
+
+---
+
+## 8. The "no cards" editorial pattern
+
+The client dislikes repeated icon+heading+text card grids (AI slop). The
+established replacement is **editorial divided rows**:
+`<Stagger className="divide-y divide-border border-t border-border">` of
+`<StaggerItem variant="left" as="div" className="grid sm:grid-cols-[220px_1fr]">`
+(label/heading left, prose right). Applied on About values, Manufacturers buyer
+roles, Security pillars. **Careers and the homepage Problem section still use
+grids** — convert them if you revisit. Functional surfaces (product mockups, the
+single light proof card, the FAQ accordion) are not "cards" and stay.
+
+---
+
+## 9. OperationsCanvas notes (`components/OperationsCanvas/`, ~1100 JSX + ~1350 CSS)
+
+The interactive node-graph "Operations Dashboard" — the homepage's canonical
+product moment. Driven by `src/lib/operations.js`; scoped CSS module.
+- **ERP panel:** shows 4 full logos (SAP, Sage, Infor, Ramco) + an "and more"
+  line. Hovering a logo fills the panel with that brand's color (`.erpFill` + JS
+  `setFill`). Infor/Ramco are placeholder wordmark SVGs (`public/erp/`).
+- **ERP ⇄ LabGenie connector:** two lanes (`erpPathRef`/`erpPathRefB`) with
+  opposite-flowing pulses = two-way comms.
+- **Module cards** (`.mCard`): full accent-tinted border + faint wash (the old
+  3px side-stripe was removed — side-stripes are a banned pattern).
+- Below 900px it renders a **mobile fallback** (no SVG wires).
+
+---
+
+## 10. Assets / logos (`public/`)
+
+- **Partner ticker** (`components/ClientTicker.jsx`): dark cards at rest (logos as
+  white silhouettes via `brightness(0) invert(1)`), card fills white + logo shows
+  real color on hover. Right-to-left marquee with edge fades; pauses on hover.
+  Files in `public/logos/clients/`. Each partner optionally has `url` (verified
+  domains) and `rest` (a transparent silhouette source when the main file has a
+  white background — e.g. Mane uses the color webp `mane.webp` for the hover and
+  `mane-mark.png` for the silhouette).
+- **Logos that need real artwork (currently clean monochrome wordmark
+  placeholders):** `public/erp/infor.svg`, `public/erp/ramco.svg`. Swap when
+  official art is available.
+- **Logo background knockout:** `choice-canning.png` and `nandus.png` had their
+  white backgrounds removed at build time with `sharp` (feathered white→transparent)
+  so they silhouette cleanly on the dark cards. If you re-add a white-bg logo,
+  either provide a transparent PNG or repeat that process.
+- Raw source logos live in the root working folder; the **served** assets are all
+  under `public/`. Brand kit: `Datadivr Brand Guide.pdf`, `labgenie-ai__logo-assets/`.
+
+---
+
+## 11. Content source of truth
+
+- **`src/lib/content.js`** — copy (headlines, modules, stats, buyer roles,
+  designPartner, integrations, security, about, careers, finalCta). Edit words here.
+- **`src/lib/operations.js`** — stations + modules for the OperationsCanvas and the
+  Gemini router (keep labels in sync; the chat returns module labels).
+
+---
+
+## 12. Known issues / TODO before launch
+
+- **Verify partner URLs.** Ticker links are best-effort; `manekancor.com`/
+  `mercelys.com` etc. were checked, but confirm all and add any missing.
+- **Swap placeholder ERP wordmarks** (`infor.svg`, `ramco.svg`) for real logos.
+- **Security badges are original artwork, not official seals** (LabGenie is
+  pre-certification — the copy says so). Swap in real seals as audits complete.
+- **Decide the hero AAA call** (§5): keep brand-blue (AA-large) or switch to
+  `accent-text` (AAA-large).
+- **Mobile nav is an icon-only pill** with `aria-label`s (44px touch targets). Fine
+  a11y-wise; consider labels if first-time-user clarity matters.
+- Convert the remaining card grids (Careers, homepage Problem) to the editorial row pattern.
+- Set the production domain in `layout.jsx`, `robots.js`, `sitemap.js`.
+
+---
+
+## 13. Working with the `impeccable` skill
+
+The skill is committed at `.claude/skills/impeccable` so `/impeccable …` works on
+pull. Recent runs this cycle: `animate`, `critique` (snapshot in
+`.impeccable/critique/`, gitignored), `distill` (homepage), `clarify`/`harden`
+(credibility + graceful degradation), `audit` (latest score ~19/20), `adapt`/
+`colorize`/`optimize`/`polish` (the audit fixes). `/impeccable audit` is the
+quickest way to re-check a11y/perf/responsive/anti-patterns after changes.
+
+> Verification note: the in-tool browser screenshot times out on this
+> animation-dense build, so most checks during development were done via DOM /
+> computed-style evaluation rather than pixel comparison.

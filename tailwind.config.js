@@ -18,6 +18,7 @@ module.exports = {
         dim: "rgb(var(--text-dim-rgb) / <alpha-value>)",
         accent: "rgb(var(--accent-rgb) / <alpha-value>)",
         "accent-2": "rgb(var(--accent-2-rgb) / <alpha-value>)",
+        "accent-text": "rgb(var(--accent-text-rgb) / <alpha-value>)",
         warm: "rgb(var(--accent-warm-rgb) / <alpha-value>)",
       },
       fontFamily: {
@@ -45,10 +46,15 @@ module.exports = {
           "0%, 100%": { opacity: "0.4" },
           "50%": { opacity: "1" },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
       },
       animation: {
         marquee: "marquee 38s linear infinite",
         "pulse-glow": "pulse-glow 3s ease-in-out infinite",
+        float: "float 6s ease-in-out infinite",
       },
     },
   },

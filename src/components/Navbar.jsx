@@ -41,7 +41,7 @@ export default function Navbar() {
       <Link
         href="/"
         aria-label="LabGenie home"
-        className={`fixed left-4 top-4 z-50 rounded-xl px-2 py-1.5 transition-colors sm:left-6 ${
+        className={`fixed left-4 top-3 z-50 flex min-h-[44px] items-center rounded-xl px-2 transition-colors sm:left-6 ${
           scrolled ? "bg-bg/70 backdrop-blur-md" : ""
         }`}
       >
@@ -51,7 +51,7 @@ export default function Navbar() {
       {/* Primary CTA — fixed top-right */}
       <Link
         href="/contact"
-        className="btn btn-primary fixed right-4 top-4 z-50 !px-4 !py-2 text-[13px] sm:right-6"
+        className="btn btn-primary fixed right-4 top-3 z-50 min-h-[44px] !px-4 text-[13px] sm:right-6"
       >
         Request a demo
       </Link>
@@ -67,14 +67,13 @@ export default function Navbar() {
                 key={item.name}
                 href={item.url}
                 aria-current={isActive ? "page" : undefined}
-                className={`relative cursor-pointer rounded-full px-4 py-2 text-[13px] font-medium transition-colors sm:px-5 ${
+                aria-label={item.name}
+                className={`relative flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full px-3 py-2 text-[13px] font-medium transition-colors sm:px-4 lg:px-5 ${
                   isActive ? "text-accent" : "text-muted hover:text-text"
                 }`}
               >
+                <Icon size={18} strokeWidth={2.25} aria-hidden="true" className="lg:hidden" />
                 <span className="hidden lg:inline">{item.name}</span>
-                <span className="lg:hidden" aria-label={item.name}>
-                  <Icon size={18} strokeWidth={2.25} />
-                </span>
                 {isActive && (
                   <motion.div
                     layoutId="nav-lamp"

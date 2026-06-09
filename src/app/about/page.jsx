@@ -50,8 +50,8 @@ const facts = [
   },
   {
     icon: FlaskConical,
-    stat: "Flavors, spices, oleoresins",
-    label: "the categories we know firsthand",
+    stat: "Food & beverage",
+    label: "the vertical we work across, not a single niche",
   },
   {
     icon: Gauge,
@@ -66,44 +66,42 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="About Datadivr"
         title="Three years inside F&B, distilled into one agent."
-        sub="We are Datadivr. We spent three years working shoulder to shoulder with the manufacturers who make flavors, spices, and oleoresins. LabGenie is what we learned, turned into a product."
+        sub="We are Datadivr. We spent three years working shoulder to shoulder with F&B manufacturers, Synthite among them, alongside many of the names on our partner wall. LabGenie is what we learned, turned into a product."
       />
 
       {/* Our story */}
       <section className="container-x py-16">
         <div className="grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-16">
-          <Reveal>
-            <div>
-              <p className="eyebrow">Our story</p>
-              <div className="mt-5 space-y-5">
-                <p className="text-lg leading-relaxed text-muted">
-                  For the last three years, Datadivr worked closely with F&B
-                  ingredient manufacturers across the industry. We sat with their
-                  quality, sales, and procurement teams, learned how each one runs,
-                  and felt the same friction everywhere: messy certificates of
-                  analysis, spec reconciliation that drags on for days, and quality,
-                  sales, and procurement kept in separate silos that never quite
-                  agree.
-                </p>
-                <p className="text-lg leading-relaxed text-muted">
-                  Along the way we learned what actually moves the needle on a plant
-                  floor, and what is just software overhead dressed up as progress.
-                  That distinction is the whole point. LabGenie is the product of that
-                  experience: an AI operating system that turns hard-won domain
-                  knowledge into one chat-native agent built for the way these
-                  manufacturers really work.
-                </p>
-                <p className="text-lg leading-relaxed text-muted">
-                  Datadivr is moving from hands-on services to a product company, and
-                  LabGenie is our flagship. We are not adapting a generic AI tool to a
-                  market we just discovered. We are shipping the system we already
-                  spent years learning to build by hand.
-                </p>
-              </div>
-            </div>
-          </Reveal>
+          <div>
+            <Reveal as="p" className="eyebrow">Our story</Reveal>
+            <Stagger gap={0.12} className="mt-5 space-y-5">
+              <StaggerItem as="p" variant="up" className="text-lg leading-relaxed text-muted">
+                For the last three years, Datadivr worked closely with F&B
+                manufacturers across the industry, Synthite, Mane, McCormick, and many of
+                the names on our partner wall. We sat with their quality, sales, and
+                procurement teams, learned how each one runs, and felt the same friction
+                everywhere: messy certificates of analysis, spec reconciliation that drags
+                on for days, and quality, sales, and procurement kept in separate silos that
+                never quite agree.
+              </StaggerItem>
+              <StaggerItem as="p" variant="up" className="text-lg leading-relaxed text-muted">
+                Along the way we learned what actually moves the needle on a plant
+                floor, and what is just software overhead dressed up as progress.
+                That distinction is the whole point. LabGenie is the product of that
+                experience: an AI operating system that turns hard-won domain
+                knowledge into one chat-native agent built for the way these
+                manufacturers really work.
+              </StaggerItem>
+              <StaggerItem as="p" variant="up" className="text-lg leading-relaxed text-muted">
+                Datadivr is moving from hands-on services to a product company, and
+                LabGenie is our flagship. We are not adapting a generic AI tool to a
+                market we just discovered. We are shipping the system we already
+                spent years learning to build by hand.
+              </StaggerItem>
+            </Stagger>
+          </div>
 
-          <Reveal delay={0.1}>
+          <Reveal variant="right" delay={0.1}>
             <aside className="panel p-7">
               <p className="eyebrow">Why this matters</p>
               <p className="mt-5 text-base leading-relaxed text-muted">
@@ -134,16 +132,23 @@ export default function AboutPage() {
           </Reveal>
         </div>
 
-        <Stagger className="mt-12 grid gap-5 sm:grid-cols-2">
+        <Stagger gap={0.1} className="mt-12 divide-y divide-border border-t border-border">
           {principles.map(({ icon: Icon, name, note }) => (
-            <StaggerItem key={name}>
-              <div className="panel panel-hover h-full p-7">
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-white/[0.03] text-accent">
-                  <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
-                </span>
-                <h3 className="mt-5 text-xl text-text">{name}</h3>
-                <p className="mt-2 text-base leading-relaxed text-muted">{note}</p>
-              </div>
+            <StaggerItem
+              key={name}
+              variant="left"
+              as="div"
+              className="group grid gap-3 py-8 sm:grid-cols-[1fr_1.35fr] sm:gap-14"
+            >
+              <h3 className="flex items-start gap-3.5 font-display text-xl text-text sm:text-2xl">
+                <Icon
+                  className="mt-1 h-5 w-5 shrink-0 text-accent transition-transform duration-300 group-hover:scale-110"
+                  strokeWidth={1.75}
+                  aria-hidden="true"
+                />
+                {name}
+              </h3>
+              <p className="max-w-2xl text-base leading-relaxed text-muted">{note}</p>
             </StaggerItem>
           ))}
         </Stagger>

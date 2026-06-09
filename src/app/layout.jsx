@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AmbientBackground from "@/components/AmbientBackground";
 import MotionProvider from "@/components/MotionProvider";
+import SmoothScroll from "@/components/SmoothScroll";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,7 +33,7 @@ const manrope = Manrope({
 export const metadata = {
   metadataBase: new URL("https://labgenie.ai"),
   title: {
-    default: "LabGenie — The AI operating system for F&B manufacturers",
+    default: "LabGenie: The AI operating system for F&B manufacturers",
     template: "%s · LabGenie",
   },
   description:
@@ -47,7 +48,7 @@ export const metadata = {
     "quote matching",
   ],
   openGraph: {
-    title: "LabGenie — The AI operating system for F&B manufacturers",
+    title: "LabGenie: The AI operating system for F&B manufacturers",
     description:
       "Check your quality documents against every customer's specs in minutes, not days. Quality, sales, and procurement in one AI-native interface.",
     url: "https://labgenie.ai",
@@ -67,14 +68,17 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable} ${manrope.variable}`}
     >
       <body>
         <MotionProvider>
-          <AmbientBackground />
-          <Navbar />
-          <main className="relative">{children}</main>
-          <Footer />
+          <SmoothScroll>
+            <AmbientBackground />
+            <Navbar />
+            <main className="relative">{children}</main>
+            <Footer />
+          </SmoothScroll>
         </MotionProvider>
       </body>
     </html>

@@ -1,4 +1,5 @@
 import Reveal from "./Reveal";
+import SynthiteMark from "./SynthiteMark";
 import { designPartner } from "@/lib/content";
 
 export default function DesignPartner() {
@@ -22,8 +23,8 @@ export default function DesignPartner() {
               &ldquo;{designPartner.quote}&rdquo;
             </blockquote>
             <figcaption className="mt-6 flex items-center gap-3 text-sm">
-              <span className="font-semibold text-text">{designPartner.name}</span>
-              <span className="text-dim">—</span>
+              <SynthiteMark className="h-5" />
+              <span className="text-dim">·</span>
               <span className="text-muted">{designPartner.descriptor}</span>
             </figcaption>
           </div>

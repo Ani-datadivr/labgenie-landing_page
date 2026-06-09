@@ -1,5 +1,6 @@
 import { Beaker, Inbox, LineChart } from "lucide-react";
 import ScrollRevealText from "../ScrollRevealText";
+import Reveal, { Stagger, StaggerItem } from "../Reveal";
 
 // The pain, stated before the product appears. Stark numbers, muted icons, no
 // screenshots. Dark surface (brand-committed) kept stark so the numbers land.
@@ -13,7 +14,7 @@ const CARDS = [
   {
     icon: Inbox,
     area: "Sales",
-    stat: "Thousands of requests",
+    stat: "1000+ requests",
     body: "Manually sorted. Slowly routed. Most never reach the lab in time.",
   },
   {
@@ -26,23 +27,23 @@ const CARDS = [
 
 export default function Problem() {
   return (
-    <section className="container-x grid-frame border-t border-border py-20 lg:py-28">
-      <h2 className="max-w-4xl text-4xl leading-[1.06] sm:text-5xl lg:text-[3.2rem]">
+    <section className="container-x py-20 lg:py-28">
+      <Reveal as="h2" variant="blur" className="max-w-4xl text-4xl leading-[1.06] sm:text-5xl lg:text-[3.2rem]">
         Your ERP stores the data. Your team still does the work by hand.
-      </h2>
+      </Reveal>
 
-      <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
+      <Stagger gap={0.12} className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
         {CARDS.map(({ icon: Icon, area, stat, body }) => (
-          <div key={area} className="bg-bg p-7 lg:p-8">
-            <Icon size={22} strokeWidth={1.5} className="text-dim" aria-hidden="true" />
+          <StaggerItem key={area} variant="scale" className="group bg-bg p-7 transition-colors duration-300 hover:bg-surface/40 lg:p-8">
+            <Icon size={22} strokeWidth={1.5} className="text-dim transition-colors duration-300 group-hover:text-accent" aria-hidden="true" />
             <div className="mono-label mt-6">{area}</div>
             <div className="mt-2 font-display text-3xl font-semibold tracking-tight text-text">
               {stat}
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted">{body}</p>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </Stagger>
 
       <ScrollRevealText
         as="p"
