@@ -20,6 +20,7 @@ module.exports = {
         "accent-2": "rgb(var(--accent-2-rgb) / <alpha-value>)",
         "accent-text": "rgb(var(--accent-text-rgb) / <alpha-value>)",
         warm: "rgb(var(--accent-warm-rgb) / <alpha-value>)",
+        danger: "rgb(var(--danger-rgb) / <alpha-value>)",
       },
       fontFamily: {
         display: ["var(--font-display)", "system-ui", "sans-serif"],

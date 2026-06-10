@@ -174,11 +174,11 @@ export default function ContactForm() {
               aria-invalid={errors[f.name] ? true : undefined}
               aria-describedby={errors[f.name] ? `${f.name}-error` : undefined}
               className={`w-full rounded-xl border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:outline-none ${
-                errors[f.name] ? "border-warm/70 focus:border-warm" : "border-border focus:border-accent/50"
+                errors[f.name] ? "border-danger/70 focus:border-danger" : "border-border focus:border-accent/50"
               }`}
             />
             {errors[f.name] && (
-              <p id={`${f.name}-error`} className="mt-1.5 text-xs text-warm">
+              <p id={`${f.name}-error`} className="mt-1.5 text-xs text-danger">
                 {errors[f.name]}
               </p>
             )}
@@ -231,12 +231,12 @@ export default function ContactForm() {
               aria-invalid={errors.phone ? true : undefined}
               aria-describedby={errors.phone ? "phone-error" : undefined}
               className={`w-full rounded-xl border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:outline-none ${
-                errors.phone ? "border-warm/70 focus:border-warm" : "border-border focus:border-accent/50"
+                errors.phone ? "border-danger/70 focus:border-danger" : "border-border focus:border-accent/50"
               }`}
             />
           </div>
           {errors.phone && (
-            <p id="phone-error" className="mt-1.5 text-xs text-warm">
+            <p id="phone-error" className="mt-1.5 text-xs text-danger">
               {errors.phone}
             </p>
           )}
@@ -258,11 +258,11 @@ export default function ContactForm() {
             aria-invalid={errors.message ? true : undefined}
             aria-describedby={errors.message ? "message-error" : undefined}
             className={`w-full resize-none rounded-xl border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:outline-none ${
-              errors.message ? "border-warm/70 focus:border-warm" : "border-border focus:border-accent/50"
+              errors.message ? "border-danger/70 focus:border-danger" : "border-border focus:border-accent/50"
             }`}
           />
           {errors.message && (
-            <p id="message-error" className="mt-1.5 text-xs text-warm">
+            <p id="message-error" className="mt-1.5 text-xs text-danger">
               {errors.message}
             </p>
           )}
@@ -282,7 +282,7 @@ export default function ContactForm() {
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-sm text-warm"
+              className="text-sm text-danger"
             >
               Something went wrong. Email us at {site.email}.
             </motion.span>

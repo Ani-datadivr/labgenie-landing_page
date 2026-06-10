@@ -18,6 +18,7 @@
   --accent-2-rgb: 90 160 255;   /* #5AA0FF — lighter azure: depth / gradients */
   --accent-text-rgb: 107 170 255; /* #6BAAFF — accent for SMALL text: ~7.8:1 on ink (AAA) */
   --accent-warm-rgb: 255 180 84;/* amber — semantic flag / out-of-spec only */
+  --danger-rgb: 255 138 138;    /* #FF8A8A — error text/borders: ~7.7:1 on ink (AAA) */
 
   --bg: rgb(var(--bg-rgb));
   --bg-elev: rgb(var(--bg-elev-rgb));
@@ -30,6 +31,7 @@
   --accent-2: rgb(var(--accent-2-rgb));
   --accent-text: rgb(var(--accent-text-rgb));
   --accent-warm: rgb(var(--accent-warm-rgb));
+  --danger: rgb(var(--danger-rgb));
 
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.14);
