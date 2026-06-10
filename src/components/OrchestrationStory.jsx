@@ -80,7 +80,7 @@ export default function OrchestrationStory() {
                           </svg>
                         </span>
                         <p className="text-sm leading-snug text-muted">
-                          <span className="font-mono text-[11px] uppercase tracking-wider text-accent">
+                          <span className="font-mono text-[11px] uppercase tracking-wider text-accent-text">
                             {s.station}
                           </span>
                           <span className="mx-2 text-dim">·</span>
@@ -102,7 +102,7 @@ export default function OrchestrationStory() {
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className="mt-5 flex items-start gap-3 rounded-2xl rounded-bl-sm border border-accent/30 bg-accent/[0.07] px-4 py-3.5"
                 >
-                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-accent/20 font-mono text-[11px] font-bold text-accent">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-accent/20 font-mono text-[11px] font-bold text-accent-text">
                     LG
                   </span>
                   <p className="text-sm leading-relaxed text-text">{answer}</p>

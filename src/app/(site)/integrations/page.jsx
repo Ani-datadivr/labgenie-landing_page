@@ -44,7 +44,7 @@ export default function IntegrationsPage() {
                 { step: "03", title: "Write back", body: "Populate compliance documentation and route work back into your systems." },
               ].map((s) => (
                 <div key={s.step} className="border-t border-border pt-5">
-                  <span className="font-mono text-xs text-accent">{s.step}</span>
+                  <span className="font-mono text-xs text-accent-text">{s.step}</span>
                   <h4 className="mt-2 text-lg text-text">{s.title}</h4>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
                 </div>

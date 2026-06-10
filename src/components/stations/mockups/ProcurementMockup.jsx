@@ -114,7 +114,7 @@ export default function ProcurementMockup() {
           {/* minimal mono axis labels */}
           <div className="mt-1 flex items-center justify-between font-mono text-[9px] uppercase tracking-wider text-dim">
             <span>8 wks ago</span>
-            <span className="text-accent/80">buy window</span>
+            <span className="text-accent-text/80">buy window</span>
             <span>now</span>
           </div>
         </div>
@@ -123,7 +123,7 @@ export default function ProcurementMockup() {
         <div className="mt-4 flex items-start gap-2 rounded-xl border border-accent/25 bg-accent/[0.06] px-3.5 py-3">
           <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
           <p className="text-[13px] leading-snug text-text">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-accent">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-accent-text">
               Buy window
             </span>
             <br />

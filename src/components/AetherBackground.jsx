@@ -14,9 +14,14 @@ export default function AetherBackground({ className = "" }) {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const parent = canvas.parentElement;
+    // Render a single static frame (no rAF, no listeners) when motion is
+    // reduced OR on touch/small screens: there's no cursor to interact with on
+    // mobile, and the per-frame O(n²) link pass is the hero's heaviest cost.
     const reduce =
       typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.innerWidth < 768);
 
     let raf = 0;
     let particles = [];

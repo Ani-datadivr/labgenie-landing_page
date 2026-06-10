@@ -17,7 +17,7 @@ export default function QaMockup() {
       {/* status header */}
       <div className="flex items-center gap-2 px-1 pb-4 pt-1">
         <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_10px_2px_rgba(0,102,255,0.7)]" />
-        <span className="font-mono text-[12px] text-accent">Analyzing RFP</span>
+        <span className="font-mono text-[12px] text-accent-text">Analyzing RFP</span>
         <span className="font-mono text-[12px] text-dim">· Harris Foods</span>
       </div>
 

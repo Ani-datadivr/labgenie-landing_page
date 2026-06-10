@@ -12,7 +12,7 @@ export default function StatsBand() {
                 {s.value}
               </p>
               <p className="mt-2 text-sm text-muted">{s.label}</p>
-              <p className="mt-3 font-mono text-[11px] uppercase tracking-wider text-accent/80">
+              <p className="mt-3 font-mono text-[11px] uppercase tracking-wider text-accent-text/80">
                 {s.mono}
               </p>
             </div>

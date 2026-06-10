@@ -49,7 +49,7 @@ export default function ManufacturersPage() {
               as="div"
               className="grid gap-1.5 py-6 sm:grid-cols-[220px_1fr] sm:gap-10"
             >
-              <span className="font-mono text-[12px] uppercase tracking-[0.16em] text-accent">{b.role}</span>
+              <span className="font-mono text-[12px] uppercase tracking-[0.16em] text-accent-text">{b.role}</span>
               <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{b.pain}</p>
             </StaggerItem>
           ))}

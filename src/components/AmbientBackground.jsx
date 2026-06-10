@@ -1,9 +1,29 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 // Living backdrop: drifting aurora light, two slow sweeping light beams, a
 // rotating conic sheen, and fine grain. Premium and alive without competing
 // with content. Frozen to a static composition under prefers-reduced-motion.
+//
+// This layer is fixed full-viewport, so it's always visible while the tab is
+// focused — but its six large blurred layers keep compositing on the GPU even
+// when the tab is backgrounded. We pause every animation on `visibilitychange`
+// so a hidden tab costs nothing; resume is instant and visually identical.
 export default function AmbientBackground() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const sync = () => el.classList.toggle("lg-paused", document.hidden);
+    sync();
+    document.addEventListener("visibilitychange", sync);
+    return () => document.removeEventListener("visibilitychange", sync);
+  }, []);
+
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div ref={ref} aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       {/* drifting aurora blobs */}
       <div className="lg-aurora lg-aurora-a" />
       <div className="lg-aurora lg-aurora-b" />
@@ -18,7 +38,7 @@ export default function AmbientBackground() {
 
       {/* fine grain */}
       <div
-        className="absolute inset-0 opacity-[0.045] mix-blend-soft-light"
+        className="lg-grain absolute inset-0 opacity-[0.045] mix-blend-soft-light"
         style={{
           backgroundImage:
             "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
@@ -97,6 +117,18 @@ export default function AmbientBackground() {
           50% { transform: translateX(-40%) rotate(-12deg); opacity: 0.55; }
         }
         @keyframes lg-spin { to { transform: rotate(360deg); } }
+        /* Backgrounded tab: stop compositing the blurred layers entirely. */
+        .lg-paused .lg-aurora,
+        .lg-paused .lg-sheen,
+        .lg-paused .lg-beam { animation-play-state: paused; }
+        /* Mobile: the sweeping beams, conic sheen and blend-mode grain are the
+           expensive compositor work that makes touch scroll jank and fixed
+           layers (incl. the nav) drop. Drop them and freeze the aurora to a
+           static, still-premium gradient. */
+        @media (max-width: 768px) {
+          .lg-beam, .lg-sheen, .lg-grain { display: none; }
+          .lg-aurora { animation: none !important; opacity: 0.4; }
+        }
         @media (prefers-reduced-motion: reduce) {
           .lg-aurora, .lg-sheen, .lg-beam { animation: none !important; }
         }

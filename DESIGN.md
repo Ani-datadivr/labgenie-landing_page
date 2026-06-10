@@ -4,13 +4,14 @@ description: The AI operating system for F&B ingredient manufacturers — Datadi
 colors:
   brand-blue: "#0066FF"
   azure: "#5AA0FF"
+  accent-text: "#6BAAFF"
   ink: "#0E141C"
   bg-elev: "#131A24"
   surface: "#18212E"
   surface-2: "#1F2A3A"
   text: "#EDF1F6"
   muted: "#A6B2C2"
-  dim: "#6F7D8F"
+  dim: "#97A4B6"
   flag-amber: "#FFB454"
 typography:
   display:
@@ -86,7 +87,8 @@ It explicitly rejects four things: **generic dark SaaS** (no purple-gradient her
 A near-monochrome blue-on-ink system: one saturated brand blue carries all signal, neutrals are cool-tinted, and a lone amber marks failure.
 
 ### Primary
-- **Datadivr Blue** (#0066FF): The brand signal and the official Datadivr/LabGenie blue. Primary CTAs, the logo's spectrum dots, accent text on large headings ("manufacturers."), focus rings, the reconciliation scan line, resolved-match states, and the interactive background-grid hover. This is the only saturated color on the page.
+- **Datadivr Blue** (#0066FF): The brand signal and the official Datadivr/LabGenie blue. Used as a **fill and on large display type only** — primary CTAs, the logo's spectrum dots, accent words on large headings ("manufacturers."), focus rings, the reconciliation scan line, resolved-match states, and the interactive background-grid hover. At ~3.83:1 on ink it clears AA for large text but not body; it is never used for small text. This is the only saturated color on the page.
+- **Accent Text** (#6BAAFF): A lighter tint of the brand blue reserved for **small blue text** — mono kickers, data labels, inline emphasis, links, status chips. At ~7.77:1 on ink it meets AAA, where #0066FF would fail. Visually the same signal; legible at body sizes.
 
 ### Secondary
 - **Azure** (#5AA0FF): A lighter tint of the brand blue for depth — gradient lift on the primary button, ambient orb glows, and the brighter end of the background-grid hover spectrum. Never competes with the brand blue; it supports it.
@@ -96,13 +98,15 @@ A near-monochrome blue-on-ink system: one saturated brand blue carries all signa
 - **Elevated / Surface / Surface-2** (#131A24 / #18212E / #1F2A3A): Cool blue-tinted panel tiers, each a step lighter, for cards, the COA panel, and nav surfaces.
 - **Text** (#EDF1F6): Near-white primary text on ink (~16:1, AAA).
 - **Muted** (#A6B2C2): Secondary/body-supporting text (~8.6:1 on ink, AAA body).
-- **Dim** (#6F7D8F): Tertiary labels and de-emphasized metadata only.
+- **Dim** (#97A4B6): Tertiary labels and de-emphasized metadata only. Lifted to ~7.3:1 on ink so even tertiary text stays AAA.
 
 ### Tertiary
 - **Flag Amber** (#FFB454): Reserved exclusively for out-of-spec / flagged states (e.g. a failing Lead (Pb) row). It is a status color, not a brand color.
 
 ### Named Rules
-**The One Signal Rule.** Datadivr Blue is the only saturated hue on any screen. If a second saturated color appears for decoration, delete it. Azure is a tint of the same blue, not a second color.
+**The One Signal Rule.** Datadivr Blue is the only saturated hue on any screen. If a second saturated color appears for decoration, delete it. Azure (#5AA0FF) and Accent Text (#6BAAFF) are tints of the same blue, not separate colors.
+
+**The Small-Text-Is-Accent-Text Rule.** #0066FF is a fill and large-display color only (~3.83:1 on ink). Any blue text below large-heading size uses #6BAAFF (~7.77:1, AAA) instead. Reaching for `text-accent` on a label or body span is the bug; the token is `accent-text`.
 
 **The Amber-Means-Failure Rule.** Amber appears only where a value is out of spec. Never as decoration, never as a generic accent. If nothing has failed, there is no amber on the screen.
 
@@ -174,7 +178,8 @@ The system is structural-flat: depth comes from cool tonal layering (ink → ele
 ### Do:
 - **Do** use Datadivr Blue (#0066FF) as the single saturated signal — CTAs, the logo dots, resolved states, focus rings, the grid hover.
 - **Do** ground every surface on Ink (#0E141C) and step neutrals upward with cool blue-tinted tiers.
-- **Do** keep body text at #EDF1F6 / #A6B2C2 for AAA contrast on ink; reserve #6F7D8F for tertiary metadata only.
+- **Do** keep body text at #EDF1F6 / #A6B2C2 for AAA contrast on ink; reserve #97A4B6 for tertiary metadata only.
+- **Do** use Accent Text (#6BAAFF) for any small blue text — labels, links, inline emphasis, chips; #0066FF small text fails AAA.
 - **Do** render the logo from the exact official artwork (white arc + five #0066FF dots, "labgenie.ai" in Manrope). Retain it precisely.
 - **Do** gate every animation behind `prefers-reduced-motion` with a non-motion fallback, and keep content visible by default (never gate visibility on a motion reveal).
 - **Do** carry status meaning with an icon plus color, never color alone.

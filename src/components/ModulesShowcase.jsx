@@ -2,7 +2,7 @@ import { modules } from "@/lib/content";
 import Reveal, { Stagger, StaggerItem } from "./Reveal";
 
 const toneRing = {
-  accent: "border-accent/30 text-accent",
+  accent: "border-accent/30 text-accent-text",
   blue: "border-accent-2/30 text-accent-2",
   muted: "border-border-strong text-muted",
 };

@@ -26,8 +26,9 @@ import {
   Zap,
   Database,
 } from "lucide-react";
-import { GROUPS, STATIONS as STATION_DATA } from "@/lib/operations";
+import { STATIONS as STATION_DATA } from "@/lib/operations";
 import styles from "./OperationsCanvas.module.css";
+import MobileDemo from "./MobileDemo";
 
 /* ============================================================================
    DATA MODEL — catalogue lives in @/lib/operations (shared with the Gemini
@@ -939,9 +940,13 @@ export default function OperationsCanvas() {
         <header className={styles.header}>
           <p className={styles.eyebrow}>Operations Dashboard</p>
           <h2 className={styles.title}>One agent. Every station.</h2>
-          <p className={styles.sub}>
-            LabGenie sits on top of your ERP — it reads the data, then routes any request to the right sub-agent.
+          <p className={`${styles.sub} max-[899px]:hidden`}>
+            LabGenie sits on top of your ERP, reads the data, then routes any request to the right sub-agent.
             Switch teams, expand a station to fire a module, drag anything, or just ask in plain English.
+          </p>
+          <p className={`${styles.sub} min-[900px]:hidden`}>
+            LabGenie sits on top of your ERP, reads the data, then routes any request to the right sub-agent.
+            Watch it take a few requests below.
           </p>
         </header>
       </div>
@@ -962,7 +967,7 @@ export default function OperationsCanvas() {
           </span>
         </div>
         <div ref={canvasRef} className={styles.canvas}>
-          <div className={styles.groupBar} role="tablist" aria-label="Filter stations by team">
+          <div className={styles.groupBar} role="group" aria-label="Filter stations by team">
             {GROUP_LIST.map((g) => {
               const { Icon } = g;
               const count = STATIONS.filter((s) => s.group === g.id).length;
@@ -971,8 +976,8 @@ export default function OperationsCanvas() {
                 <button
                   key={g.id}
                   type="button"
-                  role="tab"
-                  aria-selected={active}
+                  aria-pressed={active}
+                  aria-label={`${g.name} (${count} stations)`}
                   className={`${styles.groupBtn} ${active ? styles.groupBtnActive : ""}`}
                   onClick={() => selectGroup(g.id)}
                 >
@@ -1130,40 +1135,9 @@ export default function OperationsCanvas() {
         </div>
       </div>
 
-      {/* ---- mobile fallback (< 900px) ---- */}
+      {/* ---- mobile (< 900px): auto-playing "see it work" demo ---- */}
       <div className={`container-x ${styles.mobile}`}>
-        {Object.entries(GROUPS).map(([gid, gname]) => (
-          <div key={gid} className={styles.mGroup}>
-            <h3 className={styles.mGroupTitle}>{gname}</h3>
-            <div className={styles.mGrid}>
-              {STATIONS.filter((s) => s.group === gid).map((s) => {
-                const { Icon } = s;
-                const live = s.status === "live";
-                return (
-                  <div key={s.id} className={styles.mCard} style={{ "--accent": s.accent }}>
-                    <div className={styles.mCardHead}>
-                      <span className={styles.iconTile} aria-hidden="true">
-                        <Icon size={16} strokeWidth={1.75} />
-                      </span>
-                      <h4 className={styles.mCardName}>{s.short}</h4>
-                      <span className={`${styles.chip} ${live ? styles.chipLive : styles.chipPlanned}`}>
-                        {live ? "Live" : "Planned"}
-                      </span>
-                    </div>
-                    <ul className={styles.mModList}>
-                      {s.modules.map((m) => (
-                        <li key={m} className={styles.mModItem}>
-                          <span className={styles.modDot} aria-hidden="true" />
-                          {m}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+        <MobileDemo />
       </div>
     </section>
   );

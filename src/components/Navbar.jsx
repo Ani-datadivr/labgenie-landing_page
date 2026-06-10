@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -27,23 +26,13 @@ export default function Navbar() {
     NAV.find((i) => pathname?.startsWith(i.url))?.name ??
     null;
 
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
     <>
       {/* Logo — fixed top-left */}
       <Link
         href="/"
         aria-label="LabGenie home"
-        className={`fixed left-4 top-3 z-50 flex min-h-[44px] items-center rounded-xl px-2 transition-colors sm:left-6 ${
-          scrolled ? "bg-bg/70 backdrop-blur-md" : ""
-        }`}
+        className="fixed left-4 top-3 z-50 flex min-h-[44px] items-center rounded-xl px-2 sm:left-6"
       >
         <Logo />
       </Link>
@@ -56,9 +45,12 @@ export default function Navbar() {
         Request a demo
       </Link>
 
-      {/* Tubelight pill nav */}
-      <nav className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 sm:bottom-auto sm:top-4">
-        <div className="flex items-center gap-1 rounded-full border border-border bg-bg/60 px-1 py-1 shadow-panel backdrop-blur-xl">
+      {/* Tubelight pill nav. transform-gpu pins it to its own compositor layer so
+          it can't drop out during scroll on mobile; the bg is more opaque on
+          mobile (lighter blur) so it stays legible even if backdrop-filter is
+          throttled, then takes the full glass treatment from sm: up. */}
+      <nav className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform-gpu sm:bottom-auto sm:top-4">
+        <div className="flex items-center gap-1 rounded-full border border-border bg-bg/90 px-1 py-1 shadow-panel backdrop-blur-md sm:bg-bg/60 sm:backdrop-blur-xl">
           {NAV.map((item) => {
             const Icon = item.icon;
             const isActive = active === item.name;
@@ -69,7 +61,7 @@ export default function Navbar() {
                 aria-current={isActive ? "page" : undefined}
                 aria-label={item.name}
                 className={`relative flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full px-3 py-2 text-[13px] font-medium transition-colors sm:px-4 lg:px-5 ${
-                  isActive ? "text-accent" : "text-muted hover:text-text"
+                  isActive ? "text-accent-text" : "text-muted hover:text-text"
                 }`}
               >
                 <Icon size={18} strokeWidth={2.25} aria-hidden="true" className="lg:hidden" />

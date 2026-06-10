@@ -97,7 +97,7 @@ export default function DashboardBrief() {
                 <div className="min-w-0 flex-1">
                   <p className="text-[12.5px] leading-snug text-muted">{item.text}</p>
                 </div>
-                <span className="inline-flex shrink-0 items-center gap-1 self-center font-mono text-[10px] uppercase tracking-wider text-accent">
+                <span className="inline-flex shrink-0 items-center gap-1 self-center font-mono text-[10px] uppercase tracking-wider text-accent-text">
                   {item.action}
                   <ArrowRight className="h-3 w-3" aria-hidden="true" />
                 </span>
@@ -106,7 +106,7 @@ export default function DashboardBrief() {
           </ul>
           <div className="mt-4 flex items-center justify-between rounded-xl border border-accent/25 bg-accent/[0.07] px-4 py-3">
             <span className="text-[12.5px] text-muted">Manual work avoided today</span>
-            <span className="font-display text-base font-semibold text-accent">~3 days</span>
+            <span className="font-display text-base font-semibold text-accent-text">~3 days</span>
           </div>
         </div>
       </div>

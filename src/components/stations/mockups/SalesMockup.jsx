@@ -67,7 +67,7 @@ export default function SalesMockup() {
       {/* agent draft */}
       <div className="mt-4 rounded-xl border border-accent/30 bg-accent/[0.06] p-4">
         <div className="flex items-center justify-between gap-3">
-          <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+          <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent-text">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             Sales Agent · 05s
           </span>
@@ -96,7 +96,7 @@ export default function SalesMockup() {
             </span>
           </div>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-dim">
-            Confidence <span className="font-semibold text-accent">91%</span>
+            Confidence <span className="font-semibold text-accent-text">91%</span>
           </span>
         </div>
       </div>

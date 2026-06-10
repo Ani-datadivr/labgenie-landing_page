@@ -36,7 +36,7 @@ const securityEmail = "security@labgenie.ai";
 // claimed as certified. Tags are paired with text + a dot pattern so meaning
 // never rests on color alone.
 const STATUS = {
-  certified: { label: "Certified", style: "border-accent/40 bg-accent/10 text-accent" },
+  certified: { label: "Certified", style: "border-accent/40 bg-accent/10 text-accent-text" },
   progress: { label: "In progress", style: "border-[#fb923c]/45 bg-[#fb923c]/10 text-[#fb923c]" },
   aligned: { label: "Aligned", style: "border-[#4ade80]/45 bg-[#4ade80]/10 text-[#4ade80]" },
 };

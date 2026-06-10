@@ -36,6 +36,9 @@ export async function POST(req) {
     return Response.json({ ok: false }, { status: 500 });
   }
 
+  // Unix seconds for Slack's <!date> token (renders in each viewer's timezone).
+  const ts = Math.floor(Date.now() / 1000);
+
   const payload = {
     attachments: [
       {
@@ -89,7 +92,10 @@ export async function POST(req) {
           {
             type: "context",
             elements: [
-              { type: "mrkdwn", text: "Source: *labgenie.ai/contact*  •  LabGenie CRM Bot" },
+              {
+                type: "mrkdwn",
+                text: `⏱️  <!date^${ts}^{date_long_pretty} at {time}|just now>  •  Source: *labgenie.ai/contact*  •  LabGenie CRM Bot`,
+              },
             ],
           },
         ],

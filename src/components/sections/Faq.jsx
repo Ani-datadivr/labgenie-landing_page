@@ -33,8 +33,12 @@ const FAQS = [
   },
 ];
 
-export default function Faq() {
-  const [open, setOpen] = useState(0);
+export default function Faq({ items }) {
+  // Editable copy comes from Keystatic (singleton "faqs"); fall back to the
+  // built-in list if none is passed or it's empty.
+  const faqs = items?.length ? items : FAQS;
+  // Start fully collapsed — every item reads as just a question at first glance.
+  const [open, setOpen] = useState(-1);
 
   return (
     <section id="faq" className="container-x py-20 lg:py-28">
@@ -53,14 +57,16 @@ export default function Faq() {
         </div>
 
         <Reveal as="ul" delay={0.05} className="divide-y divide-border border-y border-border">
-          {FAQS.map((item, i) => {
+          {faqs.map((item, i) => {
             const isOpen = open === i;
             return (
               <li key={item.q}>
                 <button
                   type="button"
+                  id={`faq-q-${i}`}
                   onClick={() => setOpen(isOpen ? -1 : i)}
                   aria-expanded={isOpen}
+                  aria-controls={`faq-a-${i}`}
                   className="flex w-full items-center justify-between gap-4 py-5 text-left"
                 >
                   <span className="font-display text-lg font-medium text-text">{item.q}</span>
@@ -85,13 +91,25 @@ export default function Faq() {
                   {isOpen && (
                     <motion.div
                       key="content"
+                      id={`faq-a-${i}`}
+                      role="region"
+                      aria-labelledby={`faq-q-${i}`}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.38, ease: EASE }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-[68ch] pb-6 text-[15px] leading-relaxed text-muted">{item.a}</p>
+                      {/* answer resolves in: fades up and sharpens from dim to
+                          full weight, slightly after the panel opens */}
+                      <motion.p
+                        initial={{ opacity: 0, y: 6, color: "#6F7D8F" }}
+                        animate={{ opacity: 1, y: 0, color: "#A6B2C2" }}
+                        transition={{ duration: 0.55, ease: EASE, delay: 0.12 }}
+                        className="max-w-[68ch] pb-6 text-[15px] leading-relaxed"
+                      >
+                        {item.a}
+                      </motion.p>
                     </motion.div>
                   )}
                 </AnimatePresence>

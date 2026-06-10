@@ -204,6 +204,10 @@ h1, h2, h3, h4 {
   .btn {
     @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-medium transition-all duration-200 focus-visible:outline-none;
   }
+  /* A11y note: white-on-brand-blue is ~4.83:1 — WCAG AA (≥4.5:1) but not the
+     AAA 7:1 target. This is a deliberate brand tradeoff: the CTA must carry the
+     exact Datadivr blue (#0066FF), which can't reach 7:1 against white at this
+     size. Small UI text uses --accent-text (AAA) instead; see DESIGN.md. */
   .btn-primary {
     background: linear-gradient(180deg, #1a78ff, var(--accent));
     color: #fff;
@@ -396,6 +400,10 @@ h1, h2, h3, h4 {
   to { transform: translateX(-50%); }
 }
 .marquee-mask {
+  /* Clip the max-content track. Without this the duplicated row (~4000px wide)
+     overflows the page, ballooning the document width on mobile — which breaks
+     vertical scrolling and throws the fixed, left-1/2-centered nav off-screen. */
+  overflow: hidden;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }

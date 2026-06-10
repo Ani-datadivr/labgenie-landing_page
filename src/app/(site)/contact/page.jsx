@@ -77,7 +77,7 @@ export default function ContactPage() {
 
               <div className="border-t border-border pt-6">
                 <p className="text-sm text-muted">Prefer email?</p>
-                <a href={`mailto:${site.email}`} className="mt-1 inline-block font-display text-lg text-accent">
+                <a href={`mailto:${site.email}`} className="mt-1 inline-block font-display text-lg text-accent-text">
                   {site.email}
                 </a>
               </div>

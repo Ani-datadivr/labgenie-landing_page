@@ -330,7 +330,7 @@ function StageOrchestrate() {
         {CHIPS.map((c, i) => (
           <motion.span
             key={c}
-            className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-accent"
+            className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-accent/[0.08] px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-accent-text"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.35, ease: EASE, delay: 0.2 + i * 0.12 }}

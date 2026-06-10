@@ -20,11 +20,37 @@ export default function ContactForm() {
   const [values, setValues] = useState({
     name: "", email: "", company: "", phone: "", country: "", teamSize: "", message: "",
   });
+  const [errors, setErrors] = useState({});
 
-  const update = (k) => (e) => setValues((v) => ({ ...v, [k]: e.target.value }));
+  // Clear a field's error as soon as the user edits it.
+  const update = (k) => (e) => {
+    const val = e.target.value;
+    setValues((v) => ({ ...v, [k]: val }));
+    setErrors((er) => (er[k] ? { ...er, [k]: undefined } : er));
+  };
+
+  // Client-side validation: required fields + email shape. Server still
+  // re-validates; this is for fast, specific feedback near each field.
+  function validate() {
+    const e = {};
+    if (!values.name.trim()) e.name = "Enter your name.";
+    if (!values.email.trim()) e.email = "Enter your work email.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))
+      e.email = "Enter a valid email address.";
+    if (!values.message.trim()) e.message = "Tell us what you're hoping to solve.";
+    return e;
+  }
 
   async function onSubmit(e) {
     e.preventDefault();
+    const found = validate();
+    if (Object.keys(found).length) {
+      setErrors(found);
+      // Move focus to the first field with an error for keyboard/SR users.
+      const first = Object.keys(found)[0];
+      document.getElementById(first)?.focus();
+      return;
+    }
     setStatus("submitting");
     try {
       const res = await fetch("/api/contact", {
@@ -59,7 +85,7 @@ export default function ContactForm() {
         <p className="mt-3 max-w-sm text-sm text-muted">
           A member of our team will reach out within one business day. In the
           meantime, feel free to email us directly at{" "}
-          <a href={`mailto:${site.email}`} className="text-accent">{site.email}</a>.
+          <a href={`mailto:${site.email}`} className="text-accent-text">{site.email}</a>.
         </p>
       </motion.div>
     );
@@ -72,7 +98,7 @@ export default function ContactForm() {
           <div key={f.name} className={f.half ? "" : "sm:col-span-2"}>
             <label htmlFor={f.name} className="mb-2 block text-sm font-medium text-text">
               {f.label}
-              {f.required && <span className="ml-1 text-accent">*</span>}
+              {f.required && <span className="ml-1 text-accent-text">*</span>}
             </label>
             <input
               id={f.name}
@@ -82,15 +108,24 @@ export default function ContactForm() {
               placeholder={f.placeholder}
               value={values[f.name]}
               onChange={update(f.name)}
-              className="w-full rounded-xl border border-border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:border-accent/50 focus:outline-none"
+              aria-invalid={errors[f.name] ? true : undefined}
+              aria-describedby={errors[f.name] ? `${f.name}-error` : undefined}
+              className={`w-full rounded-xl border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:outline-none ${
+                errors[f.name] ? "border-warm/70 focus:border-warm" : "border-border focus:border-accent/50"
+              }`}
             />
+            {errors[f.name] && (
+              <p id={`${f.name}-error`} className="mt-1.5 text-xs text-warm">
+                {errors[f.name]}
+              </p>
+            )}
           </div>
         ))}
 
         <div className="sm:col-span-2">
           <label htmlFor="message" className="mb-2 block text-sm font-medium text-text">
             What are you hoping to solve?
-            <span className="ml-1 text-accent">*</span>
+            <span className="ml-1 text-accent-text">*</span>
           </label>
           <textarea
             id="message"
@@ -100,8 +135,17 @@ export default function ContactForm() {
             value={values.message}
             onChange={update("message")}
             placeholder="Tell us about your spec-reconciliation or sales-ops workflow today."
-            className="w-full resize-none rounded-xl border border-border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:border-accent/50 focus:outline-none"
+            aria-invalid={errors.message ? true : undefined}
+            aria-describedby={errors.message ? "message-error" : undefined}
+            className={`w-full resize-none rounded-xl border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:outline-none ${
+              errors.message ? "border-warm/70 focus:border-warm" : "border-border focus:border-accent/50"
+            }`}
           />
+          {errors.message && (
+            <p id="message-error" className="mt-1.5 text-xs text-warm">
+              {errors.message}
+            </p>
+          )}
         </div>
       </div>
 

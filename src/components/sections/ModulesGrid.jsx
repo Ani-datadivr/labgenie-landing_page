@@ -4,7 +4,7 @@ import SectionHeader from "./SectionHeader";
 // The platform, as a structured maturity ledger rather than identical cards:
 // Live today / In active build / On the roadmap, each a hairline group.
 const TIERS = [
-  { key: "live", tag: "Live today", tagClass: "border-accent/40 bg-accent/10 text-accent" },
+  { key: "live", tag: "Live today", tagClass: "border-accent/40 bg-accent/10 text-accent-text" },
   { key: "building", tag: "In active build", tagClass: "border-border-strong bg-white/[0.04] text-muted" },
   { key: "roadmap", tag: "On the roadmap", tagClass: "border-border bg-transparent text-dim" },
 ];

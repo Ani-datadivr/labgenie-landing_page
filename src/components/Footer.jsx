@@ -56,7 +56,9 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-border">
-        <div className="container-x flex flex-col items-center justify-between gap-3 py-6 text-xs text-dim sm:flex-row">
+        {/* extra bottom padding on phones so this bar clears the fixed bottom
+            nav pill (which only floats at the bottom below sm) */}
+        <div className="container-x flex flex-col items-center justify-between gap-3 pt-6 pb-28 text-xs text-dim sm:flex-row sm:py-6">
           <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
           <p className="font-mono">Dairy · Beverage · Ingredients · Flavors · Specialty F&amp;B</p>
         </div>

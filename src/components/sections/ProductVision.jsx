@@ -6,7 +6,7 @@ import Reveal from "../Reveal";
 // full architecture map. Individual station detail lives on /platform.
 export default function ProductVision() {
   return (
-    <section className="container-x py-20 lg:py-28">
+    <section className="container-x py-20 max-[899px]:hidden lg:py-28">
       <div className="max-w-3xl">
         <Reveal className="flex items-center gap-3">
           <span className="h-px w-7 bg-accent/60" />

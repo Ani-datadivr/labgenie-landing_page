@@ -16,7 +16,7 @@ export default function DesignPartner() {
             }}
           />
           <div className="relative max-w-3xl">
-            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent-text">
               First design partner
             </span>
             <blockquote className="mt-5 font-display text-2xl leading-snug text-text sm:text-[1.8rem]">

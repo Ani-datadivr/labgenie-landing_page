@@ -120,7 +120,7 @@ export default function FormulationMockup() {
                 </span>
                 <span
                   className={`inline-flex items-center gap-1 font-mono text-[11px] ${
-                    s.state === "converted" ? "text-accent" : "text-muted"
+                    s.state === "converted" ? "text-accent-text" : "text-muted"
                   }`}
                 >
                   {s.state === "converted" && <ArrowRight className="h-3 w-3" strokeWidth={2} />}

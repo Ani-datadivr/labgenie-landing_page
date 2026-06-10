@@ -45,7 +45,7 @@ export default function Comparison() {
               >
                 <span
                   className={`font-display text-sm font-semibold ${
-                    i === 2 ? "text-accent" : "text-muted"
+                    i === 2 ? "text-accent-text" : "text-muted"
                   }`}
                 >
                   {c}

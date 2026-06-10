@@ -7,24 +7,31 @@ import AppDashboard from "./AppDashboard";
 
 const ease = [0.22, 1, 0.36, 1];
 
+// Defaults keep the hero working if no CMS content is passed (or a field is
+// blank). Editable copy is sourced from Keystatic (singleton "home") and passed
+// in as `copy` from the server page.
+const DEFAULTS = {
+  titleLead: "The only end-to-end platform for",
+  titleAccent: "F&B manufacturers.",
+  sub: "LabGenie connects your quality, sales, procurement, and production workflows through one AI layer, on top of the ERP you already run.",
+  primaryLabel: "Get early access",
+  primaryHref: "/contact",
+  secondaryLabel: "See it in action",
+  secondaryHref: "#operations",
+};
+
 // Headline animated word by word: each word rises and sharpens from a soft blur.
-function AnimatedHeading() {
+function AnimatedHeading({ lead, accent }) {
   const reduce = useReducedMotion();
   const words = [
-    { t: "The" },
-    { t: "only" },
-    { t: "end-to-end" },
-    { t: "platform" },
-    { t: "for" },
-    { t: "F&B", accent: true },
-    { t: "manufacturers.", accent: true },
+    ...lead.split(/\s+/).filter(Boolean).map((t) => ({ t })),
+    ...accent.split(/\s+/).filter(Boolean).map((t) => ({ t, accent: true })),
   ];
 
   if (reduce) {
     return (
       <h1 className="display mx-auto max-w-[16ch]">
-        The only end-to-end platform for{" "}
-        <span className="text-accent">F&amp;B manufacturers.</span>
+        {lead} <span className="text-accent">{accent}</span>
       </h1>
     );
   }
@@ -46,14 +53,16 @@ function AnimatedHeading() {
           }}
         >
           <span className={w.accent ? "text-accent" : undefined}>{w.t}</span>
-          {i < words.length - 1 ? " " : ""}
+          {i < words.length - 1 ? " " : ""}
         </motion.span>
       ))}
     </motion.h1>
   );
 }
 
-export default function Hero() {
+export default function Hero({ copy }) {
+  const c = { ...DEFAULTS, ...(copy || {}) };
+
   return (
     <section className="relative overflow-hidden">
       {/* Aether particle field */}
@@ -63,18 +72,8 @@ export default function Hero() {
       </div>
 
       <div className="container-x grid-frame relative pb-16 pt-32 text-center sm:pt-36 lg:pb-24 lg:pt-44">
-        <motion.span
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease }}
-          className="kicker kicker-accent justify-center"
-        >
-          <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent" />
-          Quality · Sales · Procurement · Production
-        </motion.span>
-
-        <div className="mt-7">
-          <AnimatedHeading />
+        <div>
+          <AnimatedHeading lead={c.titleLead} accent={c.titleAccent} />
         </div>
 
         <motion.p
@@ -83,8 +82,7 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.55, ease }}
           className="lead mx-auto mt-6 text-center"
         >
-          LabGenie connects your quality, sales, procurement, and production workflows through one AI
-          layer, on top of the ERP you already run.
+          {c.sub}
         </motion.p>
 
         <motion.div
@@ -93,13 +91,13 @@ export default function Hero() {
           transition={{ duration: 0.7, delay: 0.66, ease }}
           className="mt-9 flex flex-wrap items-center justify-center gap-3"
         >
-          <Link href="/contact" className="btn btn-primary">
-            Get early access
+          <Link href={c.primaryHref} className="btn btn-primary">
+            {c.primaryLabel}
             <Arrow />
           </Link>
-          <Link href="#operations" className="btn btn-ghost font-mono text-[13px]">
+          <Link href={c.secondaryHref} className="btn btn-ghost font-mono text-[13px]">
             <span className="text-dim">{"["}</span>
-            See it in action
+            {c.secondaryLabel}
             <span className="text-dim">{"]"}</span>
           </Link>
         </motion.div>

@@ -118,8 +118,9 @@ export default function AppDashboard() {
             </div>
           </div>
 
-          {/* KPI cards */}
-          <div className="mt-5 grid grid-cols-3 gap-3">
+          {/* KPI cards — stacked on phones (a value + 72px sparkline won't fit a
+              third-width card below sm), three-up from sm where there's room */}
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
             {KPIS.map((k) => (
               <div key={k.label} className="rounded-xl border border-border bg-surface/50 p-3.5">
                 <div className="mono-label normal-case tracking-normal text-dim">{k.label}</div>

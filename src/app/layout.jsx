@@ -1,11 +1,6 @@
 import "./globals.css";
 import { Inter, Space_Grotesk, JetBrains_Mono, Manrope } from "next/font/google";
 import { site } from "@/lib/content";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import AmbientBackground from "@/components/AmbientBackground";
-import MotionProvider from "@/components/MotionProvider";
-import SmoothScroll from "@/components/SmoothScroll";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -64,6 +59,9 @@ export const viewport = {
   initialScale: 1,
 };
 
+// Root layout is intentionally minimal: just <html>/<body> + font variables.
+// The marketing chrome (nav, footer, smooth scroll, ambient backdrop) lives in
+// the (site) route group's layout, so the /keystatic admin renders clean.
 export default function RootLayout({ children }) {
   return (
     <html
@@ -71,16 +69,7 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable} ${manrope.variable}`}
     >
-      <body>
-        <MotionProvider>
-          <SmoothScroll>
-            <AmbientBackground />
-            <Navbar />
-            <main className="relative">{children}</main>
-            <Footer />
-          </SmoothScroll>
-        </MotionProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

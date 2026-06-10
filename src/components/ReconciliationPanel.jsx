@@ -120,7 +120,7 @@ export default function ReconciliationPanel() {
 
 function Cell({ value, resolved, tone, showStatus }) {
   const color =
-    tone === "match" ? "text-accent" : tone === "flag" ? "text-warm" : "text-muted";
+    tone === "match" ? "text-accent-text" : tone === "flag" ? "text-warm" : "text-muted";
   return (
     <div className="flex min-w-0 items-center gap-1.5">
       <motion.span

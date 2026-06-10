@@ -6,6 +6,7 @@
     "colorMeta": {
       "brand-blue": { "role": "primary", "displayName": "Datadivr Blue", "canonical": "#0066FF", "tonalRamp": ["#001433", "#002766", "#003b99", "#004ecc", "#0066FF", "#3d8bff", "#7db0ff", "#bdd7ff"] },
       "azure": { "role": "secondary", "displayName": "Azure", "canonical": "#5AA0FF", "tonalRamp": ["#12233b", "#1d3a66", "#2a5491", "#3a72c2", "#5AA0FF", "#85bcff", "#aed5ff", "#d7eaff"] },
+      "accent-text": { "role": "primary", "displayName": "Accent Text", "canonical": "#6BAAFF", "tonalRamp": ["#152744", "#1f3d6e", "#2c5798", "#3e76c8", "#6BAAFF", "#93c2ff", "#bcd9ff", "#e2efff"] },
       "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#0E141C", "tonalRamp": ["#0E141C", "#131A24", "#18212E", "#1F2A3A", "#2b3a4d", "#3b4d63", "#6F7D8F", "#A6B2C2"] },
       "text": { "role": "neutral", "displayName": "Near-White", "canonical": "#EDF1F6", "tonalRamp": ["#0E141C", "#2b3a4d", "#6F7D8F", "#A6B2C2", "#c7d0db", "#EDF1F6", "#f5f7fa", "#ffffff"] },
       "flag-amber": { "role": "tertiary", "displayName": "Flag Amber", "canonical": "#FFB454", "tonalRamp": ["#33240d", "#664717", "#996b22", "#cc8f2d", "#FFB454", "#ffc579", "#ffd79f", "#ffe8c4"] }
@@ -91,7 +92,8 @@
     "dos": [
       "Do use Datadivr Blue (#0066FF) as the single saturated signal — CTAs, logo dots, resolved states, focus rings, grid hover.",
       "Do ground every surface on Ink (#0E141C) and step neutrals upward with cool blue-tinted tiers.",
-      "Do keep body text at #EDF1F6 / #A6B2C2 for AAA contrast on ink; reserve #6F7D8F for tertiary metadata only.",
+      "Do keep body text at #EDF1F6 / #A6B2C2 for AAA contrast on ink; reserve #97A4B6 for tertiary metadata only.",
+      "Do use Accent Text (#6BAAFF) for any small blue text — labels, links, inline emphasis, chips; #0066FF small text fails AAA.",
       "Do render the logo from the exact official artwork (white arc + five #0066FF dots, labgenie.ai in Manrope).",
       "Do gate every animation behind prefers-reduced-motion and keep content visible by default.",
       "Do carry status meaning with an icon plus color, never color alone."

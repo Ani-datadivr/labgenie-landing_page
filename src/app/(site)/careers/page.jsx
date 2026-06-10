@@ -157,7 +157,7 @@ export default function CareersPage() {
                   </p>
                   <p className="mt-3 text-sm leading-relaxed text-muted">{r.blurb}</p>
                 </div>
-                <span className="inline-flex shrink-0 items-center gap-1.5 self-start text-sm font-medium text-accent sm:self-center">
+                <span className="inline-flex shrink-0 items-center gap-1.5 self-start text-sm font-medium text-accent-text sm:self-center">
                   Email us
                   <ArrowRight
                     className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
@@ -175,7 +175,7 @@ export default function CareersPage() {
             to help build LabGenie early, reach out anyway.{" "}
             <a
               href={`mailto:${careersEmail}`}
-              className="font-medium text-accent underline-offset-4 hover:underline"
+              className="font-medium text-accent-text underline-offset-4 hover:underline"
             >
               Reach out at {careersEmail}.
             </a>
