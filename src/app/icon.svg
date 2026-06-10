@@ -1,13 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
-  <rect width="100" height="100" rx="22" fill="#0E141C"/>
-  <g transform="translate(2 0) scale(0.96)">
-    <path d="M 66 22.29 A 32 32 0 1 0 66 77.71" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" fill="none"/>
-    <g fill="#0066FF">
-      <circle cx="66" cy="22.29" r="4.5"/>
-      <circle cx="77.71" cy="34" r="4.5"/>
-      <circle cx="82" cy="50" r="4.5"/>
-      <circle cx="77.71" cy="66" r="4.5"/>
-      <circle cx="66" cy="77.71" r="4.5"/>
-    </g>
+  <!-- Transparent-background brand mark. The stroke adapts to the tab's color
+       scheme (white on dark chrome, ink on light) so the "C" never disappears;
+       the brand-blue dots stay constant on both. -->
+  <style>
+    .mark-stroke { stroke: #0E141C; }
+    @media (prefers-color-scheme: dark) { .mark-stroke { stroke: #FFFFFF; } }
+  </style>
+  <path class="mark-stroke" d="M 66 22.29 A 32 32 0 1 0 66 77.71" stroke-width="10" stroke-linecap="round" fill="none"/>
+  <g fill="#0066FF">
+    <circle cx="66" cy="22.29" r="4.5"/>
+    <circle cx="77.71" cy="34" r="4.5"/>
+    <circle cx="82" cy="50" r="4.5"/>
+    <circle cx="77.71" cy="66" r="4.5"/>
+    <circle cx="66" cy="77.71" r="4.5"/>
   </g>
 </svg>

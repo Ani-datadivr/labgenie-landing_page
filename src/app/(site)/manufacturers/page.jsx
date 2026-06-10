@@ -2,6 +2,7 @@ import PageHeader from "@/components/PageHeader";
 import ClientTicker from "@/components/ClientTicker";
 import DesignPartner from "@/components/DesignPartner";
 import FinalCTA from "@/components/FinalCTA";
+import RotatingSegments from "@/components/RotatingSegments";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { buyer } from "@/lib/content";
 
@@ -11,8 +12,6 @@ export const metadata = {
     "Built for mid-to-large B2B ingredient manufacturers — flavors, spices, oleoresins, and specialty ingredients. For the people who supply the world's brands.",
 };
 
-const segments = ["Flavors", "Spices", "Oleoresins", "Specialty ingredients"];
-
 export default function ManufacturersPage() {
   return (
     <>
@@ -20,16 +19,7 @@ export default function ManufacturersPage() {
 
       <section className="container-x py-10">
         <Reveal>
-          <div className="flex flex-wrap gap-2.5">
-            {segments.map((s) => (
-              <span
-                key={s}
-                className="rounded-full border border-border bg-white/[0.03] px-4 py-2 font-mono text-xs uppercase tracking-wider text-muted"
-              >
-                {s}
-              </span>
-            ))}
-          </div>
+          <RotatingSegments />
         </Reveal>
       </section>
 
