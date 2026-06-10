@@ -39,6 +39,7 @@ function AnimatedHeading({ lead, accent }) {
   return (
     <motion.h1
       className="display mx-auto max-w-[16ch]"
+      aria-label={`${lead} ${accent}`}
       initial="hidden"
       animate="show"
       transition={{ staggerChildren: 0.08, delayChildren: 0.1 }}
@@ -46,14 +47,13 @@ function AnimatedHeading({ lead, accent }) {
       {words.map((w, i) => (
         <motion.span
           key={i}
-          className="inline-block"
+          className={`mr-[0.25em] inline-block last:mr-0 ${w.accent ? "text-accent" : ""}`}
           variants={{
             hidden: { opacity: 0, y: "0.45em", filter: "blur(10px)" },
             show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease } },
           }}
         >
-          <span className={w.accent ? "text-accent" : undefined}>{w.t}</span>
-          {i < words.length - 1 ? " " : ""}
+          {w.t}
         </motion.span>
       ))}
     </motion.h1>
