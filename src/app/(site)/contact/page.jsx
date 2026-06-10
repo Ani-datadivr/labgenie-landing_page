@@ -1,6 +1,7 @@
 import PageHeader from "@/components/PageHeader";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
+import GradientBackground from "@/components/GradientBackground";
 import { site } from "@/lib/content";
 
 export const metadata = {
@@ -11,7 +12,15 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <>
+    <div className="relative">
+      {/* Brand-blue grain gradient behind the header, dissolved into the ink
+          before it reaches the form so contrast stays AAA. */}
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+        <GradientBackground className="absolute inset-0" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(14,20,28,0.35)_42%,rgb(var(--bg-rgb))_78%)]" />
+      </div>
+
+      <div className="relative">
       <PageHeader
         eyebrow="Request a demo"
         title="See your quality documents checked in minutes."
@@ -89,6 +98,7 @@ export default function ContactPage() {
           </Reveal>
         </div>
       </section>
-    </>
+      </div>
+    </div>
   );
 }

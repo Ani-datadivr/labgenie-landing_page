@@ -1,11 +1,31 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import AetherBackground from "./AetherBackground";
 import AppDashboard from "./AppDashboard";
 
+// Mobile-only: the WebGL dotted surface. Loaded lazily and gated behind a
+// media query so `three` never ships to desktop, where AetherBackground runs.
+const DottedSurface = dynamic(() => import("./DottedSurface"), { ssr: false });
+
 const ease = [0.22, 1, 0.36, 1];
+
+function useIsMobile(query = "(max-width: 639px)") {
+  // Starts false so the server/desktop render uses AetherBackground and never
+  // pulls in three; on a phone it flips true after mount and swaps in the dots.
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [query]);
+  return isMobile;
+}
 
 // Defaults keep the hero working if no CMS content is passed (or a field is
 // blank). Editable copy is sourced from Keystatic (singleton "home") and passed
@@ -62,12 +82,19 @@ function AnimatedHeading({ lead, accent }) {
 
 export default function Hero({ copy }) {
   const c = { ...DEFAULTS, ...(copy || {}) };
+  const isMobile = useIsMobile();
 
   return (
     <section className="relative overflow-hidden">
-      {/* Aether particle field */}
+      {/* Background field: rippling dot surface on mobile, the Aether particle
+          field on desktop. Same radial vignette fades either into the bg so the
+          headline stays the focus. */}
       <div aria-hidden="true" className="absolute inset-0">
-        <AetherBackground />
+        {isMobile ? (
+          <DottedSurface className="absolute inset-0" opacity={0.55} />
+        ) : (
+          <AetherBackground />
+        )}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_25%,transparent_35%,rgb(var(--bg-rgb))_88%)]" />
       </div>
 
