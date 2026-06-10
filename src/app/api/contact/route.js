@@ -2,9 +2,17 @@
 // essentials, and posts a rich "New Lead" message to Slack via an incoming
 // webhook. The webhook URL stays server-side (process.env.SLACK_WEBHOOK_URL)
 // and is never sent to the client.
+//
+// Hardening: a honeypot field for bots, length caps (Slack section blocks
+// reject text over 3000 chars), mrkdwn escaping of user input, and the lead is
+// logged server-side BEFORE the Slack call so a webhook hiccup never silently
+// loses it (recoverable from function logs).
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+// Escape the three characters Slack mrkdwn treats as control syntax.
+const mrkdwn = (v) => v.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
 export async function POST(req) {
   let body = {};
@@ -14,8 +22,14 @@ export async function POST(req) {
     return Response.json({ ok: false }, { status: 400 });
   }
 
-  // Safe string accessor: guard undefined/null -> "".
-  const s = (v) => (v == null ? "" : String(v)).trim();
+  // Safe string accessor: guard undefined/null -> "", cap length.
+  const s = (v, max = 200) => (v == null ? "" : String(v)).trim().slice(0, max);
+
+  // Honeypot: real users never see or fill this field. Pretend success so the
+  // bot learns nothing.
+  if (s(body.website)) {
+    return Response.json({ ok: true });
+  }
 
   const name = s(body.name);
   const email = s(body.email);
@@ -23,12 +37,16 @@ export async function POST(req) {
   const phone = s(body.phone);
   const country = s(body.country);
   const teamSize = s(body.teamSize);
-  const message = s(body.message);
+  const message = s(body.message, 2000);
 
-  // Required: name, email, message.
-  if (!name || !email || !message) {
+  // Required: name, email (sane shape), message.
+  if (!name || !email || !message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return Response.json({ ok: false }, { status: 400 });
   }
+
+  // Record the lead before any external call: even if Slack is down or
+  // unconfigured, the submission is recoverable from the function logs.
+  console.log("[contact] lead", JSON.stringify({ name, email, company, phone, country, teamSize, message }));
 
   const webhook = process.env.SLACK_WEBHOOK_URL;
   if (!webhook) {
@@ -39,6 +57,10 @@ export async function POST(req) {
   // Unix seconds for Slack's <!date> token (renders in each viewer's timezone).
   const ts = Math.floor(Date.now() / 1000);
 
+  // User text, escaped for mrkdwn; the message keeps its blockquote shape even
+  // across newlines.
+  const quoted = mrkdwn(message).split("\n").map((l) => `> ${l}`).join("\n");
+
   const payload = {
     attachments: [
       {
@@ -48,28 +70,28 @@ export async function POST(req) {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: "🎯  *New Lead — Someone wants in!*\nA potential customer just submitted the contact form on *labgenie.ai*. Reach out while interest is hot 🔥",
+              text: "🎯  *New Lead: someone wants in!*\nA potential customer just submitted the contact form on *labgenie.ai*. Reach out while interest is hot 🔥",
             },
           },
           { type: "divider" },
           {
             type: "section",
             fields: [
-              { type: "mrkdwn", text: `👤  *Name*\n${name}` },
-              { type: "mrkdwn", text: `🏢  *Company*\n${company}` },
-              { type: "mrkdwn", text: `📧  *Email*\n<mailto:${email}|${email}>` },
-              { type: "mrkdwn", text: `📞  *Phone*\n${phone}` },
+              { type: "mrkdwn", text: `👤  *Name*\n${mrkdwn(name)}` },
+              { type: "mrkdwn", text: `🏢  *Company*\n${mrkdwn(company)}` },
+              { type: "mrkdwn", text: `📧  *Email*\n<mailto:${email}|${mrkdwn(email)}>` },
+              { type: "mrkdwn", text: `📞  *Phone*\n${mrkdwn(phone)}` },
             ],
           },
           {
             type: "section",
-            text: { type: "mrkdwn", text: `💬  *Their Message*\n> ${message}` },
+            text: { type: "mrkdwn", text: `💬  *Their Message*\n${quoted}` },
           },
           {
             type: "section",
             fields: [
-              { type: "mrkdwn", text: `🌍  *Country*\n${country}` },
-              { type: "mrkdwn", text: `⭐  *Interest*\n${teamSize}` },
+              { type: "mrkdwn", text: `🌍  *Country*\n${mrkdwn(country)}` },
+              { type: "mrkdwn", text: `⭐  *Interest*\n${mrkdwn(teamSize)}` },
             ],
           },
           { type: "divider" },

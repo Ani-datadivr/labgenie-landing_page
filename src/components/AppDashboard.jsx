@@ -30,10 +30,12 @@ const ACTIVITY = [
   { tag: "Q", tone: "accent", title: "Spec review", meta: "Verde Beverages", right: "3 flagged" },
 ];
 
+// All tags stay in the brand-blue family (One Signal Rule); the Q/S/P letters
+// differentiate the stations, intensity varies the tiers.
 const TAG_BG = {
   accent: "bg-accent/15 text-accent-text",
-  violet: "bg-[#818cf8]/15 text-[#a5b4fc]",
-  cyan: "bg-[#22d3ee]/15 text-[#67e8f9]",
+  violet: "bg-accent-2/15 text-accent-text",
+  cyan: "bg-accent/[0.08] text-accent-text",
 };
 
 function Sparkline({ points, className = "" }) {
@@ -59,16 +61,16 @@ export default function AppDashboard() {
       {/* browser chrome */}
       <div className="flex items-center gap-3 border-b border-border bg-surface-2/70 px-4 py-2.5">
         <span className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-surface-3/90 ring-1 ring-border" />
-          <span className="h-2.5 w-2.5 rounded-full bg-surface-3/90 ring-1 ring-border" />
-          <span className="h-2.5 w-2.5 rounded-full bg-surface-3/90 ring-1 ring-border" />
+          <span className="h-2.5 w-2.5 rounded-full bg-surface-2/90 ring-1 ring-border" />
+          <span className="h-2.5 w-2.5 rounded-full bg-surface-2/90 ring-1 ring-border" />
+          <span className="h-2.5 w-2.5 rounded-full bg-surface-2/90 ring-1 ring-border" />
         </span>
         <div className="ml-2 hidden items-center gap-1.5 rounded-lg bg-bg/70 px-3 py-1.5 sm:flex">
           <svg viewBox="0 0 16 16" className="h-3 w-3 text-dim" fill="none"><path d="M5 7V5a3 3 0 1 1 6 0v2m-7 0h8v6H4z" stroke="currentColor" strokeWidth="1.2"/></svg>
           <span className="font-mono text-[11px] text-muted">app.labgenie.ai/dashboard</span>
         </div>
-        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-[#4ade80]/30 bg-[#4ade80]/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-[#4ade80]">
-          <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-[#4ade80]" />
+        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.16em] text-accent-text">
+          <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent" />
           Live
         </span>
       </div>
@@ -94,7 +96,7 @@ export default function AppDashboard() {
             ))}
           </nav>
           <span className="mt-auto hidden items-center gap-2 px-2 pt-6 lg:flex">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             <span className="font-mono text-[9px] uppercase tracking-[0.14em] text-dim">All systems operational</span>
           </span>
         </aside>
@@ -140,7 +142,7 @@ export default function AppDashboard() {
             <div className="rounded-xl border border-border bg-surface/50 p-4">
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-medium text-text">Throughput · last 7 days</span>
-                <span className="rounded-md bg-[#4ade80]/12 px-2 py-0.5 font-mono text-[10px] text-[#4ade80]">
+                <span className="rounded-md bg-accent/[0.12] px-2 py-0.5 font-mono text-[10px] text-accent-text">
                   +24% WoW
                 </span>
               </div>
@@ -170,8 +172,8 @@ export default function AppDashboard() {
             <div className="rounded-xl border border-border bg-surface/50 p-4">
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-medium text-text">Live activity</span>
-                <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-[#4ade80]">
-                  <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-[#4ade80]" />
+                <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-accent-text">
+                  <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent" />
                   Live
                 </span>
               </div>

@@ -2,8 +2,8 @@ import Link from "next/link";
 import { finalCta } from "@/lib/content";
 
 // Confident structural close. Copy is contextual per page (pass eyebrow/title/
-// sub); the primary is "Request a demo" and the secondary is the gold
-// "Become a design partner" button with a glowing flush-fill on hover.
+// sub); the primary is "Request a demo" and the secondary is the brand-blue
+// flush-fill "Become a design partner" button.
 export default function FinalCTA({
   eyebrow = "Get started",
   title = finalCta.title,
@@ -35,7 +35,7 @@ export default function FinalCTA({
                 <path d="M3 8h9M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
-            <Link href={finalCta.secondary.href} className="btn btn-partner">
+            <Link href={finalCta.secondary.href} className="btn btn-fill">
               {finalCta.secondary.label}
             </Link>
           </div>

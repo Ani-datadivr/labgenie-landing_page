@@ -8,7 +8,7 @@ import { buyer } from "@/lib/content";
 export const metadata = {
   title: "For F&B Manufacturers",
   description:
-    "Built for mid-to-large B2B ingredient manufacturers — flavors, spices, oleoresins, and specialty ingredients. For the people who supply the world's brands.",
+    "Built for mid-to-large B2B ingredient manufacturers: flavors, spices, oleoresins, and specialty ingredients. For the people who supply the world's brands.",
 };
 
 const segments = ["Flavors", "Spices", "Oleoresins", "Specialty ingredients"];
@@ -38,7 +38,7 @@ export default function ManufacturersPage() {
         <Reveal>
           <p className="eyebrow">Who buys LabGenie</p>
           <h2 className="mt-3 max-w-2xl text-3xl sm:text-4xl">
-            The pain shows up in the corner office.
+            Bought by the leaders accountable for quality, sales, and procurement.
           </h2>
         </Reveal>
         <Stagger className="mt-8 divide-y divide-border border-t border-border">
@@ -61,7 +61,7 @@ export default function ManufacturersPage() {
         <Reveal>
           <p className="eyebrow">Who uses it daily</p>
           <h2 className="mt-3 max-w-2xl text-3xl sm:text-4xl">
-            The win shows up on the floor.
+            Used every day by the teams doing the checking, routing, and buying.
           </h2>
         </Reveal>
         <Stagger className="mt-8 divide-y divide-border border-t border-border">

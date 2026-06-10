@@ -75,8 +75,8 @@ export default function MobileDemo() {
             <span className="h-3 w-3 rounded bg-gradient-to-br from-accent to-accent-2" aria-hidden="true" />
             LabGenie · Operations
           </span>
-          <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-[#4ade80]">
-            <span className="live-dot h-1.5 w-1.5 text-[#4ade80]" aria-hidden="true" />
+          <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-accent-text">
+            <span className="live-dot h-1.5 w-1.5 text-accent-text" aria-hidden="true" />
             Live
           </span>
         </div>
@@ -185,7 +185,7 @@ function MiniBars({ data }) {
     <div className="mt-2.5">
       <div className="mb-1.5 flex items-baseline justify-between">
         <span className="font-mono text-[10px] text-dim">{data.caption}</span>
-        <span className="font-mono text-[11px] font-semibold text-[#4ade80]">{data.delta}</span>
+        <span className="font-mono text-[11px] font-semibold text-accent-text">{data.delta}</span>
       </div>
       <div className="flex h-9 items-end gap-1.5">
         {data.bars.map((b, k) => (

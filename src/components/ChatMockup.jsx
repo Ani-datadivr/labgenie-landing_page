@@ -19,7 +19,7 @@ export default function ChatMockup({ query, stations = [], answer, typed }) {
           <span className="font-display text-sm font-semibold text-text">LabGenie</span>
         </span>
         <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           Full operation context
         </span>
       </div>

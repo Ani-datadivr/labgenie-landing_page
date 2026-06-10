@@ -19,9 +19,11 @@
   --accent: #0066ff;
   --accent-hover: #3378ff;
   --accent-ring: rgba(0, 102, 255, 0.3);
-  --live: #4ade80;
-  --live-bg: rgba(74, 222, 128, 0.1);
-  --live-border: rgba(74, 222, 128, 0.25);
+  /* "Live" is the brand-blue signal (One Signal Rule); the lighter tint keeps
+     small live labels AAA-legible on the dark panel. */
+  --live: #6baaff;
+  --live-bg: rgba(0, 102, 255, 0.12);
+  --live-border: rgba(0, 102, 255, 0.3);
   --radius-lg: 14px;
 
   position: relative;

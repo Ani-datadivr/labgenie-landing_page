@@ -11,10 +11,10 @@ const ease = [0.22, 1, 0.36, 1];
 // blank). Editable copy is sourced from Keystatic (singleton "home") and passed
 // in as `copy` from the server page.
 const DEFAULTS = {
-  titleLead: "The only end-to-end platform for",
+  titleLead: "The AI operating system for",
   titleAccent: "F&B manufacturers.",
   sub: "LabGenie connects your quality, sales, procurement, and production workflows through one AI layer, on top of the ERP you already run.",
-  primaryLabel: "Get early access",
+  primaryLabel: "Request a demo",
   primaryHref: "/contact",
   secondaryLabel: "See it in action",
   secondaryHref: "#operations",
@@ -39,22 +39,25 @@ function AnimatedHeading({ lead, accent }) {
   return (
     <motion.h1
       className="display mx-auto max-w-[16ch]"
-      aria-label={`${lead} ${accent}`}
       initial="hidden"
       animate="show"
       transition={{ staggerChildren: 0.08, delayChildren: 0.1 }}
     >
       {words.map((w, i) => (
-        <motion.span
-          key={i}
-          className={`mr-[0.25em] inline-block last:mr-0 ${w.accent ? "text-accent" : ""}`}
-          variants={{
-            hidden: { opacity: 0, y: "0.45em", filter: "blur(10px)" },
-            show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease } },
-          }}
-        >
-          {w.t}
-        </motion.span>
+        // Real whitespace must sit OUTSIDE the inline-block (trailing spaces
+        // inside one collapse), so copy/paste and screen readers get spaced text.
+        <span key={i}>
+          <motion.span
+            className={`inline-block ${w.accent ? "text-accent" : ""}`}
+            variants={{
+              hidden: { opacity: 0, y: "0.45em", filter: "blur(10px)" },
+              show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease } },
+            }}
+          >
+            {w.t}
+          </motion.span>
+          {i < words.length - 1 ? " " : ""}
+        </span>
       ))}
     </motion.h1>
   );

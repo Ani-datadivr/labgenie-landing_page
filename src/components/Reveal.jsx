@@ -16,6 +16,10 @@ const VARIANTS = {
     hidden: { opacity: 0, y: 28, clipPath: "inset(0 0 100% 0)" },
     show: { opacity: 1, y: 0, clipPath: "inset(0 0 0% 0)" },
   },
+  // Visibility-safe reveal: motion on position only, never on opacity. For
+  // content that must not ship blank if the animation stalls or never fires
+  // (hidden tab, throttled rAF, failed hydration) — e.g. the social-proof quote.
+  rise: { hidden: { y: 28 }, show: { y: 0 } },
   left: { hidden: { opacity: 0, x: -32 }, show: { opacity: 1, x: 0 } },
   right: { hidden: { opacity: 0, x: 32 }, show: { opacity: 1, x: 0 } },
 };

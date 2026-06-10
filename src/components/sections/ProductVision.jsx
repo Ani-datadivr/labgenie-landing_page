@@ -3,10 +3,11 @@ import StationMap from "../StationMap";
 import Reveal from "../Reveal";
 
 // The vision before the depth: one platform across every station, shown as the
-// full architecture map. Individual station detail lives on /platform.
+// full architecture map. Individual station detail lives on /platform. On
+// phones the map stacks into branch cards; mobile still sees the full scope.
 export default function ProductVision() {
   return (
-    <section className="container-x py-20 max-[899px]:hidden lg:py-28">
+    <section className="container-x py-20 lg:py-28">
       <div className="max-w-3xl">
         <Reveal className="flex items-center gap-3">
           <span className="h-px w-7 bg-accent/60" />
@@ -16,8 +17,9 @@ export default function ProductVision() {
           One platform. Every workflow. One conversation.
         </Reveal>
         <Reveal as="p" delay={0.12} className="lead mt-4">
-          LabGenie puts an AI agent across every operational station. Ask it anything; it knows your
-          entire operation.
+          A station is a department-level AI agent: quality, sales, procurement,
+          production. LabGenie puts one on every desk your plant already runs.
+          Ask it anything; it knows your entire operation.
         </Reveal>
       </div>
 

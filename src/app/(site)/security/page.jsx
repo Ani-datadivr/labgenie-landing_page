@@ -4,7 +4,6 @@ import {
   Lock,
   KeyRound,
   CloudCog,
-  FileCheck,
   Eye,
   Globe,
   Cpu,
@@ -13,7 +12,6 @@ import {
   ScrollText,
   DatabaseZap,
   CircleCheck,
-  HeartPulse,
   Fingerprint,
   Mail,
 } from "lucide-react";
@@ -35,10 +33,12 @@ const securityEmail = "security@labgenie.ai";
 // Status is honest: most controls are in progress / aligned, not falsely
 // claimed as certified. Tags are paired with text + a dot pattern so meaning
 // never rests on color alone.
+// One Signal Rule: blue marks the achieved tiers, neutral marks work underway.
+// The text label is the meaning; color only reinforces it.
 const STATUS = {
   certified: { label: "Certified", style: "border-accent/40 bg-accent/10 text-accent-text" },
-  progress: { label: "In progress", style: "border-[#fb923c]/45 bg-[#fb923c]/10 text-[#fb923c]" },
-  aligned: { label: "Aligned", style: "border-[#4ade80]/45 bg-[#4ade80]/10 text-[#4ade80]" },
+  progress: { label: "In progress", style: "border-border-strong bg-white/[0.04] text-muted" },
+  aligned: { label: "Aligned", style: "border-accent/40 bg-accent/10 text-accent-text" },
 };
 
 const compliance = [
@@ -48,13 +48,6 @@ const compliance = [
     Icon: ShieldCheck,
     status: "progress",
     desc: "Independent attestation of our security, availability, and confidentiality controls over time.",
-  },
-  {
-    standard: "SOC 1",
-    monogram: "SOC 1",
-    Icon: FileCheck,
-    status: "progress",
-    desc: "Controls relevant to customers' financial reporting and the systems that support it.",
   },
   {
     standard: "SOC 3",
@@ -90,13 +83,6 @@ const compliance = [
     Icon: Fingerprint,
     status: "progress",
     desc: "A privacy information management extension to ISO 27001 for handling personal data.",
-  },
-  {
-    standard: "HIPAA",
-    monogram: "HIPAA",
-    Icon: HeartPulse,
-    status: "aligned",
-    desc: "Safeguards for protected health information, available where a customer's workflow requires it.",
   },
 ];
 
@@ -202,7 +188,7 @@ export default function SecurityPage() {
           </Reveal>
         </div>
 
-        <Stagger className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+        <Stagger className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {compliance.map(({ standard, monogram, Icon, status, desc }) => (
             <StaggerItem key={standard} className="h-full">
               <div className="group relative flex h-full flex-col items-center bg-surface p-6 text-center transition-colors">
@@ -360,7 +346,7 @@ export default function SecurityPage() {
                   <Link href="/contact" className="btn btn-primary">
                     Request security documentation
                   </Link>
-                  <Link href="/contact" className="btn btn-orange">
+                  <Link href="/contact" className="btn btn-fill">
                     Talk to our security team
                   </Link>
                 </div>
