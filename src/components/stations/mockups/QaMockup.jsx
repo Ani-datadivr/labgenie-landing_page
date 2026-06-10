@@ -3,12 +3,14 @@
 // panel like a reader. MATCH = in spec, REVIEW = needs a human look.
 // CSS-only scanner (the .scan-line / .scan-edge animation), so no client JS.
 
+// Every verdict shows the measured value against the requirement: a QA reader
+// will not trust a MATCH that hides the result it was judged on.
 const ROWS = [
-  { title: "Capsaicin content", sub: "Required ≥ 40,000 SHU", status: "match" },
-  { title: "Solvent residual", sub: "Required ≤ 30 ppm", status: "review" },
-  { title: "Color value", sub: "CV 120,000 min · spec 118k", status: "review" },
-  { title: "Microbiological limit", sub: "TPC ≤ 10⁴ cfu/g", status: "match" },
-  { title: "Moisture content", sub: "≤ 3.0% w/w", status: "match" },
+  { title: "Capsaicin content", sub: "42,600 SHU · req ≥ 40,000 SHU", status: "match" },
+  { title: "Solvent residual", sub: "34 ppm · limit ≤ 30 ppm", status: "review" },
+  { title: "Color value", sub: "CV 116,400 · spec ≥ 118,000", status: "review" },
+  { title: "Microbiological limit", sub: "TPC 2.1×10³ cfu/g · ≤ 10⁴", status: "match" },
+  { title: "Moisture content", sub: "2.4% w/w · limit ≤ 3.0%", status: "match" },
 ];
 
 export default function QaMockup() {
@@ -50,8 +52,8 @@ function StatusBadge({ status }) {
     <span
       className={`shrink-0 rounded-md border px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.12em] ${
         ok
-          ? "border-[#4ade80]/35 bg-[#4ade80]/10 text-[#4ade80]"
-          : "border-[#fb923c]/40 bg-[#fb923c]/10 text-[#fb923c]"
+          ? "border-accent/35 bg-accent/10 text-accent-text"
+          : "border-warm/40 bg-warm/10 text-warm"
       }`}
     >
       {ok ? "Match" : "Review"}

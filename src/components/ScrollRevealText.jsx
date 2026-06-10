@@ -23,7 +23,8 @@ export default function ScrollRevealText({ children, className = "", as = "p" })
   }
 
   return (
-    <Tag ref={ref} className={className}>
+    // relative: framer's useScroll needs a positioned target to compute offsets
+    <Tag ref={ref} className={`relative ${className}`}>
       {words.map((word, i) => {
         const start = i / words.length;
         const end = start + 1 / words.length;

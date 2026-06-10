@@ -169,18 +169,6 @@ export default function CareersPage() {
           ))}
         </Stagger>
 
-        <Reveal>
-          <p className="mt-8 text-sm text-muted">
-            Do not see your role? If you are exceptional at what you do and want
-            to help build LabGenie early, reach out anyway.{" "}
-            <a
-              href={`mailto:${careersEmail}`}
-              className="font-medium text-accent-text underline-offset-4 hover:underline"
-            >
-              Reach out at {careersEmail}.
-            </a>
-          </p>
-        </Reveal>
       </section>
 
       {/* Closing CTA: careers-appropriate, not a demo request */}

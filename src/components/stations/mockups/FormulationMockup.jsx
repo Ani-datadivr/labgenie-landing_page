@@ -37,7 +37,7 @@ export default function FormulationMockup() {
           </div>
         </div>
         <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           Matched
         </span>
       </div>
@@ -105,7 +105,7 @@ export default function FormulationMockup() {
                 className={`relative z-10 mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${
                   s.state === "converted"
                     ? "bg-accent text-white"
-                    : "border border-[#4ade80]/40 bg-[#4ade80]/10 text-[#4ade80]"
+                    : "border border-accent/40 bg-accent/10 text-accent-text"
                 }`}
               >
                 <Check className="h-3 w-3" strokeWidth={2.5} />

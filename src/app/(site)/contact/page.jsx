@@ -25,34 +25,10 @@ export default function ContactPage() {
               <div>
                 <p className="eyebrow">Design partner program</p>
                 <p className="mt-3 text-lg leading-relaxed text-muted">
-                  We&apos;re onboarding a small group of design partners who shape
-                  LabGenie as we build it. Partners get direct influence over the
-                  roadmap and hands-on support from the founding team.
+                  Partners get direct influence over the roadmap and hands-on
+                  support from the founding team, in exchange for the kind of
+                  honest feedback only a production floor can give.
                 </p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-bg-elev/40 px-4 py-3">
-                <span
-                  className="flex items-center gap-1.5"
-                  role="img"
-                  aria-label="3 of 5 design-partner seats are filled"
-                >
-                  {[true, true, true, false, false].map((filled, i) => (
-                    <span
-                      key={i}
-                      aria-hidden="true"
-                      className={
-                        filled
-                          ? "h-2.5 w-2.5 rounded-full bg-accent"
-                          : "h-2.5 w-2.5 rounded-full border border-border bg-transparent"
-                      }
-                    />
-                  ))}
-                </span>
-                <span className="text-sm text-text">
-                  3 of 5 design-partner seats are filled.{" "}
-                  <span className="text-muted">2 remaining.</span>
-                </span>
               </div>
 
               <ul className="space-y-4">

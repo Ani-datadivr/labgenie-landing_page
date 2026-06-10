@@ -38,7 +38,7 @@ export default function MarketIntelMockup() {
           </p>
         </div>
         <span className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           Curated for you
         </span>
       </div>

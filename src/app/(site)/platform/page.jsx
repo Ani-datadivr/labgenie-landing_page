@@ -16,10 +16,10 @@ export const metadata = {
 
 const STATIONS = [
   {
-    name: "Quality Agent",
+    name: "Quality Assurance",
     status: "Live",
     headline: "RFP specification matching",
-    body: "The Quality Agent matches customer RFP specifications against your product information sheets in minutes. A two-day review becomes a five-minute task.",
+    body: "The Quality Assurance Station matches customer RFP specifications against your product information sheets in minutes. A review that burned 3 to 5 days per batch becomes a five-minute task.",
     points: [
       "Instantly compare customer specs against your full product catalog",
       "Surface non-conformities and gaps before they reach the customer",
@@ -28,10 +28,10 @@ const STATIONS = [
     Mockup: QaMockup,
   },
   {
-    name: "Sales Agent",
+    name: "Sales",
     status: "Live",
     headline: "Intelligent sales response",
-    body: "Match inbound customer queries to the right SKUs using your full ERP history, in minutes.",
+    body: "The Sales Station matches inbound customer queries to the right SKUs using your full ERP history, in minutes.",
     points: [
       "Parse unstructured customer emails and extract product requirements",
       "Match queries against full ERP history with confidence scores",
@@ -94,6 +94,8 @@ export default function PlatformPage() {
         </div>
 
         <div className="mt-12">
+          {/* Keeps the outline h1 -> h2 -> h3 (branch names inside the map) */}
+          <h2 className="sr-only">Stations by branch</h2>
           <StationMap />
         </div>
       </section>

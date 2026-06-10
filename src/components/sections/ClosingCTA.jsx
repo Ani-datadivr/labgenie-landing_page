@@ -4,9 +4,10 @@ import Reveal from "../Reveal";
 
 // Bookend the page with the product in action: the buyer's own context typed
 // into LabGenie, answered with a concrete first step.
+// Numbers match the claims used site-wide: 3-5 days per batch, 1000+ requests.
 const CLOSE_STATIONS = [
-  { name: "Quality", accent: "#0066FF", action: "3 days a batch checking quality certificates is your biggest drain." },
-  { name: "Sales", accent: "#5AA0FF", action: "400+ customer requests a month, every one sorted by hand." },
+  { name: "Quality", accent: "#0066FF", action: "3 to 5 days a batch checking quality certificates is your biggest drain." },
+  { name: "Sales", accent: "#5AA0FF", action: "1000+ customer requests a month, every one sorted by hand." },
 ];
 
 export default function ClosingCTA() {
@@ -23,7 +24,7 @@ export default function ClosingCTA() {
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <Link href="/contact" className="btn btn-primary group">
-              Book a demo
+              Request a demo
               <svg viewBox="0 0 16 16" className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" aria-hidden="true">
                 <path d="M3 8h9M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
@@ -38,7 +39,7 @@ export default function ClosingCTA() {
 
         <Reveal variant="scale" delay={0.1} duration={0.85}>
           <ChatMockup
-            query="We handle 400+ customer requests a month and spend 3 days a batch checking quality certificates. Where do we start?"
+            query="We handle 1000+ customer requests a month and spend 3 to 5 days a batch checking quality certificates. Where do we start?"
             stations={CLOSE_STATIONS}
             answer="Start with the Quality Assurance Station. Here's what week one looks like."
             typed="Where do we start?"

@@ -7,7 +7,7 @@ import SynthiteMark from "../SynthiteMark";
 // single light surface on the page — so it reads as a pulled-forward statement,
 // not a flip to a light theme. Three hard metrics underneath.
 const METRICS = [
-  { value: "3 days → minutes", animated: true, label: "Time to check a batch's quality documents" },
+  { value: "3–5 days → minutes", animated: true, label: "Time to check a batch's quality documents" },
   { value: "1000+ requests", label: "Handled without a single manual sort" },
   { value: "Synthite", synthite: true, label: "First design partner, the world's largest oleoresin producer" },
 ];
@@ -25,10 +25,12 @@ export default function SocialProof() {
         </Reveal>
       </div>
 
-      {/* the one light card — clips up like a panel sliding into place */}
+      {/* The one light card. Visibility-safe reveal (position only): this quote
+          is the page's trust moment and must never render blank if the
+          animation stalls (hidden tab, throttled rAF) or an observer misfires. */}
       <Reveal
         as="figure"
-        variant="clip"
+        variant="rise"
         duration={0.85}
         className="mt-12 rounded-2xl bg-[#f5f7fa] p-8 shadow-panel sm:p-12"
       >
@@ -38,7 +40,8 @@ export default function SocialProof() {
         <blockquote className="mt-5 font-display text-2xl font-medium leading-snug tracking-tight text-[#0e141c] sm:text-[2rem] sm:leading-[1.2]">
           &ldquo;{designPartner.quote}&rdquo;
         </blockquote>
-        <figcaption className="mt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-[#5b6675]">
+        {/* #46505e clears AAA (7:1) on the #f5f7fa card at this small size */}
+        <figcaption className="mt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-[#46505e]">
           {designPartner.name} · {designPartner.descriptor}
         </figcaption>
       </Reveal>

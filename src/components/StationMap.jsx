@@ -41,9 +41,11 @@ const BRANCHES = [
   },
 ];
 
+// One Signal Rule: live = brand-blue signal, build = neutral with a solid dot,
+// roadmap = ghost. The Live/Build text labels carry the meaning; color reinforces.
 const STATUS_CLASS = {
-  live: "border-[#4ade80]/45 bg-[#4ade80]/12 text-[#4ade80] glow-live",
-  build: "border-[#fb923c]/40 bg-[#fb923c]/12 text-[#fb923c]",
+  live: "border-accent/45 bg-accent/[0.12] text-accent-text glow-live",
+  build: "border-border-strong bg-white/[0.04] text-text",
   roadmap: "border-border bg-transparent text-muted",
 };
 
@@ -121,10 +123,10 @@ export default function StationMap({ compact = false }) {
                       >
                         <span className="flex items-center gap-2 font-medium">
                           {s.status === "live" && (
-                            <span className="live-dot h-1.5 w-1.5 text-[#4ade80]" aria-hidden="true" />
+                            <span className="live-dot h-1.5 w-1.5 text-accent-text" aria-hidden="true" />
                           )}
                           {s.status === "build" && (
-                            <span className="h-1.5 w-1.5 rounded-full bg-[#fb923c]" aria-hidden="true" />
+                            <span className="h-1.5 w-1.5 rounded-full bg-muted" aria-hidden="true" />
                           )}
                           {s.name}
                         </span>
@@ -142,8 +144,8 @@ export default function StationMap({ compact = false }) {
 
       {/* legend */}
       <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
-        <Legend swatch="bg-[#4ade80]" label="Live today" pulse={!reduce} />
-        <Legend swatch="bg-[#fb923c]" label="In active build" />
+        <Legend swatch="bg-accent" label="Live today" pulse={!reduce} />
+        <Legend swatch="bg-muted" label="In active build" />
         <Legend swatch="border border-border bg-transparent" label="On the roadmap" />
       </div>
     </motion.div>
@@ -153,7 +155,7 @@ export default function StationMap({ compact = false }) {
 function Legend({ swatch, label, pulse }) {
   return (
     <span className="inline-flex items-center gap-2">
-      <span className={`h-3 w-3 rounded ${pulse ? "live-dot text-[#4ade80]" : swatch}`} />
+      <span className={`h-3 w-3 rounded ${pulse ? "live-dot text-accent-text" : swatch}`} />
       <span className="mono-label normal-case tracking-normal text-muted">{label}</span>
     </span>
   );

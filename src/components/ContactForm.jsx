@@ -19,6 +19,7 @@ export default function ContactForm() {
   const [status, setStatus] = useState("idle"); // idle | submitting | success | error
   const [values, setValues] = useState({
     name: "", email: "", company: "", phone: "", country: "", teamSize: "", message: "",
+    website: "", // honeypot: hidden from humans, bots fill it, server drops it
   });
   const [errors, setErrors] = useState({});
 
@@ -81,18 +82,40 @@ export default function ContactForm() {
             <path d="M6 12.5l4 4 8-9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
-        <h3 className="mt-6 text-2xl">Thanks — we&apos;ll be in touch.</h3>
+        <h3 className="mt-6 text-2xl">Thanks. We&apos;ll be in touch.</h3>
         <p className="mt-3 max-w-sm text-sm text-muted">
-          A member of our team will reach out within one business day. In the
-          meantime, feel free to email us directly at{" "}
+          A member of our team will reach out within one business day. Want to
+          skip the wait? Pick a slot that suits you, or email us directly at{" "}
           <a href={`mailto:${site.email}`} className="text-accent-text">{site.email}</a>.
         </p>
+        <a
+          href="https://cal.com/labgenie"
+          target="_blank"
+          rel="noreferrer"
+          className="btn btn-primary mt-6"
+        >
+          Book a time now
+        </a>
       </motion.div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="panel p-6 sm:p-8" noValidate>
+    <form onSubmit={onSubmit} className="panel relative p-6 sm:p-8" noValidate>
+      {/* Honeypot: visually hidden and skipped by keyboard/AT; bots that fill
+          every field trip it and the server silently drops the submission. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={values.website}
+          onChange={update("website")}
+        />
+      </div>
       <div className="grid gap-5 sm:grid-cols-2">
         {fields.map((f) => (
           <div key={f.name} className={f.half ? "" : "sm:col-span-2"}>
@@ -132,6 +155,7 @@ export default function ContactForm() {
             name="message"
             rows={4}
             required
+            maxLength={2000}
             value={values.message}
             onChange={update("message")}
             placeholder="Tell us about your spec-reconciliation or sales-ops workflow today."

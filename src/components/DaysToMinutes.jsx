@@ -21,9 +21,9 @@ export default function DaysToMinutes() {
       ref={ref}
       className="flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-2xl font-semibold tracking-tight"
     >
-      {/* old reality: 3 days, struck through */}
+      {/* old reality: 3-5 days, struck through (the claim used site-wide) */}
       <span className="relative whitespace-nowrap text-muted">
-        3 days
+        3–5 days
         <motion.span
           aria-hidden="true"
           className="absolute left-0 top-1/2 h-px w-full origin-left bg-muted"

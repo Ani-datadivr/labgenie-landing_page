@@ -2,23 +2,23 @@
   "items": [
     {
       "question": "How long does it take to go live?",
-      "answer": "Most teams are running within 2 to 6 weeks. If one of our existing agents fits your workflow out of the box, like RFP matching or sales query relay, you'll be live in about 2 weeks. If we need to tune the agents to your specific catalogue, SOPs, or systems, plan for 4 to 6 weeks."
+      "answer": "Most teams are running within 2 to 6 weeks. If one of our live stations fits your workflow out of the box, like quote matching or inquiry routing, you'll be live in about 2 weeks. If we need to tune the platform to your specific catalogue, SOPs, or systems, plan for 4 to 6 weeks."
     },
     {
       "question": "How is our data kept safe?",
-      "answer": "Your formulations, buyer lists, RFPs, and pricing are yours alone. LabGenie runs on AWS with isolated tenant environments, so no customer data ever touches another customer's models or queries. We never train shared models on your proprietary data. Access is role-based, every action is logged, and we sign NDAs and data processing agreements before onboarding begins."
+      "answer": "Your formulations, buyer lists, RFPs, and pricing are yours alone. LabGenie processes your data inside your own secure cloud, or through controlled, need-to-access connections; we never store your raw business data on our systems, and the AI runs on Google Vertex AI. We never train shared models on your proprietary data. Access is role-based, every action is logged, and we sign NDAs and data processing agreements before onboarding begins."
     },
     {
       "question": "Does it work with the tools we already use?",
-      "answer": "Yes. LabGenie sits on top of what you already run. We integrate with SAP (S/4HANA and B1), Sage, Salesforce, Outlook, Teams, Slack, and the Excel sheets and shared drives your team lives in. If a data source matters to your decisions, we connect to it."
+      "answer": "Yes. LabGenie sits on top of what you already run. We integrate with ERPs like SAP (S/4HANA and B1), Oracle NetSuite, Microsoft Dynamics 365, Infor, Sage, and Odoo, plus Salesforce, Outlook, Teams, Slack, and the Excel sheets and shared drives your team lives in. If a data source matters to your decisions, we connect to it."
     },
     {
       "question": "Can it handle our specific products and formulations?",
-      "answer": "Yes. The agents learn your product catalogue, your SOPs, your spec formats, and your way of describing things. We start by ingesting what your team already references, and the agents get sharper with every interaction."
+      "answer": "Yes. Each station learns your product catalogue, your SOPs, your spec formats, and your way of describing things. We start by ingesting what your team already references, and the platform gets sharper with every interaction."
     },
     {
-      "question": "What if we only need one agent, not all three?",
-      "answer": "Each agent works independently. Most customers start with one, usually the one solving their loudest pain, whether that's RFP matching, sales query routing, or compliance reporting. You expand when you see results. There's no requirement to deploy the full platform on day one."
+      "question": "What if we only need one station, not the whole platform?",
+      "answer": "Each station works independently. Most customers start with one, usually the one solving their loudest pain, whether that's quote matching, inquiry routing, or compliance reporting. You expand when you see results. There's no requirement to deploy the full platform on day one."
     },
     {
       "question": "How is LabGenie priced?",

@@ -16,7 +16,6 @@ import {
   Sparkles,
   RefreshCw,
   HelpCircle,
-  X,
   ChevronDown,
   SendHorizontal,
   CheckCircle2,
@@ -439,7 +438,7 @@ function MiniChart({ data, accent }) {
    LabGenieNode — the brain (the layer on top of the ERP). Not draggable.
    ========================================================================== */
 
-function LabGenieNode({ position, routeTarget, routeResult, thinking, notice, chatValue, setChatValue, onSubmit, chips, activeChip, onChip, nodeRef }) {
+function LabGenieNode({ position, routeTarget, routeResult, thinking, notice, chatValue, setChatValue, onSubmit, chips, activeChip, onChip, onReset, onHelp, nodeRef }) {
   const routingStation = routeTarget ? byId(routeTarget) : null;
   const resultStation = routeResult ? byId(routeResult.stationId) : null;
 
@@ -458,10 +457,11 @@ function LabGenieNode({ position, routeTarget, routeResult, thinking, notice, ch
           <h3 className={styles.brainTitle}>LabGenie</h3>
           <span className={styles.brainSub}>F&amp;B Operations AI</span>
         </div>
+        {/* Real controls only: reset re-mounts the canvas (cards return home),
+            help explains the demo. No decoy affordances. */}
         <div className={styles.brainActions}>
-          <button type="button" className={styles.iconBtn} aria-label="Refresh"><RefreshCw size={14} /></button>
-          <button type="button" className={styles.iconBtn} aria-label="Help"><HelpCircle size={14} /></button>
-          <button type="button" className={styles.iconBtn} aria-label="Dismiss"><X size={14} /></button>
+          <button type="button" className={styles.iconBtn} aria-label="Reset the canvas" title="Reset the canvas" onClick={onReset}><RefreshCw size={14} /></button>
+          <button type="button" className={styles.iconBtn} aria-label="How this demo works" title="How this demo works" onClick={onHelp}><HelpCircle size={14} /></button>
         </div>
       </div>
 
@@ -534,7 +534,7 @@ function LabGenieNode({ position, routeTarget, routeResult, thinking, notice, ch
             </motion.div>
           ) : (
             <motion.div key="idle" className={styles.brainStatus} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="status">
-              Ask me anything — I&apos;ll route it to the right station.
+              Ask me anything. I&apos;ll route it to the right station.
             </motion.div>
           )}
         </AnimatePresence>
@@ -585,7 +585,14 @@ function LabGenieNode({ position, routeTarget, routeResult, thinking, notice, ch
    OperationsCanvas — orchestrator (default export)
    ========================================================================== */
 
+// Thin wrapper so "Reset the canvas" can re-mount the whole demo: dragged
+// cards return home, chat/route state clears, layout re-measures.
 export default function OperationsCanvas() {
+  const [resetKey, setResetKey] = useState(0);
+  return <CanvasInner key={resetKey} onReset={() => setResetKey((k) => k + 1)} />;
+}
+
+function CanvasInner({ onReset }) {
   const canvasRef = useRef(null);
   const nodeRef = useRef(null);
   const erpRef = useRef(null);
@@ -917,12 +924,12 @@ export default function OperationsCanvas() {
       } else {
         const local = localMatch(text);
         if (local) startRoute(local.stationId, local.module, { mode: "twoway" });
-        else showToast("Couldn't reach LabGenie — try again in a moment.");
+        else showToast("Couldn't reach LabGenie. Try again in a moment.");
       }
     } catch {
       const local = localMatch(text);
       if (local) startRoute(local.stationId, local.module, { mode: "twoway" });
-      else showToast("Couldn't reach LabGenie — try again in a moment.");
+      else showToast("Couldn't reach LabGenie. Try again in a moment.");
     } finally {
       setThinking(false);
     }
@@ -1112,6 +1119,12 @@ export default function OperationsCanvas() {
                 chips={CHIPS}
                 activeChip={activeChip}
                 onChip={onChip}
+                onReset={onReset}
+                onHelp={() =>
+                  showNotice(
+                    "Switch teams, expand a station to fire a module, drag cards around, or ask in plain English. Reset puts everything back."
+                  )
+                }
                 nodeRef={nodeRef}
               />
             </>

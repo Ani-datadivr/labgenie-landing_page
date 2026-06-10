@@ -11,9 +11,16 @@ export default function SiteLayout({ children }) {
   return (
     <MotionProvider>
       <SmoothScroll>
+        {/* Skip link: first focusable element; visible only on keyboard focus. */}
+        <a
+          href="#main"
+          className="btn btn-primary fixed left-4 top-3 z-[60] -translate-y-24 opacity-0 transition-transform focus-visible:translate-y-0 focus-visible:opacity-100"
+        >
+          Skip to content
+        </a>
         <AmbientBackground />
         <Navbar />
-        <main className="relative">{children}</main>
+        <main id="main" className="relative">{children}</main>
         <Footer />
       </SmoothScroll>
     </MotionProvider>

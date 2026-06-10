@@ -32,9 +32,17 @@ export default function Navbar() {
       <Link
         href="/"
         aria-label="LabGenie home"
-        className="fixed left-4 top-3 z-50 flex min-h-[44px] items-center rounded-xl px-2 sm:left-6"
+        className="fixed left-4 top-3 z-50 flex min-h-[44px] items-center rounded-xl bg-bg/60 px-2.5 backdrop-blur-md sm:left-6"
       >
-        <Logo />
+        {/* Mark-only between sm and lg: the labeled center pill needs the
+            width there; the full lockup returns at lg and below sm (where the
+            pill drops to the bottom of the screen). */}
+        <span className="hidden max-sm:block lg:block">
+          <Logo />
+        </span>
+        <span className="hidden sm:max-lg:block">
+          <Logo showWordmark={false} />
+        </span>
       </Link>
 
       {/* Primary CTA — fixed top-right */}
@@ -59,12 +67,16 @@ export default function Navbar() {
                 key={item.name}
                 href={item.url}
                 aria-current={isActive ? "page" : undefined}
-                aria-label={item.name}
-                className={`relative flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full px-3 py-2 text-[13px] font-medium transition-colors sm:px-4 lg:px-5 ${
+                className={`relative flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full px-1.5 py-1.5 text-[13px] font-medium transition-colors sm:px-4 sm:py-2 lg:px-5 ${
                   isActive ? "text-accent-text" : "text-muted hover:text-text"
                 }`}
               >
-                <Icon size={18} strokeWidth={2.25} aria-hidden="true" className="lg:hidden" />
+                {/* Below lg the label stays visible under the icon: six bare
+                    icons (factory vs briefcase vs building) are guesswork. */}
+                <span className="flex flex-col items-center gap-0.5 lg:hidden">
+                  <Icon size={17} strokeWidth={2.25} aria-hidden="true" />
+                  <span className="text-[9px] leading-none tracking-tight">{item.name}</span>
+                </span>
                 <span className="hidden lg:inline">{item.name}</span>
                 {isActive && (
                   <motion.div

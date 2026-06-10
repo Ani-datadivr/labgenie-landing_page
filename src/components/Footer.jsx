@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="max-w-xs">
           <Logo />
           <p className="mt-4 text-sm leading-relaxed text-muted">
-            The F&amp;B manufacturing platform that actually speaks your language.
+            The AI operating system for F&amp;B ingredient manufacturers.
           </p>
           <p className="mt-4 font-mono text-xs text-dim">{site.domain}</p>
         </div>

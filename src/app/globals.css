@@ -12,8 +12,11 @@
   --surface-rgb: 24 33 46;
   --surface-2-rgb: 31 42 58;
   --text-rgb: 237 241 246;
-  --text-muted-rgb: 166 178 194;
-  --text-dim-rgb: 151 164 182;  /* #97A4B6 — lifted to ~7.3:1 on ink for AAA */
+  /* Muted/dim are lifted so both clear the AAA 7:1 target on EVERY surface
+     tier, including surface-2 (#1F2A3A) where panels place small mono labels:
+     muted ~7.6:1 and dim ~7.2:1 on surface-2, higher on ink. */
+  --text-muted-rgb: 178 190 205;
+  --text-dim-rgb: 172 184 200;
   --accent-rgb: 0 102 255;      /* #0066FF — Datadivr brand blue (primary: fills, CTAs, large) */
   --accent-2-rgb: 90 160 255;   /* #5AA0FF — lighter azure: depth / gradients */
   --accent-text-rgb: 107 170 255; /* #6BAAFF — accent for SMALL text: ~7.8:1 on ink (AAA) */
@@ -51,6 +54,16 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  /* Positioned root: framer-motion's useScroll resolves target offsets by
+     walking offsetParent up to the scroll container (documentElement). With a
+     static root the walk dead-ends at body and every scroll-linked section
+     logs "container has a non-static position" and may mis-measure. */
+  position: relative;
+  /* Reveal/scrub transforms translate elements past the right edge before they
+     settle (Reveal x:32, StationFeature x:110). body{overflow-x:hidden} hides
+     the scrollbar but the html pan area still grows on touch devices; clip
+     removes it without creating a scroll container (sticky keeps working). */
+  overflow-x: clip;
 }
 
 /* Lenis smooth scroll: when active it controls scrolling, so native
@@ -221,80 +234,49 @@ h1, h2, h3, h4 {
     @apply border border-border-strong bg-white/[0.02] text-text hover:bg-white/[0.06];
   }
 
-  /* Gold "design partner" button: ghost at rest; on hover a glowing gold fill
-     flushes up from the bottom and the label flips to dark. Premium accent. */
-  .btn-partner {
+  /* Ghost button whose brand-blue fill flushes up on hover; the secondary CTA
+     with extra intent (design partner, security review). One Signal Rule: the
+     hover fill is the same Datadivr blue as the primary, not a second hue. */
+  .btn-fill {
     position: relative;
     overflow: hidden;
     isolation: isolate;
-    border: 1px solid rgba(202, 162, 74, 0.45);
+    border: 1px solid rgba(0, 102, 255, 0.45);
     background: transparent;
-    color: #ecc66a;
+    color: var(--accent-text);
     transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
-  .btn-partner::before {
+  .btn-fill::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(180deg, #f7d278, #c9962f);
+    background: linear-gradient(180deg, #1a78ff, var(--accent));
     transform: translateY(101%);
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .btn-partner:hover,
-  .btn-partner:focus-visible {
-    color: #2a1d04;
+  .btn-fill:hover,
+  .btn-fill:focus-visible {
+    color: #fff;
     border-color: transparent;
-    box-shadow: 0 0 0 1px rgba(231, 188, 92, 0.55), 0 12px 44px -10px rgba(231, 188, 92, 0.6);
+    box-shadow: 0 0 0 1px rgba(0, 102, 255, 0.55), 0 12px 44px -10px rgba(0, 102, 255, 0.6);
   }
-  .btn-partner:hover::before,
-  .btn-partner:focus-visible::before {
+  .btn-fill:hover::before,
+  .btn-fill:focus-visible::before {
     transform: translateY(0);
   }
   @media (prefers-reduced-motion: reduce) {
-    .btn-partner::before { transition: none; }
+    .btn-fill::before { transition: none; }
   }
 
-  /* Ghost button whose fill flushes up in bright orange on hover. Used for the
-     "Talk to our security team" action. */
-  .btn-orange {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-    border: 1px solid var(--border-strong);
-    background: transparent;
-    color: var(--text);
-    transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  .btn-orange::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(180deg, #ff8c2e, #ff6a00);
-    transform: translateY(101%);
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .btn-orange:hover,
-  .btn-orange:focus-visible {
-    color: #2a1402;
-    border-color: transparent;
-    box-shadow: 0 0 0 1px rgba(255, 122, 24, 0.6), 0 12px 44px -10px rgba(255, 122, 24, 0.6);
-  }
-  .btn-orange:hover::before,
-  .btn-orange:focus-visible::before {
-    transform: translateY(0);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .btn-orange::before { transition: none; }
-  }
-
-  /* Station status accents: live (green) / building (amber) / roadmap (grey). */
-  .status-live { color: #4ade80; }
-  .status-build { color: #fb923c; }
+  /* Station status accents. One Signal Rule: live = the brand-blue signal,
+     building = neutral (label + dot carry the meaning), roadmap = ghost.
+     Amber stays reserved for out-of-spec values only. */
+  .status-live { color: var(--accent-text); }
+  .status-build { color: rgb(var(--text-muted-rgb)); }
   .status-roadmap { color: rgb(var(--text-muted-rgb)); }
-  .glow-live { box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.28), 0 0 28px -8px rgba(74, 222, 128, 0.5); }
-  .glow-build { box-shadow: 0 0 0 1px rgba(251, 146, 60, 0.28), 0 0 28px -8px rgba(251, 146, 60, 0.45); }
+  .glow-live { box-shadow: 0 0 0 1px rgba(0, 102, 255, 0.3), 0 0 28px -8px rgba(0, 102, 255, 0.55); }
+  .glow-build { box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12); }
 
   /* Live telemetry dot: a solid core with an expanding sonar ring. The ring is
      a ::after so a single element carries the whole effect. Color is inherited

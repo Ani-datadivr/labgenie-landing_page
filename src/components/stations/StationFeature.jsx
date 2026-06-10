@@ -11,9 +11,11 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 // paces its reveals. Reduced motion renders everything in place.
 //
 // Props: name, status ("Live"|"In build"|"Roadmap"), headline, body, points[], children
+// One Signal Rule: live = brand-blue signal, build = neutral, roadmap = ghost.
+// The text label carries the meaning; color reinforces it.
 const STATUS = {
-  Live: { badge: "border-[#4ade80]/40 bg-[#4ade80]/10 text-[#4ade80] glow-live", dot: "bg-[#4ade80]", pulse: true },
-  "In build": { badge: "border-[#fb923c]/40 bg-[#fb923c]/10 text-[#fb923c] glow-build", dot: "bg-[#fb923c]", pulse: false },
+  Live: { badge: "border-accent/40 bg-accent/10 text-accent-text glow-live", dot: "bg-accent", pulse: true },
+  "In build": { badge: "border-border-strong bg-white/[0.04] text-text glow-build", dot: "bg-muted", pulse: false },
   Roadmap: { badge: "border-border bg-transparent text-dim", dot: "bg-dim", pulse: false },
 };
 
@@ -37,7 +39,7 @@ export default function StationFeature({ name, status, headline, body, points, c
   const screenStyle = reduce ? undefined : { x: screenX, opacity };
 
   return (
-    <div ref={ref} className="grid items-center gap-10 py-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16 lg:py-28">
+    <div ref={ref} className="relative grid items-center gap-10 py-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-16 lg:py-28">
       <motion.div style={textStyle}>
         <div className="flex items-center gap-3">
           <span className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] ${cfg.badge}`}>
@@ -46,7 +48,7 @@ export default function StationFeature({ name, status, headline, body, points, c
           </span>
           <span className="mono-label">{name}</span>
         </div>
-        <h3 className="mt-5 text-2xl sm:text-3xl lg:text-[2.1rem]">{headline}</h3>
+        <h2 className="mt-5 text-2xl sm:text-3xl lg:text-[2.1rem]">{headline}</h2>
         <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">{body}</p>
         {points && (
           <ul className="mt-6 space-y-3">
