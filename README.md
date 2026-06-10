@@ -9,6 +9,10 @@ smooth scroll.
 > **New to the codebase or an AI assistant picking this up?** Read
 > [`HANDOVER.md`](./HANDOVER.md) — it's the detailed engineering map (gotchas,
 > motion system, tokens, OperationsCanvas internals).
+>
+> **Deploying?** [`DEPLOY.md`](./DEPLOY.md) is the Vercel walkthrough (env vars,
+> the one-command `scripts/push-vercel-env.sh`, and the Keystatic GitHub-App
+> setup so on-prod editing works).
 
 ---
 
@@ -112,6 +116,11 @@ buyer roles, the design-partner quote, etc. You rarely need to touch JSX to chan
 words. Station/module labels live in **`src/lib/operations.js`** (keep them in
 sync with the chat router).
 
+Some content (the hero headline/CTAs and the FAQ) is also editable through a UI:
+**Keystatic CMS at `/keystatic`**. Locally it writes the JSON in `src/content/`;
+on Vercel it commits via a GitHub App. See [`KEYSTATIC.md`](./KEYSTATIC.md) and
+[`DEPLOY.md`](./DEPLOY.md) §3.
+
 ---
 
 ## Signature interactions
@@ -128,7 +137,11 @@ sync with the chat router).
 ---
 
 ## TODO before launch
-- [ ] Add real `GEMINI_API_KEY` and `SLACK_WEBHOOK_URL` in `.env.local`.
+- [ ] Add real `GEMINI_API_KEY` and `SLACK_WEBHOOK_URL` (in `.env.local` locally,
+      and in Vercel env for prod — `DEPLOY.md`).
+- [ ] Run the Keystatic "Create GitHub App" wizard once on the deployed
+      `/keystatic`, then add the `KEYSTATIC_GITHUB_*` vars to Vercel so on-prod
+      content editing works (`DEPLOY.md` §3).
 - [ ] Verify the partner ticker links and swap placeholder ERP wordmarks (Infor,
       Ramco) for official logos.
 - [ ] Replace the original compliance medallions with real seals as audits

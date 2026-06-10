@@ -61,12 +61,21 @@ contact-to-Slack) degrade gracefully (see §3).
 | `GEMINI_API_KEY` | "Ask LabGenie" chat in the Operations Dashboard (`/api/labgenie-route`) | Get one at aistudio.google.com/apikey. **Real keys start with `AIzaSy…`.** |
 | `GEMINI_MODEL` | same | Optional. Defaults to `gemini-2.5-flash-lite`. |
 | `SLACK_WEBHOOK_URL` | `/contact` form (`/api/contact`) | Posts each lead to Slack, server-side only. |
+| `KEYSTATIC_SECRET` | `/keystatic` editor (GitHub mode) | Random 32-byte hex (`openssl rand -hex 32`). |
+| `KEYSTATIC_GITHUB_CLIENT_ID` / `_CLIENT_SECRET` / `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` | `/keystatic` editing on the live site | Minted by the "Create GitHub App" wizard on first `/keystatic` visit in prod (see `DEPLOY.md` §3). |
 
 **Graceful degradation (verified):** with no `GEMINI_API_KEY`, the chat route
 returns `{reply:null, error:"unconfigured"}` and the UI falls back to instant
 local keyword routing plus a friendly hint (no dev jargon shown to users). With
 no `SLACK_WEBHOOK_URL`, the contact form shows a clean error with an email
 fallback. Neither crashes.
+
+**Deploying:** see **`DEPLOY.md`** for the full Vercel walkthrough. TL;DR: push to
+`main`, import the repo on Vercel (Next.js auto-detected), then either paste the
+vars above into Vercel's env settings or run `bash scripts/push-vercel-env.sh`
+(after `vercel link`) to push them all from `.env.local`. Storage for Keystatic is
+**GitHub mode on Vercel automatically** (local files in dev), so on-prod editing
+works once the GitHub App wizard is done.
 
 ---
 
@@ -248,6 +257,12 @@ product moment. Driven by `src/lib/operations.js`; scoped CSS module.
   a11y-wise; consider labels if first-time-user clarity matters.
 - Convert the remaining card grids (Careers, homepage Problem) to the editorial row pattern.
 - Set the production domain in `layout.jsx`, `robots.js`, `sitemap.js`.
+- **Finish Keystatic on-prod editing:** after the first Vercel deploy, run the
+  "Create GitHub App" wizard once at `/keystatic`, then add the three
+  `KEYSTATIC_GITHUB_*` / app-slug vars to Vercel (`DEPLOY.md` §3). Until then the
+  live site still renders content fine; only the on-prod editor is unconfigured.
+- **Deploying:** full walkthrough in `DEPLOY.md`; one-shot env push via
+  `scripts/push-vercel-env.sh`.
 
 ---
 

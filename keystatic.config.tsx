@@ -1,9 +1,20 @@
 import { config, fields, singleton } from "@keystatic/core";
 
-// GitHub storage in production (once the GitHub App env vars are set); local
-// file storage in development so the editor works at /keystatic with no setup.
-// The switch is automatic based on whether the GitHub App client id is present.
-const storage = process.env.KEYSTATIC_GITHUB_CLIENT_ID
+// Storage kind:
+//   • GitHub mode once the GitHub App creds exist (KEYSTATIC_GITHUB_CLIENT_ID) —
+//     this is the prod editing path; edits commit to the repo.
+//   • Local files otherwise — dev editing with zero setup, AND it keeps
+//     `next build` passing on Vercel before the App exists (GitHub mode REQUIRES
+//     the creds at build time, or the build errors).
+//   • To run Keystatic's one-time "Create GitHub App" wizard locally, force
+//     GitHub mode in dev with `KEYSTATIC_STORAGE=github npm run dev` (dev doesn't
+//     do the build-time validation). See DEPLOY.md §3.
+// The reader (src/lib/cms.js) reads committed files either way, so the rendered
+// site is unaffected by the storage kind.
+const useGitHub =
+  Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID) ||
+  process.env.KEYSTATIC_STORAGE === "github";
+const storage = useGitHub
   ? ({
       kind: "github",
       repo: { owner: "Ani-datadivr", name: "labgenie-landing_page" },

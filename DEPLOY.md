@@ -32,6 +32,20 @@ explicitly. If you add them after the first deploy, **redeploy** to apply.
 | `GEMINI_API_KEY` | A real Google AI Studio key (starts with `AIzaSy…`) | The "Ask LabGenie" chat in the Operations Dashboard |
 | `GEMINI_MODEL` | `gemini-2.5-flash` (optional) | Chat model override |
 | `SLACK_WEBHOOK_URL` | Your Slack incoming webhook URL | Contact form → Slack lead |
+| `KEYSTATIC_SECRET` | a random 32-byte hex (`openssl rand -hex 32`) | `/keystatic` editor session signing |
+| `KEYSTATIC_GITHUB_CLIENT_ID` | from the GitHub App wizard (§3) | `/keystatic` editing on the live site |
+| `KEYSTATIC_GITHUB_CLIENT_SECRET` | from the GitHub App wizard (§3) | same |
+| `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` | from the GitHub App wizard (§3) | same |
+
+### One-command env push (CLI)
+Instead of pasting each value in the dashboard, you can push everything from your
+already-filled local `.env.local`:
+```bash
+npm i -g vercel && vercel login && vercel link   # one time, pick the project
+bash scripts/push-vercel-env.sh                  # pushes every var to Prod + Preview
+vercel --prod                                     # deploy
+```
+Re-run `push-vercel-env.sh` after the §3 wizard adds the GitHub App values to `.env.local`.
 
 > **Gemini:** the token used in local dev (`AQ.Ab8…`) is **not** a standard API
 > key and will not authenticate. Generate one at
@@ -47,14 +61,26 @@ explicitly. If you add them after the first deploy, **redeploy** to apply.
 ## 3. Keystatic on Vercel (content editing)
 
 - **The live site always renders correctly** — content lives in `src/content/`
-  (committed to git) and is read at build time.
-- The **`/keystatic` editor** only saves to the filesystem in local mode, and
-  Vercel's filesystem is read-only. So in production it is read-only **unless**
-  you set up the Keystatic GitHub App and add these env vars (then it commits
-  edits straight to the repo, which triggers an auto-redeploy):
-  `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`.
-- Simplest path for now: **edit content locally** at `localhost:3000/keystatic`,
-  commit, push → Vercel redeploys. See `KEYSTATIC.md`.
+  (committed to git) and is read at build time, independent of storage mode.
+- Storage is now **GitHub mode automatically on Vercel** (and local files in dev),
+  so on-prod editing is wired. To finish it, mint the GitHub App once:
+
+  1. Deploy first (with at least `KEYSTATIC_SECRET` set).
+  2. Open `https://<your-app>.vercel.app/keystatic`. Keystatic shows a
+     **"Create GitHub App"** button (because the app isn't registered yet).
+  3. Click it and approve on GitHub. GitHub creates the App on
+     `Ani-datadivr/labgenie-landing_page` and redirects back; Keystatic then
+     **shows you** `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`,
+     and the app slug.
+  4. Add those three to Vercel as `KEYSTATIC_GITHUB_CLIENT_ID`,
+     `KEYSTATIC_GITHUB_CLIENT_SECRET`, and `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
+     (paste them into `.env.local` and re-run `scripts/push-vercel-env.sh`, or add
+     in the dashboard), then **redeploy**.
+  5. Now `/keystatic` on the live site lets approved GitHub users edit content;
+     each save is a commit to the repo, which auto-redeploys.
+
+- Editing locally still works with zero setup at `localhost:3000/keystatic`
+  (writes the JSON files directly). See `KEYSTATIC.md`.
 
 ---
 
