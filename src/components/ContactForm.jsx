@@ -6,6 +6,8 @@ import { site } from "@/lib/content";
 import { COUNTRIES, flagEmoji } from "@/lib/countries";
 import Combobox from "@/components/Combobox";
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // Plain text fields. Country + phone are custom comboboxes below.
 const fields = [
   { name: "name", label: "Full name", type: "text", required: true, placeholder: "Jane Doe", half: true },
@@ -69,6 +71,14 @@ export default function ContactForm() {
     setErrors((er) => (er[k] ? { ...er, [k]: undefined } : er));
   };
 
+  // Flag a malformed email the moment the user leaves the field.
+  function checkEmail() {
+    const v = values.email.trim();
+    if (v && !EMAIL_RE.test(v)) {
+      setErrors((er) => ({ ...er, email: "Please enter a valid email." }));
+    }
+  }
+
   // Choosing a country prefills the matching dialing code.
   function chooseCountry(opt) {
     setCountry(opt);
@@ -81,8 +91,8 @@ export default function ContactForm() {
     const e = {};
     if (!values.name.trim()) e.name = "Enter your name.";
     if (!values.email.trim()) e.email = "Enter your work email.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))
-      e.email = "Enter a valid email address.";
+    else if (!EMAIL_RE.test(values.email.trim()))
+      e.email = "Please enter a valid email.";
     if (phone.trim()) {
       const digits = phone.replace(/\D/g, "");
       if (!dial) e.phone = "Select your country dialing code.";
@@ -160,6 +170,7 @@ export default function ContactForm() {
               placeholder={f.placeholder}
               value={values[f.name]}
               onChange={update(f.name)}
+              onBlur={f.name === "email" ? checkEmail : undefined}
               aria-invalid={errors[f.name] ? true : undefined}
               aria-describedby={errors[f.name] ? `${f.name}-error` : undefined}
               className={`w-full rounded-xl border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:outline-none ${
