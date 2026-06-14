@@ -2,6 +2,7 @@ import PageHeader from "@/components/PageHeader";
 import ContactForm from "@/components/ContactForm";
 import Reveal from "@/components/Reveal";
 import GradientBackground from "@/components/GradientBackground";
+import SeatMeter from "@/components/SeatMeter";
 import { site } from "@/lib/content";
 
 export const metadata = {
@@ -40,29 +41,7 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-bg-elev/40 px-4 py-3">
-                <span
-                  className="flex items-center gap-1.5"
-                  role="img"
-                  aria-label="3 of 5 design-partner seats are filled"
-                >
-                  {[true, true, true, false, false].map((filled, i) => (
-                    <span
-                      key={i}
-                      aria-hidden="true"
-                      className={
-                        filled
-                          ? "h-2.5 w-2.5 rounded-full bg-accent"
-                          : "h-2.5 w-2.5 rounded-full border border-border bg-transparent"
-                      }
-                    />
-                  ))}
-                </span>
-                <span className="text-sm text-text">
-                  3 of 5 design-partner seats are filled.{" "}
-                  <span className="text-muted">2 remaining.</span>
-                </span>
-              </div>
+              <SeatMeter />
 
               <ul className="space-y-4">
                 {[

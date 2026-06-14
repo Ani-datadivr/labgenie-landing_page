@@ -153,7 +153,7 @@ export const clients = [
 
 export const designPartner = {
   name: "Synthite",
-  descriptor: "the world's largest oleoresin producer",
+  descriptor: "the world's largest spice oleoresin manufacturer",
   quote:
     "LabGenie collapses the quality-document checking that defines our quality and sales operations from days into minutes.",
 };

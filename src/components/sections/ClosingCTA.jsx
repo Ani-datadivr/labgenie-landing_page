@@ -5,7 +5,7 @@ import Reveal from "../Reveal";
 // Bookend the page with the product in action: the buyer's own context typed
 // into LabGenie, answered with a concrete first step.
 const CLOSE_STATIONS = [
-  { name: "Quality", accent: "#0066FF", action: "3 days a batch checking quality certificates is your biggest drain." },
+  { name: "Quality", accent: "#0066FF", action: "1.5 days matching each RFP against your product specs is your biggest drain." },
   { name: "Sales", accent: "#5AA0FF", action: "400+ customer requests a month, every one sorted by hand." },
 ];
 
@@ -38,7 +38,7 @@ export default function ClosingCTA() {
 
         <Reveal variant="scale" delay={0.1} duration={0.85}>
           <ChatMockup
-            query="We handle 400+ customer requests a month and spend 3 days a batch checking quality certificates. Where do we start?"
+            query="We handle 400+ customer requests a month and spend 1.5 days matching each one against our specs. Where do we start?"
             stations={CLOSE_STATIONS}
             answer="Start with the Quality Assurance Station. Here's what week one looks like."
             typed="Where do we start?"

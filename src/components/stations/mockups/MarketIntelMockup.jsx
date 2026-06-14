@@ -57,7 +57,7 @@ export default function MarketIntelMockup() {
               <span
                 className={`mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg border ${
                   s.flagged
-                    ? "border-[#FFB454]/30 bg-[#FFB454]/10 text-[#FFB454]"
+                    ? "border-[#FFB454]/30 bg-[#FFB454]/10 text-[#FFB454] flag-glow"
                     : "border-accent/25 bg-accent/[0.08] text-accent"
                 }`}
               >

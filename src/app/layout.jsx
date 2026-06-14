@@ -1,13 +1,18 @@
 import "./globals.css";
-import { Inter, Space_Grotesk, JetBrains_Mono, Manrope } from "next/font/google";
+import { Archivo, Bricolage_Grotesque, JetBrains_Mono, Manrope } from "next/font/google";
 import { site } from "@/lib/content";
 
-const inter = Inter({
+// Body: Archivo, a high-performance grotesque built for screens, reads
+// engineered and precise (deliberately not Inter). Display: Bricolage
+// Grotesque, a contrast grotesque with real character so headlines feel
+// chosen, not defaulted. The pairing carries the "lit instrument panel"
+// brand without the training-data-default fonts.
+const archivo = Archivo({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-body",
 });
-const spaceGrotesk = Space_Grotesk({
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-display",
@@ -67,7 +72,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrains.variable} ${manrope.variable}`}
+      className={`${archivo.variable} ${bricolage.variable} ${jetbrains.variable} ${manrope.variable}`}
     >
       <body>{children}</body>
     </html>

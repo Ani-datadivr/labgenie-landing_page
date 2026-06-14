@@ -36,8 +36,8 @@
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.14);
 
-  --font-display: "Space Grotesk", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: "Archivo", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* Motion easing — natural deceleration, no bounce. */
@@ -131,10 +131,12 @@ h1, h2, h3, h4 {
   .display {
     font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 0.98;
+    /* Bricolage carries more character than Space Grotesk, so it wants slightly
+       looser tracking and a hair more leading to avoid letters touching. */
+    letter-spacing: -0.025em;
+    line-height: 1.0;
     text-wrap: balance;
-    font-size: clamp(2.6rem, 6.2vw, 5.25rem);
+    font-size: clamp(2.5rem, 6vw, 5rem);
   }
 
   /* Mono label / kicker — the technical voice. */
@@ -360,6 +362,32 @@ h1, h2, h3, h4 {
     stroke-dasharray: 5 7;
     animation: flow-dash 1.1s linear infinite;
   }
+
+  /* Station-mockup life signals (each station gets its own relevant motion). */
+  /* Procurement: a sonar ping radiating off the latest price point. */
+  .chart-ping {
+    animation: chart-ping 2.2s var(--ease-out-quint) infinite;
+  }
+  /* Production / Market Intel: an amber attention pulse on a flagged element. */
+  .flag-glow {
+    animation: flag-glow 2s ease-in-out infinite;
+  }
+  /* Formulation: a light sheen sweeping a surface on a loop ("composing"). */
+  .sheen-loop {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .sheen-loop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.22) 50%, transparent 65%);
+    transform: translateX(-130%);
+    animation: sheen-loop 3.2s var(--ease-out-quint) infinite;
+  }
 }
 
 /* ===== Continuous-life keyframes ===== */
@@ -374,9 +402,26 @@ h1, h2, h3, h4 {
 @keyframes flow-dash {
   to { stroke-dashoffset: -24; }
 }
+/* Proof switcher auto-advance bar (scales left→right over the dwell time). */
+@keyframes proof-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
 @keyframes float-soft {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
+}
+@keyframes chart-ping {
+  0% { r: 3; opacity: 0.55; }
+  100% { r: 13; opacity: 0; }
+}
+@keyframes flag-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 180, 84, 0); }
+  50% { box-shadow: 0 0 12px 1px rgba(255, 180, 84, 0.55); }
+}
+@keyframes sheen-loop {
+  0% { transform: translateX(-130%); }
+  55%, 100% { transform: translateX(230%); }
 }
 
 /* Reconciliation scan line sweep (scrollytelling "Read" stage). */

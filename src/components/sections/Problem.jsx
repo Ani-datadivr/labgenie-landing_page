@@ -1,5 +1,6 @@
 import { Beaker, Inbox, LineChart } from "lucide-react";
 import ScrollRevealText from "../ScrollRevealText";
+import CountUp from "../CountUp";
 import Reveal, { Stagger, StaggerItem } from "../Reveal";
 
 // The pain, stated before the product appears. Stark numbers, muted icons, no
@@ -8,13 +9,14 @@ const CARDS = [
   {
     icon: Beaker,
     area: "Quality",
-    stat: "3–5 days",
-    body: "Per batch. Just to check quality certificates against internal and customer specs.",
+    stat: "1.5–2 days",
+    body: "Per request. Matching each customer spec against your product information sheets, by hand.",
   },
   {
     icon: Inbox,
     area: "Sales",
-    stat: "1000+ requests",
+    countTo: 1000,
+    countSuffix: "+ requests",
     body: "Manually sorted. Slowly routed. Most never reach the lab in time.",
   },
   {
@@ -33,12 +35,12 @@ export default function Problem() {
       </Reveal>
 
       <Stagger gap={0.12} className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
-        {CARDS.map(({ icon: Icon, area, stat, body }) => (
+        {CARDS.map(({ icon: Icon, area, stat, countTo, countSuffix, body }) => (
           <StaggerItem key={area} variant="scale" className="group bg-bg p-7 transition-colors duration-300 hover:bg-surface/40 lg:p-8">
             <Icon size={22} strokeWidth={1.5} className="text-dim transition-colors duration-300 group-hover:text-accent" aria-hidden="true" />
             <div className="mono-label mt-6">{area}</div>
             <div className="mt-2 font-display text-3xl font-semibold tracking-tight text-text">
-              {stat}
+              {countTo ? <CountUp to={countTo} suffix={countSuffix} /> : stat}
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted">{body}</p>
           </StaggerItem>

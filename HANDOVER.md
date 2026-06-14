@@ -16,8 +16,47 @@ iterated heavily with the **`impeccable`** design skill (see §13).
 
 **Stack:** Next.js 14 (App Router, **JSX, not TypeScript**) · React 18 · Tailwind
 CSS 3 · Framer Motion · Lenis (smooth scroll) · lucide-react · Google
-Vertex/Gemini (chat) · Slack webhook (leads) · sharp (build-time logo
-processing only).
+Gemini (chat) · Slack webhook (leads) · sharp / Pillow (one-off image
+processing, see §0 + §10).
+
+---
+
+## 0. Recent build cycle (latest changes — read this first)
+
+This cycle reworked large parts of the site. Where this section and the older
+sections below disagree, **this section wins.**
+
+- **Fonts swapped** to clear the "$10K" bar (neither Inter nor Roboto):
+  **Bricolage Grotesque** (display) + **Archivo** (body), via `layout.jsx`
+  `next/font`. JetBrains Mono + Manrope unchanged. See `DESIGN.md` §3.
+- **Homepage hero mockup is now `AppDashboard`** (`components/AppDashboard.jsx`),
+  rebuilt as a self-contained **interactive operations console**: a workspace
+  rail that auto-tours (hover/click pauses; clicking pins) through an **Overview
+  command center** (KPI tiles + rotating, station-tagged insights) and per-station
+  views (Quality match gauge, Sales RFP queue, Procurement self-drawing price
+  chart + buy-window callout, Inventory shelf-life, Production OEE gauge,
+  Formulation composition) — plus a **live `LiveMessages` feed** and `CountUp`s.
+- **`OperationsCanvas` moved off the homepage to `/platform`, where it is now the
+  hero** ("One agent. Every station." — its `.title` is the page `h1`). The old
+  "Every station. One operating layer." hero section was removed.
+- **`StationMap` moved to the homepage `ProductVision` section** (full, not
+  compact) with a **staged entrance** (LabGenie node → connectors branch out →
+  station boxes appear one by one → status colors glow in). Removed from `/platform`.
+- **Proof merged** into `components/sections/ProofShowcase.jsx` (Synthite + Mane
+  Kancor); the old `SocialProof` is no longer mounted. Copy aligned to the VC deck
+  (**1.5 days → 5 min** RFP spine, customers **Synthite / AVT McCormick / Mane
+  Kancor** named, value-based pricing kept).
+- **Security page rebuilt** (`/security`): honest **Live / In progress / Planned**
+  status badges; the AI provider is **not named publicly** ("compliance-grade AI",
+  EU AI Act "Limited Risk"). Nothing is claimed as certified (pre-certification).
+- **About page** (`/about`): added a **leadership team section** (5 people) and two
+  **dark-graded factory photos**; see §10 for the image pipeline.
+- **Manufacturers page**: the Synthite quote (`DesignPartner`) was replaced by a
+  **"why manufacturers love us"** traits grid. `DesignPartner.jsx` is now **unused**.
+- **New components this cycle:** `AppDashboard` (rewritten), `CountUp`,
+  `SeatMeter` (contact founding-partner meter), `ProofShowcase`. Possibly-orphaned:
+  `DesignPartner`, `BlendProof`, `SocialProof`, `OperationsStory` — confirm before
+  reusing.
 
 ---
 
@@ -84,7 +123,7 @@ works once the GitHub App wizard is done.
 | Route | File | What it is |
 |---|---|---|
 | `/` | `src/app/page.jsx` | Home (see order below) |
-| `/platform` | `platform/page.jsx` | The stations broken out, each with a product screen + scroll-linked entrance |
+| `/platform` | `platform/page.jsx` | Hero = the live `OperationsCanvas` ("One agent. Every station."), then each station broken out with a product screen |
 | `/manufacturers` | `manufacturers/page.jsx` | Buyer roles (editorial rows) + the partner logo ticker |
 | `/integrations` | `integrations/page.jsx` | ERP + CRM logos + "how it connects" |
 | `/security` | `security/page.jsx` | Compliance program (pre-certification) + data handling |
@@ -94,8 +133,9 @@ works once the GitHub App wizard is done.
 | `/api/labgenie-route` | `api/labgenie-route/route.js` | Gemini chat backend |
 | `/api/contact` | `api/contact/route.js` | Contact form → Slack |
 
-**Homepage order (canvas-led, deliberately distilled to two product moments):**
-`Hero → Problem → ProductVision (compact StationMap) → OperationsCanvas → Differentiation → SocialProof → FAQ → ClosingCTA`.
+**Homepage order (current):**
+`Hero (AppDashboard console) → Problem → ProductVision (full animated StationMap) → Differentiation → ProofShowcase → FAQ → ClosingCTA`.
+(See §0 — `OperationsCanvas` moved to `/platform`, `SocialProof` → `ProofShowcase`.)
 
 > A Terminal-Industries-style **pinned scrollytelling** component
 > (`OperationsStory.jsx`) exists in the repo but was **retired from the homepage**
@@ -122,8 +162,9 @@ Tailwind opacity modifiers (`text-accent/30`) work. Full system in `DESIGN.md`.
 | `--accent-text` | `#6BAAFF` | **Brand blue for small/secondary TEXT** (~7.8:1, AAA). Tailwind: `text-accent-text` |
 | `--accent-warm` | `#FFB454` | Amber — out-of-spec / "in progress" status ONLY |
 
-**Fonts** (`layout.jsx`, `next/font`): Space Grotesk (display), Inter (body),
-JetBrains Mono (labels/data), Manrope (logo lockup only).
+**Fonts** (`layout.jsx`, `next/font`): **Bricolage Grotesque** (display),
+**Archivo** (body), JetBrains Mono (labels/data), Manrope (logo lockup only).
+(Replaced Space Grotesk + Inter this cycle — see §0 and `DESIGN.md` §3.)
 
 **Accessibility — holding WCAG AAA (mostly):** body/muted/dim/mono/eyebrow tiers
 all clear AAA after the token lifts. **The one accepted exception:** raw
@@ -201,11 +242,12 @@ single light proof card, the FAQ accordion) are not "cards" and stay.
 
 ## 9. OperationsCanvas notes (`components/OperationsCanvas/`, ~1100 JSX + ~1350 CSS)
 
-The interactive node-graph "Operations Dashboard" — the homepage's canonical
-product moment. Driven by `src/lib/operations.js`; scoped CSS module.
-- **ERP panel:** shows 4 full logos (SAP, Sage, Infor, Ramco) + an "and more"
-  line. Hovering a logo fills the panel with that brand's color (`.erpFill` + JS
-  `setFill`). Infor/Ramco are placeholder wordmark SVGs (`public/erp/`).
+The interactive node-graph console — **now the `/platform` hero** (moved off the
+homepage this cycle; the homepage uses `AppDashboard`). Driven by
+`src/lib/operations.js`; scoped CSS module. Its `.title` is the platform-page `h1`.
+- **ERP panel:** shows 4 real logos (SAP, Sage, Infor, Ramco) + an "and more"
+  line, each with a per-logo `scale` in `ERP_LOGOS` for even optical sizing.
+  Hovering a logo fills the panel with that brand's color (`.erpFill` + JS `setFill`).
 - **ERP ⇄ LabGenie connector:** two lanes (`erpPathRef`/`erpPathRefB`) with
   opposite-flowing pulses = two-way comms.
 - **Module cards** (`.mCard`): full accent-tinted border + faint wash (the old
@@ -223,9 +265,18 @@ product moment. Driven by `src/lib/operations.js`; scoped CSS module.
   domains) and `rest` (a transparent silhouette source when the main file has a
   white background — e.g. Mane uses the color webp `mane.webp` for the hover and
   `mane-mark.png` for the silhouette).
-- **Logos that need real artwork (currently clean monochrome wordmark
-  placeholders):** `public/erp/infor.svg`, `public/erp/ramco.svg`. Swap when
-  official art is available.
+- **ERP logos are now real artwork:** `public/erp/{sap.webp, sage.webp, infor.png,
+  ramco.png}`, sized per-logo via a `scale` field in `OperationsCanvas`'s
+  `ERP_LOGOS` (so the square SAP and the wide ramco read at a similar optical size).
+- **Team avatars + factory photos (`/about`) — duotone pipeline:** AI-generated
+  source illustrations/photos live in the working `photos/` folder (gitignored-ish,
+  not served). They were processed **once, by hand, with Pillow** into a uniform
+  treatment — white background (top-corner flood-fill), a cool-blue duotone matching
+  `photos/REFERENCEFORTINT.jpeg`, and watermark crops — and written to
+  **`public/team/{sunny,gautham,andrew,siva,isha}.webp`** (avatars) and
+  **`public/about/{processing-floor,processing-line}.webp`** (factory). If a source
+  image changes, re-run the same Pillow steps (duotone LUT navy `#1A2340`→white;
+  resize avatars to 480²). The served `public/` assets are what the site uses.
 - **Logo background knockout:** `choice-canning.png` and `nandus.png` had their
   white backgrounds removed at build time with `sharp` (feathered white→transparent)
   so they silhouette cleanly on the dark cards. If you re-add a white-bg logo,
@@ -248,7 +299,6 @@ product moment. Driven by `src/lib/operations.js`; scoped CSS module.
 
 - **Verify partner URLs.** Ticker links are best-effort; `manekancor.com`/
   `mercelys.com` etc. were checked, but confirm all and add any missing.
-- **Swap placeholder ERP wordmarks** (`infor.svg`, `ramco.svg`) for real logos.
 - **Security badges are original artwork, not official seals** (LabGenie is
   pre-certification — the copy says so). Swap in real seals as audits complete.
 - **Decide the hero AAA call** (§5): keep brand-blue (AA-large) or switch to

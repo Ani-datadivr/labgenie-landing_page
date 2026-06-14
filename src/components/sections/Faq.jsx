@@ -13,7 +13,7 @@ const FAQS = [
   },
   {
     q: "How is our data kept safe?",
-    a: "Your formulations, buyer lists, RFPs, and pricing are yours alone. LabGenie runs on AWS with isolated tenant environments, so no customer data ever touches another customer's models or queries. We never train shared models on your proprietary data. Access is role-based, every action is logged, and we sign NDAs and data processing agreements before onboarding begins.",
+    a: "Your formulations, buyer lists, RFPs, and pricing stay yours. LabGenie isolates each customer's data in its own tenant schema, so it never mixes with anyone else's. Data is encrypted in transit, access is role-based and least-privilege, activity is logged, and you keep full ownership of everything you upload, used only to run the platform for you and never sold. SOC 2 Type II and GDPR readiness are in progress, and we sign NDAs and put a data processing agreement in place for enterprise onboarding.",
   },
   {
     q: "Does it work with the tools we already use?",
@@ -24,7 +24,7 @@ const FAQS = [
     a: "Yes. The agents learn your product catalogue, your SOPs, your spec formats, and your way of describing things. We start by ingesting what your team already references, and the agents get sharper with every interaction.",
   },
   {
-    q: "What if we only need one agent, not all three?",
+    q: "What if we only need one station, not the whole platform?",
     a: "Each agent works independently. Most customers start with one, usually the one solving their loudest pain, whether that's RFP matching, sales query routing, or compliance reporting. You expand when you see results. There's no requirement to deploy the full platform on day one.",
   },
   {

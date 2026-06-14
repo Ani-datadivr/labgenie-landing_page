@@ -1,7 +1,7 @@
 import ScrollRevealText from "../ScrollRevealText";
 import Reveal, { Stagger, StaggerItem } from "../Reveal";
 
-// Credibility through origin: DataDivr's years inside real F&B manufacturers,
+// Credibility through origin: Datadivr's years inside real F&B manufacturers,
 // now embedded in the product.
 const KNOWS = [
   "what a real quality spec looks like, in whatever format a customer sends it",
@@ -24,7 +24,7 @@ export default function Differentiation() {
 
           {/* lineage, stated plainly: a consulting practice turned product */}
           <Reveal delay={0.1} className="mt-9 max-w-md text-base leading-relaxed text-muted">
-            LabGenie is the product DataDivr built after years of F&amp;B consulting,
+            LabGenie is the product Datadivr built after years of F&amp;B consulting,
             the same team, now shipping software instead of slide decks.
           </Reveal>
 
@@ -38,7 +38,7 @@ export default function Differentiation() {
 
         <div className="lg:pt-2">
           <Reveal as="p" className="text-lg leading-relaxed text-muted">
-            LabGenie was built out of DataDivr, a consulting firm that spent years working inside
+            LabGenie was built out of Datadivr, a consulting firm that spent years working inside
             some of the biggest names in spices, flavors, and oleoresins. So it already knows:
           </Reveal>
           <Stagger gap={0.12} className="mt-6 space-y-4">

@@ -62,7 +62,7 @@ export default function ProductionMockup() {
                   {actualH != null ? (
                     <div
                       className={`w-3.5 rounded-t-sm ${
-                        w.flagged ? "bg-[#FFB454]" : "bg-accent"
+                        w.flagged ? "bg-[#FFB454] flag-glow" : "bg-accent"
                       }`}
                       style={{ height: `${actualH}%` }}
                     />

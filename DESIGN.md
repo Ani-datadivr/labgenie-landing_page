@@ -15,13 +15,13 @@ colors:
   flag-amber: "#FFB454"
 typography:
   display:
-    fontFamily: "Space Grotesk, system-ui, sans-serif"
+    fontFamily: "Bricolage Grotesque, system-ui, sans-serif"
     fontSize: "clamp(2.5rem, 5vw, 3.6rem)"
     fontWeight: 500
     lineHeight: 1.05
     letterSpacing: "-0.02em"
   body:
-    fontFamily: "Inter, system-ui, sans-serif"
+    fontFamily: "Archivo, system-ui, sans-serif"
     fontSize: "1rem"
     fontWeight: 400
     lineHeight: 1.6
@@ -112,12 +112,12 @@ A near-monochrome blue-on-ink system: one saturated brand blue carries all signa
 
 ## 3. Typography
 
-**Display Font:** Space Grotesk (with system-ui, sans-serif)
-**Body Font:** Inter (with system-ui, sans-serif)
+**Display Font:** Bricolage Grotesque (with system-ui, sans-serif)
+**Body Font:** Archivo (with system-ui, sans-serif)
 **Label/Mono Font:** JetBrains Mono (with ui-monospace, monospace)
 **Brand Wordmark Font:** Manrope (logo lockup only — "labgenie.ai")
 
-**Character:** Geometric-technical display over a neutral humanist body, with a mono voice reserved for data and labels. The pairing reads engineered and precise, not editorial. Manrope appears only in the official logo lockup; it is not a fourth body face.
+**Character:** A contrast grotesque display (Bricolage Grotesque) over a precise, screen-built grotesque body (Archivo), with a mono voice reserved for data and labels. The pairing reads engineered and chosen, not defaulted. (This deliberately replaced Space Grotesk + Inter, which are training-data-default faces; the `$10K-checklist` pass called for fonts that are "neither Inter nor Roboto.") Manrope appears only in the official logo lockup; it is not a fourth body face.
 
 ### Hierarchy
 - **Display / H1** (500, clamp(2.5rem, 5vw, 3.6rem), 1.05, -0.02em): Hero and page headlines. `text-wrap: balance`.

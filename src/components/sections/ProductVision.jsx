@@ -22,7 +22,7 @@ export default function ProductVision() {
       </div>
 
       <div className="mt-10">
-        <StationMap compact />
+        <StationMap />
       </div>
 
       <Reveal className="mt-8 flex flex-wrap items-center gap-3">

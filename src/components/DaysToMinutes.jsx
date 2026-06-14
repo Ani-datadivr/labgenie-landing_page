@@ -6,8 +6,8 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 const EASE = [0.16, 1, 0.3, 1];
 
 /**
- * The brand spine, animated: "3 days" is struck through, an arrow streams, and
- * "minutes" resolves in brand blue. Fires once on scroll-in. Reduced motion
+ * The brand spine, animated: "1.5 days" is struck through, an arrow streams, and
+ * "5 min" resolves in brand blue. Fires once on scroll-in. Reduced motion
  * renders the resolved end state with no animation.
  */
 export default function DaysToMinutes() {
@@ -21,9 +21,9 @@ export default function DaysToMinutes() {
       ref={ref}
       className="flex flex-wrap items-center gap-x-2 gap-y-1 font-display text-2xl font-semibold tracking-tight"
     >
-      {/* old reality: 3 days, struck through */}
+      {/* old reality: 1.5 days, struck through */}
       <span className="relative whitespace-nowrap text-muted">
-        3 days
+        1.5 days
         <motion.span
           aria-hidden="true"
           className="absolute left-0 top-1/2 h-px w-full origin-left bg-muted"
@@ -57,7 +57,7 @@ export default function DaysToMinutes() {
         animate={play}
         transition={{ duration: 0.5, ease: EASE, delay: reduce ? 0 : 0.95 }}
       >
-        minutes
+        5 min
       </motion.span>
     </span>
   );

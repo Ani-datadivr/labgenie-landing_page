@@ -3,18 +3,19 @@ import {
   ShieldCheck,
   Lock,
   KeyRound,
-  CloudCog,
-  FileCheck,
-  Eye,
   Globe,
   Cpu,
-  Timer,
-  BadgeCheck,
+  FileCheck,
   ScrollText,
   DatabaseZap,
-  CircleCheck,
-  HeartPulse,
+  BadgeCheck,
   Fingerprint,
+  CircleCheck,
+  CreditCard,
+  Boxes,
+  Accessibility,
+  Scale,
+  Sparkles,
   Mail,
 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
@@ -26,131 +27,59 @@ import { site } from "@/lib/content";
 export const metadata = {
   title: "Security & compliance",
   description:
-    "How LabGenie protects F&B specifications and quality documents: your data stays in your own cloud, processing is transient and auto-purged, you keep ownership of your data, and the platform runs on Google Vertex AI.",
+    "How LabGenie protects F&B data: tenant-isolated storage, role-based access, and encryption in transit today, with SOC 2, GDPR, DPDPA, and EU AI Act work in progress. Honest status on every framework.",
 };
 
 const securityEmail = "security@labgenie.ai";
 
-// ---- Compliance program ---------------------------------------------------
-// Status is honest: most controls are in progress / aligned, not falsely
-// claimed as certified. Tags are paired with text + a dot pattern so meaning
-// never rests on color alone.
+// Honest status taxonomy. Nothing here is claimed as certified, because nothing
+// is yet. "Live" = a control already in place; "In progress" = a framework we
+// are actively working toward; "Planned" = assessed and on the roadmap. Meaning
+// never rests on color alone (label + dot carry it).
 const STATUS = {
-  certified: { label: "Certified", style: "border-accent/40 bg-accent/10 text-accent-text" },
-  progress: { label: "In progress", style: "border-[#fb923c]/45 bg-[#fb923c]/10 text-[#fb923c]" },
-  aligned: { label: "Aligned", style: "border-[#4ade80]/45 bg-[#4ade80]/10 text-[#4ade80]" },
+  live: { label: "Live", style: "border-accent/45 bg-accent/10 text-accent-text" },
+  progress: { label: "In progress", style: "border-[#fb923c]/45 bg-[#fb923c]/12 text-[#fb923c]" },
+  planned: { label: "Planned", style: "border-border bg-white/[0.04] text-muted" },
 };
 
-const compliance = [
-  {
-    standard: "SOC 2 (Type II)",
-    monogram: "SOC 2",
-    Icon: ShieldCheck,
-    status: "progress",
-    desc: "Independent attestation of our security, availability, and confidentiality controls over time.",
-  },
-  {
-    standard: "SOC 1",
-    monogram: "SOC 1",
-    Icon: FileCheck,
-    status: "progress",
-    desc: "Controls relevant to customers' financial reporting and the systems that support it.",
-  },
-  {
-    standard: "SOC 3",
-    monogram: "SOC 3",
-    Icon: BadgeCheck,
-    status: "progress",
-    desc: "A public summary of our SOC 2 controls, shareable without an NDA.",
-  },
-  {
-    standard: "ISO 27001",
-    monogram: "ISO 27K",
-    Icon: Lock,
-    status: "progress",
-    desc: "A formal information security management system covering risk, access, and operations.",
-  },
-  {
-    standard: "GDPR",
-    monogram: "GDPR",
-    Icon: Globe,
-    status: "aligned",
-    desc: "Lawful processing, data-subject rights, and EU transfer safeguards for personal data.",
-  },
-  {
-    standard: "CCPA",
-    monogram: "CCPA",
-    Icon: ScrollText,
-    status: "aligned",
-    desc: "California privacy rights for access, deletion, and control over personal information.",
-  },
-  {
-    standard: "ISO 27701",
-    monogram: "ISO 27701",
-    Icon: Fingerprint,
-    status: "progress",
-    desc: "A privacy information management extension to ISO 27001 for handling personal data.",
-  },
-  {
-    standard: "HIPAA",
-    monogram: "HIPAA",
-    Icon: HeartPulse,
-    status: "aligned",
-    desc: "Safeguards for protected health information, available where a customer's workflow requires it.",
-  },
+// ---- Controls live today (the genuinely-implemented set) ------------------
+const controls = [
+  { name: "Tenant isolation", Icon: DatabaseZap, note: "Each customer in its own database schema." },
+  { name: "Role-based access", Icon: KeyRound, note: "JWT auth, least-privilege roles." },
+  { name: "Encrypted in transit", Icon: Lock, note: "HTTPS enforced, HSTS configured." },
+  { name: "Compliance-grade AI", Icon: Cpu, note: "AI vetted to meet regulatory standards." },
 ];
 
-// ---- Protection pillars ---------------------------------------------------
-const pillars = [
-  {
-    name: "Your data stays in your environment",
-    Icon: CloudCog,
-    body: "LabGenie reads and processes your data inside your own secure virtual private cloud, or through controlled, need-to-access connections. We do not copy your raw business data onto our own systems.",
-  },
-  {
-    name: "Processing is transient and auto-purged",
-    Icon: Timer,
-    body: "Any temporary processing of your data is short-lived and subject to automatic purge. Nothing is retained on our side once the work is done.",
-  },
-  {
-    name: "You keep ownership of your data",
-    Icon: DatabaseZap,
-    body: "You retain all right, title, and interest in your raw business data. It is used only to run and improve the platform for you, never sold and never used to train foundation models.",
-  },
-  {
-    name: "Least-privilege access and SSO/SAML",
-    Icon: KeyRound,
-    body: "Access is scoped to the minimum each role needs. Connect your identity provider over SAML SSO to enforce your own authentication and offboarding.",
-  },
-  {
-    name: "Confidentiality and access control",
-    Icon: Lock,
-    body: "Your specifications and quality documents are handled as confidential. Access control and confidentiality are written commitments in our agreement, not just settings.",
-  },
-  {
-    name: "Prompt incident notification",
-    Icon: ScrollText,
-    body: "If a security incident affects your data, notifying you promptly is a contractual obligation, so your team can respond without waiting to find out.",
-  },
+// ---- Compliance program: two honest tiers --------------------------------
+const inProgress = [
+  { standard: "SOC 2 Type II", monogram: "SOC 2", Icon: ShieldCheck },
+  { standard: "GDPR", monogram: "GDPR", Icon: Globe },
+  { standard: "India DPDPA", monogram: "DPDPA", Icon: Fingerprint },
+  { standard: "CCPA / CPRA", monogram: "CCPA", Icon: ScrollText },
+  { standard: "EU AI Act", monogram: "AI ACT", Icon: Cpu },
 ];
 
-// ---- Data handling & AI ---------------------------------------------------
+const planned = [
+  { standard: "ISO 27001", monogram: "ISO 27K", Icon: Lock },
+  { standard: "PCI DSS", monogram: "PCI", Icon: CreditCard },
+  { standard: "FSMA 204", monogram: "FSMA", Icon: Boxes },
+  { standard: "FSSAI", monogram: "FSSAI", Icon: BadgeCheck },
+  { standard: "FDA 21 CFR 11", monogram: "21 CFR", Icon: FileCheck },
+  { standard: "WCAG 2.1 AA", monogram: "WCAG", Icon: Accessibility },
+];
+
+// ---- How your data is handled (honest 3-step flow) -----------------------
+const dataFlow = [
+  { name: "Encrypted in transit", Icon: Lock, note: "Uploaded over HTTPS, HSTS enforced." },
+  { name: "Isolated per tenant", Icon: DatabaseZap, note: "Your data sits in its own schema." },
+  { name: "Processed by compliance-grade AI", Icon: Cpu, note: "You keep ownership of your data." },
+];
+
+// ---- Responsible AI (EU AI Act: Limited Risk) ----------------------------
 const aiPoints = [
-  {
-    name: "Processed where your data lives",
-    Icon: Eye,
-    body: "LabGenie works on your specifications and quality documents inside your own secure cloud, or over controlled, need-to-access connections. We do not store your raw business data on our systems.",
-  },
-  {
-    name: "Never used to train models",
-    Icon: ShieldCheck,
-    body: "Your data is used only to run and improve the platform for you. It is never sold and never used to train foundation models, and you keep full ownership of it.",
-  },
-  {
-    name: "Built on Google Vertex AI",
-    Icon: Cpu,
-    body: "The platform runs on Google Vertex AI, Google's enterprise AI infrastructure, and the AI processing is governed by Google's Vertex AI terms.",
-  },
+  { name: "Advises, you decide", Icon: Scale, note: "LabGenie recommends; people make the call." },
+  { name: "AI, clearly disclosed", Icon: Sparkles, note: "We're rolling out labels on every AI-generated output." },
+  { name: "Compliance-grade only", Icon: Cpu, note: "We only use AI that meets regulatory and data-protection standards." },
 ];
 
 function StatusTag({ status }) {
@@ -165,152 +94,155 @@ function StatusTag({ status }) {
   );
 }
 
+function BadgeCard({ standard, monogram, Icon, status }) {
+  return (
+    <StaggerItem className="h-full">
+      <div className="group relative flex h-full flex-col items-center bg-surface p-6 text-center transition-colors">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{ background: "radial-gradient(ellipse 60% 55% at 50% 22%, rgba(0,102,255,0.12), transparent 70%)" }}
+        />
+        <div className="relative flex flex-col items-center gap-3">
+          <ComplianceBadge monogram={monogram} Icon={Icon} dim={status === "planned"} />
+          <h3 className="text-sm font-medium text-text">{standard}</h3>
+          <StatusTag status={status} />
+        </div>
+      </div>
+    </StaggerItem>
+  );
+}
+
 export default function SecurityPage() {
   return (
     <>
       <PageHeader
         eyebrow="Trust & security"
         title="Security and compliance, built in."
-        sub="Your specifications are your edge. LabGenie keeps your data in your own cloud, processes it transiently, and never stores your raw business data on our systems, backed by a compliance program built for cautious quality and operations teams."
+        sub="Foundational controls are live today. The certifications your auditors expect are in progress or on a clear roadmap. Every badge below shows its real status, never one we haven't earned."
       />
 
-      {/* Compliance & certifications */}
-      <section className="container-x py-16">
+      {/* Controls live today */}
+      <section className="container-x py-14">
+        <Reveal className="flex items-center gap-3">
+          <span className="h-px w-7 bg-accent/60" />
+          <span className="kicker kicker-accent">Live today</span>
+        </Reveal>
+        <Stagger className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+          {controls.map(({ name, Icon, note }) => (
+            <StaggerItem key={name} className="bg-bg p-6">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent/30 bg-accent/[0.08]">
+                <Icon aria-hidden="true" className="h-5 w-5 text-accent" strokeWidth={1.6} />
+              </span>
+              <h3 className="mt-4 flex items-center gap-2 text-base font-medium text-text">
+                {name}
+                <span className="inline-flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.14em] text-accent-text">
+                  <span aria-hidden="true" className="h-1 w-1 rounded-full bg-accent-text" />
+                  Live
+                </span>
+              </h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted">{note}</p>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </section>
+
+      {/* Compliance program — badge grid */}
+      <section className="container-x py-14">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-2xl">
+          <div className="max-w-xl">
             <Reveal>
-              <p className="eyebrow">Our compliance program</p>
+              <h2 className="text-3xl sm:text-4xl">Our compliance program.</h2>
             </Reveal>
             <Reveal delay={0.05}>
-              <h2 className="mt-3 text-3xl sm:text-4xl">
-                Compliance and certifications.
-              </h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p className="mt-4 lead">
-                We are pre-certification. We map our controls to the standards your
-                auditors expect, and each badge below shows its real status, in
-                progress or aligned, never a certification we have not earned.
+              <p className="mt-4 text-base leading-relaxed text-muted">
+                We are pre-certification. Reports and current attestation status are available under NDA.
               </p>
             </Reveal>
           </div>
-          <Reveal delay={0.12}>
-            <p className="max-w-xs text-sm leading-relaxed text-muted">
-              Certifications marked in progress are actively being pursued.
-              Reports and current attestation status are available under NDA.
-            </p>
-          </Reveal>
         </div>
 
-        <Stagger className="mt-10 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-          {compliance.map(({ standard, monogram, Icon, status, desc }) => (
-            <StaggerItem key={standard} className="h-full">
-              <div className="group relative flex h-full flex-col items-center bg-surface p-6 text-center transition-colors">
-                {/* Hover ring glow: decorative, not essential to meaning */}
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 rounded-none opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse 60% 55% at 50% 22%, rgba(0,102,255,0.12), transparent 70%)",
-                  }}
-                />
-                <div className="relative flex flex-col items-center">
-                  <ComplianceBadge
-                    monogram={monogram}
-                    Icon={Icon}
-                    dim={status !== "aligned" && status !== "certified"}
-                  />
-                  <h3 className="mt-4 text-base font-medium text-text">{standard}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{desc}</p>
-                  <div className="mt-4">
-                    <StatusTag status={status} />
-                  </div>
-                </div>
-              </div>
-            </StaggerItem>
+        {/* In progress */}
+        <Reveal className="mt-10 flex items-center gap-3">
+          <span className="kicker">Actively pursuing</span>
+          <StatusTag status="progress" />
+        </Reveal>
+        <Stagger className="mt-5 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
+          {inProgress.map((c) => (
+            <BadgeCard key={c.standard} {...c} status="progress" />
+          ))}
+        </Stagger>
+
+        {/* Planned */}
+        <Reveal className="mt-10 flex items-center gap-3">
+          <span className="kicker">On our roadmap</span>
+          <StatusTag status="planned" />
+        </Reveal>
+        <Stagger className="mt-5 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-6">
+          {planned.map((c) => (
+            <BadgeCard key={c.standard} {...c} status="planned" />
           ))}
         </Stagger>
 
         <p className="mt-6 text-sm leading-relaxed text-muted">
-          The medallions above are our own visual treatment, not official seals.
-          Official certification seals will be displayed once each audit
-          completes.
+          The medallions are our own visual treatment, not official seals. Each official seal appears once its audit completes.
         </p>
       </section>
 
-      {/* How we protect your data */}
-      <section className="container-x py-16">
-        <div className="max-w-2xl">
-          <Reveal>
-            <h2 className="text-3xl sm:text-4xl">How we protect your data.</h2>
-          </Reveal>
-          <Reveal delay={0.05}>
-            <p className="mt-4 lead">
-              The principles below come straight from the agreement we sign with
-              you. They apply from the first document LabGenie reads.
-            </p>
-          </Reveal>
-        </div>
-
-        <Stagger className="mt-10 divide-y divide-border border-t border-border">
-          {pillars.map(({ name, Icon, body }) => (
-            <StaggerItem
-              key={name}
-              variant="left"
-              as="div"
-              className="grid items-start gap-3 py-7 sm:grid-cols-[320px_1fr] sm:gap-12"
-            >
-              <h3 className="flex items-center gap-3 text-lg font-medium text-text">
-                <Icon aria-hidden="true" className="h-5 w-5 shrink-0 text-accent" strokeWidth={1.6} />
-                {name}
-              </h3>
-              <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{body}</p>
-            </StaggerItem>
-          ))}
-        </Stagger>
-      </section>
-
-      {/* Data handling & AI */}
-      <section className="container-x py-16">
+      {/* How your data is handled — honest 3-step flow */}
+      <section className="container-x py-14">
         <Reveal>
           <div className="panel relative overflow-hidden p-8 sm:p-10">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 opacity-70"
-              style={{
-                background:
-                  "radial-gradient(ellipse 70% 90% at 100% 0%, rgba(0,102,255,0.10), transparent 65%)",
-              }}
+              style={{ background: "radial-gradient(ellipse 70% 90% at 100% 0%, rgba(0,102,255,0.10), transparent 65%)" }}
             />
-            <div className="relative grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-14">
-              <div className="max-w-xl">
-                <p className="eyebrow">Data handling and AI</p>
-                <h2 className="mt-3 text-3xl sm:text-4xl">
-                  Your data stays yours, in your own cloud.
-                </h2>
-                <p className="mt-5 lead">
-                  LabGenie reads your specifications and quality documents to do
-                  your work: check, match, and route. It processes that data
-                  inside your own secure cloud, keeps any temporary processing
-                  transient and auto-purged, and never stores your raw business
-                  data on our systems. The AI runs on Google Vertex AI.
+            <div className="relative">
+              <p className="eyebrow">How your data is handled</p>
+              <div className="mt-8 grid items-stretch gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-3">
+                {dataFlow.map(({ name, Icon, note }, i) => (
+                  <div key={name} className="relative bg-surface p-6">
+                    <span className="mono-label">Step {i + 1}</span>
+                    <span className="mt-4 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent/30 bg-accent/[0.08]">
+                      <Icon aria-hidden="true" className="h-5 w-5 text-accent" strokeWidth={1.6} />
+                    </span>
+                    <h3 className="mt-4 text-base font-medium text-text">{name}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted">{note}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Responsible AI — EU AI Act Limited Risk */}
+      <section className="container-x py-14">
+        <Reveal>
+          <div className="panel relative overflow-hidden p-8 sm:p-10">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 opacity-70"
+              style={{ background: "radial-gradient(ellipse 60% 80% at 0% 100%, rgba(0,102,255,0.12), transparent 70%)" }}
+            />
+            <div className="relative grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12">
+              <div className="max-w-md">
+                <p className="eyebrow">Responsible AI</p>
+                <h2 className="mt-3 text-2xl sm:text-3xl">Classified Limited Risk under the EU AI Act.</h2>
+                <p className="mt-4 text-base leading-relaxed text-muted">
+                  LabGenie informs decisions, it doesn&apos;t make them, which keeps it in the EU AI Act&apos;s
+                  lightest tier, with transparency our core obligation.
                 </p>
               </div>
-
-              <ul className="grid gap-4">
-                {aiPoints.map(({ name, Icon, body }) => (
-                  <li
-                    key={name}
-                    className="flex gap-4 rounded-2xl border border-border bg-white/[0.02] p-5"
-                  >
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-accent/30 bg-accent/[0.08]">
+              <ul className="grid gap-4 sm:grid-cols-3">
+                {aiPoints.map(({ name, Icon, note }) => (
+                  <li key={name} className="rounded-2xl border border-border bg-white/[0.02] p-5">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-accent/30 bg-accent/[0.08]">
                       <Icon aria-hidden="true" className="h-4 w-4 text-accent" strokeWidth={1.6} />
                     </span>
-                    <div>
-                      <h3 className="text-base font-medium text-text">{name}</h3>
-                      <p className="mt-1 text-sm leading-relaxed text-muted">{body}</p>
-                    </div>
+                    <h3 className="mt-3 text-sm font-medium text-text">{name}</h3>
+                    <p className="mt-1 text-[13px] leading-relaxed text-muted">{note}</p>
                   </li>
                 ))}
               </ul>
@@ -320,28 +252,18 @@ export default function SecurityPage() {
       </section>
 
       {/* Security contact / documentation CTA */}
-      <section className="container-x py-16">
+      <section className="container-x py-14">
         <Reveal>
           <div className="panel relative overflow-hidden p-8 sm:p-12">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 opacity-70"
-              style={{
-                background:
-                  "radial-gradient(ellipse 60% 80% at 0% 100%, rgba(0,102,255,0.12), transparent 70%)",
-              }}
+              style={{ background: "radial-gradient(ellipse 60% 80% at 0% 100%, rgba(0,102,255,0.12), transparent 70%)" }}
             />
             <div className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-xl">
-                <h2 className="text-2xl sm:text-3xl">
-                  Reviewing LabGenie with your security team?
-                </h2>
-                <p className="mt-4 text-base leading-relaxed text-muted">
-                  We share architecture diagrams, data-flow details, subprocessor
-                  lists, and current attestation reports under NDA. Tell us what
-                  your review needs and we will route it to the right people.
-                </p>
-                <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+                <h2 className="text-2xl sm:text-3xl">Reviewing LabGenie with your security team?</h2>
+                <ul className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
                   {[
                     "Security documentation under NDA",
                     "Architecture and data-flow review",
@@ -360,7 +282,7 @@ export default function SecurityPage() {
                   <Link href="/contact" className="btn btn-primary">
                     Request security documentation
                   </Link>
-                  <Link href="/contact" className="btn btn-orange">
+                  <Link href="/contact" className="btn btn-ghost">
                     Talk to our security team
                   </Link>
                 </div>
@@ -371,9 +293,7 @@ export default function SecurityPage() {
                   <Mail aria-hidden="true" className="h-4 w-4 text-accent" strokeWidth={1.8} />
                   <span className="font-mono tracking-tight">{securityEmail}</span>
                 </a>
-                <p className="text-xs text-muted">
-                  General questions: {site.email}
-                </p>
+                <p className="text-xs text-muted">General questions: {site.email}</p>
               </div>
             </div>
           </div>
@@ -383,7 +303,7 @@ export default function SecurityPage() {
       <FinalCTA
         eyebrow="Talk to security"
         title="Bring your security team. We'll bring the answers."
-        sub="Get our security documentation and the design partner agreement under NDA, and see exactly how your data is handled in your own environment."
+        sub="Get our security documentation under NDA, and see exactly how your data is handled."
       />
     </>
   );

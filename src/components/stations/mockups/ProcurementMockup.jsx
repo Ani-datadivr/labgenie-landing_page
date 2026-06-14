@@ -106,7 +106,8 @@ export default function ProcurementMockup() {
               strokeLinejoin="round"
             />
 
-            {/* last point elevated */}
+            {/* last point elevated, with a live sonar ping */}
+            <circle className="chart-ping" cx={last[0]} cy={last[1]} r="3" fill="#5AA0FF" aria-hidden="true" />
             <circle cx={last[0]} cy={last[1]} r="5" fill="#0066FF" fillOpacity="0.18" />
             <circle cx={last[0]} cy={last[1]} r="2.6" fill="#5AA0FF" />
           </svg>

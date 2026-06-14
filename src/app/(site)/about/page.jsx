@@ -41,6 +41,41 @@ const principles = [
   },
 ];
 
+// Leadership — bios distilled from the deck. Photos are processed to a uniform
+// white-background blue-duotone treatment in /public/team.
+const team = [
+  {
+    name: "Sunny",
+    role: "Founder & CEO",
+    photo: "/team/sunny.webp",
+    bio: "Pioneered Dataiku's India presence and led product marketing at RapidMiner and Dataiku before founding Datadivr.",
+  },
+  {
+    name: "Gautham",
+    role: "CTO",
+    photo: "/team/gautham.webp",
+    bio: "Architect behind every LabGenie deployment in production, from the Synthite RFP Matcher to ShelfSmart. Owns the agent infrastructure.",
+  },
+  {
+    name: "Andrew",
+    role: "Head of Operations",
+    photo: "/team/andrew.webp",
+    bio: "A decade of US experience in AI, product, and consulting across CPG, retail, pharma, and financial services.",
+  },
+  {
+    name: "Siva",
+    role: "Forward-Deployed Engineer",
+    photo: "/team/siva.webp",
+    bio: "AI engineer and startup builder. Founding engineer across mobility and commerce startups, MVP to launch.",
+  },
+  {
+    name: "Isha",
+    role: "Strategy & GTM",
+    photo: "/team/isha.webp",
+    bio: "Runs strategic operations and go-to-market from the founder's office — the link between customers and product priorities.",
+  },
+];
+
 // Honest, defensible facts about the journey — no fabricated revenue or logo counts.
 const facts = [
   {
@@ -69,9 +104,9 @@ export default function AboutPage() {
         sub="We are Datadivr. We spent three years working shoulder to shoulder with F&B manufacturers, Synthite among them, alongside many of the names on our partner wall. LabGenie is what we learned, turned into a product."
       />
 
-      {/* Our story */}
+      {/* Our story — grounded with a (dark-graded) field photo */}
       <section className="container-x py-16">
-        <div className="grid gap-10 lg:grid-cols-[1.35fr_1fr] lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
           <div>
             <Reveal as="p" className="eyebrow">Our story</Reveal>
             <Stagger gap={0.12} className="mt-5 space-y-5">
@@ -102,21 +137,67 @@ export default function AboutPage() {
           </div>
 
           <Reveal variant="right" delay={0.1}>
-            <aside className="panel p-7">
-              <p className="eyebrow">Why this matters</p>
-              <p className="mt-5 text-base leading-relaxed text-muted">
-                Generic AI can summarize a document. It cannot tell you whether a
-                batch meets a customer&apos;s outgoing spec, because it has never read
-                ten thousand of them.
-              </p>
-              <p className="mt-4 text-base leading-relaxed text-muted">
-                LabGenie carries the vocabulary, the edge cases, and the workflows we
-                absorbed over three years in the field. That context is the difference
-                between a chatbot and an operating system the floor can trust.
-              </p>
-            </aside>
+            <div className="space-y-5">
+              <figure className="overflow-hidden rounded-2xl border border-border shadow-panel">
+                <img
+                  src="/about/processing-floor.webp"
+                  alt="A spice and oleoresin processing plant: stainless tanks, conveyors, and bins of raw spice."
+                  width={984}
+                  height={730}
+                  loading="lazy"
+                  className="block w-full"
+                />
+                <figcaption className="border-t border-border bg-surface/40 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
+                  Three years on floors like this became LabGenie.
+                </figcaption>
+              </figure>
+              <aside className="panel p-6">
+                <p className="eyebrow">Why this matters</p>
+                <p className="mt-4 text-[15px] leading-relaxed text-muted">
+                  Generic AI can summarize a document. It cannot tell you whether a batch meets a
+                  customer&apos;s outgoing spec, because it has never read ten thousand of them.
+                </p>
+              </aside>
+            </div>
           </Reveal>
         </div>
+      </section>
+
+      {/* The team */}
+      <section className="container-x py-16">
+        <div className="max-w-2xl">
+          <Reveal>
+            <p className="eyebrow">The team</p>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-3 text-3xl sm:text-4xl">
+              Built by people who&apos;ve sat across the table from F&B manufacturers.
+            </h2>
+          </Reveal>
+        </div>
+
+        <Stagger gap={0.08} className="mt-12 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+          {team.map((m) => (
+            <StaggerItem
+              key={m.name}
+              variant="up"
+              as="div"
+              className="group flex flex-col rounded-2xl border border-border bg-surface/40 p-5 transition-colors duration-300 hover:border-border-strong hover:bg-surface/70"
+            >
+              <img
+                src={m.photo}
+                alt={`${m.name}, ${m.role}`}
+                width={80}
+                height={80}
+                loading="lazy"
+                className="h-20 w-20 rounded-full bg-white object-cover ring-1 ring-border transition-transform duration-300 group-hover:scale-105"
+              />
+              <h3 className="mt-4 font-display text-base font-semibold text-text">{m.name}</h3>
+              <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-accent-text">{m.role}</p>
+              <p className="mt-3 text-[13px] leading-relaxed text-muted">{m.bio}</p>
+            </StaggerItem>
+          ))}
+        </Stagger>
       </section>
 
       {/* What we believe */}
@@ -166,25 +247,36 @@ export default function AboutPage() {
                   "radial-gradient(ellipse 60% 100% at 0% 50%, rgba(0,102,255,0.10), transparent 70%)",
               }}
             />
-            <div className="relative">
-              <p className="eyebrow">From services to product</p>
-              <h2 className="mt-3 max-w-2xl text-3xl sm:text-[2.2rem]">
-                Earned in the field, not invented in a pitch deck.
-              </h2>
+            <div className="relative grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+              <div>
+                <p className="eyebrow">From services to product</p>
+                <h2 className="mt-3 max-w-xl text-3xl sm:text-[2.2rem]">
+                  Earned in the field, not invented in a pitch deck.
+                </h2>
 
-              <div className="mt-10 grid gap-8 sm:grid-cols-3">
-                {facts.map(({ icon: Icon, stat, label }) => (
-                  <div key={stat}>
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-white/[0.03] text-accent">
-                      <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
-                    </span>
-                    <p className="mt-4 font-display text-2xl text-text sm:text-[1.7rem]">
-                      {stat}
-                    </p>
-                    <p className="mt-2 text-base leading-relaxed text-muted">{label}</p>
-                  </div>
-                ))}
+                <div className="mt-9 grid gap-7 sm:grid-cols-3">
+                  {facts.map(({ icon: Icon, stat, label }) => (
+                    <div key={stat}>
+                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-white/[0.03] text-accent">
+                        <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+                      </span>
+                      <p className="mt-4 font-display text-2xl text-text sm:text-[1.7rem]">{stat}</p>
+                      <p className="mt-2 text-[15px] leading-relaxed text-muted">{label}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
+
+              <figure className="overflow-hidden rounded-xl border border-border shadow-panel">
+                <img
+                  src="/about/processing-line.webp"
+                  alt="Workers sorting and grading red chillies on a spice-processing line."
+                  width={665}
+                  height={326}
+                  loading="lazy"
+                  className="block w-full"
+                />
+              </figure>
             </div>
           </div>
         </Reveal>

@@ -146,11 +146,15 @@ const GROUPBAR_W = 350;
 const GROUPBAR_H = 46;
 const ERP_PULSES = 2;
 
+// `scale` optically balances the marks: each wordmark has a different aspect
+// ratio and baked-in padding, so a uniform height alone makes the square SAP
+// read tiny and the wide ramco read huge. These nudges land them all near the
+// Sage/Infor size.
 const ERP_LOGOS = [
-  { id: "sap", name: "SAP", logo: "/erp/sap.webp", color: "#0aa0e1" },
-  { id: "sage", name: "Sage", logo: "/erp/sage.webp", color: "#00d639" },
-  { id: "infor", name: "Infor", logo: "/erp/infor.svg", color: "#d4002a" },
-  { id: "ramco", name: "Ramco", logo: "/erp/ramco.svg", color: "#f47216" },
+  { id: "sap", name: "SAP", logo: "/erp/sap.webp", color: "#0aa0e1", scale: 1.5 },
+  { id: "sage", name: "Sage", logo: "/erp/sage.webp", color: "#00d639", scale: 1.1 },
+  { id: "infor", name: "Infor", logo: "/erp/infor.png", color: "#d8232a", scale: 1.05 },
+  { id: "ramco", name: "Ramco", logo: "/erp/ramco.png", color: "#00aeef", scale: 0.68 },
 ];
 
 function bezierPath(x1, y1, x2, y2) {
@@ -260,8 +264,10 @@ function buildLayout(w, h, ids, expandedMap, modCountFn) {
    ========================================================================== */
 
 // One ERP tile: the full logo (white mark at rest). On hover it reports its
-// brand color up so the whole panel fills with that company's theme.
-function ErpLogo({ logo, name, color, onHover }) {
+// brand color up so the whole panel fills with that company's theme. `scale`
+// nudges a single mark's optical height to match the set (for logos with
+// baked-in padding); the base height is normalized in CSS.
+function ErpLogo({ logo, name, color, scale = 1, onHover }) {
   const [hasImg, setHasImg] = useState(Boolean(logo));
   return (
     <span
@@ -275,7 +281,7 @@ function ErpLogo({ logo, name, color, onHover }) {
           src={logo}
           alt={name}
           className={styles.erpLogoImg}
-          style={{ filter: "brightness(0) invert(1)" }}
+          style={{ filter: "brightness(0) invert(1)", "--erp-scale": scale }}
           onError={() => setHasImg(false)}
         />
       ) : (
@@ -303,7 +309,7 @@ function ErpSource({ position, erpRef }) {
       </div>
       <div className={styles.erpLogos}>
         {ERP_LOGOS.map((l) => (
-          <ErpLogo key={l.id} logo={l.logo} name={l.name} color={l.color} onHover={setFill} />
+          <ErpLogo key={l.id} logo={l.logo} name={l.name} color={l.color} scale={l.scale} onHover={setFill} />
         ))}
         <span className={styles.erpEtc}>and more</span>
       </div>
@@ -938,15 +944,21 @@ export default function OperationsCanvas() {
     <section id="operations" className={styles.section}>
       <div className="container-x">
         <header className={styles.header}>
-          <p className={styles.eyebrow}>Operations Dashboard</p>
-          <h2 className={styles.title}>One agent. Every station.</h2>
+          <span className="inline-flex items-center gap-2">
+            <span className={styles.eyebrow}>The platform</span>
+            <span className="inline-flex animate-pulse-glow items-center gap-1.5 rounded-full border border-[#4ade80]/45 bg-[#4ade80]/[0.12] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[#4ade80]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" aria-hidden="true" />
+              Live, try it
+            </span>
+          </span>
+          <h1 className={styles.title}>One agent. Every station.</h1>
           <p className={`${styles.sub} max-[899px]:hidden`}>
-            LabGenie sits on top of your ERP, reads the data, then routes any request to the right sub-agent.
-            Switch teams, expand a station to fire a module, drag anything, or just ask in plain English.
+            This is the real product, running live. Ask LabGenie a question or open any station to watch it
+            work, a quick glimpse of how it reads your operation on top of the ERP you already have.
           </p>
           <p className={`${styles.sub} min-[900px]:hidden`}>
-            LabGenie sits on top of your ERP, reads the data, then routes any request to the right sub-agent.
-            Watch it take a few requests below.
+            The real product, running live. Tap a prompt to ask LabGenie and watch it answer, a glimpse of
+            how it runs your operation.
           </p>
         </header>
       </div>

@@ -1,10 +1,19 @@
+import { Clock, HeartHandshake, Languages, Rocket, GraduationCap } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import ClientTicker from "@/components/ClientTicker";
-import DesignPartner from "@/components/DesignPartner";
 import FinalCTA from "@/components/FinalCTA";
 import RotatingSegments from "@/components/RotatingSegments";
 import Reveal, { Stagger, StaggerItem } from "@/components/Reveal";
 import { buyer } from "@/lib/content";
+
+// How we work — the traits manufacturers actually stay for.
+const TRAITS = [
+  { Icon: Clock, title: "We answer on time", note: "Need a hand? You get a real person quickly, not a ticket number and a week of silence." },
+  { Icon: HeartHandshake, title: "We check in", note: "We stay close even when everything is running smoothly, not just when something breaks." },
+  { Icon: Languages, title: "No jargon, ever", note: "We speak your team's language. No acronyms thrown around to sound clever or sell harder." },
+  { Icon: Rocket, title: "Effortless onboarding", note: "We do the heavy lifting, so going live feels smooth, never like another IT project." },
+  { Icon: GraduationCap, title: "We learn from you", note: "Your team teaches us how the floor really runs, and the product keeps getting sharper for it." },
+];
 
 export const metadata = {
   title: "For F&B Manufacturers",
@@ -72,7 +81,37 @@ export default function ManufacturersPage() {
         </Stagger>
       </section>
 
-      <DesignPartner />
+      {/* How we work — why manufacturers stay */}
+      <section className="container-x py-12">
+        <div className="max-w-2xl">
+          <Reveal>
+            <p className="eyebrow">How we work</p>
+          </Reveal>
+          <Reveal delay={0.05}>
+            <h2 className="mt-3 text-3xl sm:text-4xl">
+              Manufacturers don&apos;t just use LabGenie. They like working with us.
+            </h2>
+          </Reveal>
+        </div>
+
+        <Stagger gap={0.08} className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {TRAITS.map(({ Icon, title, note }) => (
+            <StaggerItem
+              key={title}
+              variant="up"
+              as="div"
+              className="group rounded-2xl border border-border bg-surface/40 p-6 transition-colors duration-300 hover:border-border-strong hover:bg-surface/70"
+            >
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-accent/30 bg-accent/[0.08] text-accent">
+                <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" strokeWidth={1.75} aria-hidden="true" />
+              </span>
+              <h3 className="mt-4 font-display text-lg text-text">{title}</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-muted">{note}</p>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </section>
+
       <ClientTicker />
       <FinalCTA
         eyebrow="Get started"

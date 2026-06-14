@@ -31,13 +31,13 @@ function useIsMobile(query = "(max-width: 639px)") {
 // blank). Editable copy is sourced from Keystatic (singleton "home") and passed
 // in as `copy` from the server page.
 const DEFAULTS = {
-  titleLead: "The only end-to-end platform for",
+  titleLead: "The end-to-end platform for",
   titleAccent: "F&B manufacturers.",
   sub: "LabGenie connects your quality, sales, procurement, and production workflows through one AI layer, on top of the ERP you already run.",
   primaryLabel: "Get early access",
   primaryHref: "/contact",
   secondaryLabel: "See it in action",
-  secondaryHref: "#operations",
+  secondaryHref: "/platform",
 };
 
 // Headline animated word by word: each word rises and sharpens from a soft blur.
@@ -98,7 +98,7 @@ export default function Hero({ copy }) {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_55%_at_50%_25%,transparent_35%,rgb(var(--bg-rgb))_88%)]" />
       </div>
 
-      <div className="container-x grid-frame relative pb-16 pt-32 text-center sm:pt-36 lg:pb-24 lg:pt-44">
+      <div className="container-x grid-frame relative pt-32 text-center sm:pt-36 lg:pt-44">
         <div>
           <AnimatedHeading lead={c.titleLead} accent={c.titleAccent} />
         </div>
@@ -129,16 +129,17 @@ export default function Hero({ copy }) {
           </Link>
         </motion.div>
 
-        {/* daily-brief dashboard */}
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.8, ease }}
-          className="mx-auto mt-16 max-w-6xl text-left"
-        >
-          <AppDashboard />
-        </motion.div>
       </div>
+
+      {/* operations console — breaks wider than the text column for presence */}
+      <motion.div
+        initial={{ opacity: 0, y: 28 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.8, ease }}
+        className="relative mx-auto mt-16 w-full max-w-[1440px] px-5 pb-16 text-left sm:px-6 lg:px-8 lg:pb-24"
+      >
+        <AppDashboard />
+      </motion.div>
     </section>
   );
 }

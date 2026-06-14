@@ -64,8 +64,8 @@ export default function FormulationMockup() {
         <div className="bg-surface p-5">
           <p className="mono-label mb-3 text-dim">Reverse engineered</p>
 
-          {/* stacked bar */}
-          <div className="mb-3 flex h-2 w-full overflow-hidden rounded-full">
+          {/* stacked bar, with a sheen that sweeps as it "composes" */}
+          <div className="sheen-loop mb-3 flex h-2 w-full overflow-hidden rounded-full">
             {COMPONENTS.map((c) => (
               <div
                 key={c.name}

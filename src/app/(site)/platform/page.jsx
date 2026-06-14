@@ -1,6 +1,10 @@
+import dynamic from "next/dynamic";
 import StationFeature from "@/components/stations/StationFeature";
-import StationMap from "@/components/StationMap";
 import FinalCTA from "@/components/FinalCTA";
+
+// Heaviest interactive component (graph logic + framer + icon set). Its own chunk
+// so it doesn't weigh down the rest of the platform page; still SSR'd.
+const OperationsCanvas = dynamic(() => import("@/components/OperationsCanvas/OperationsCanvas"));
 import QaMockup from "@/components/stations/mockups/QaMockup";
 import SalesMockup from "@/components/stations/mockups/SalesMockup";
 import ProcurementMockup from "@/components/stations/mockups/ProcurementMockup";
@@ -76,27 +80,8 @@ const STATIONS = [
 export default function PlatformPage() {
   return (
     <>
-      <section className="container-x pb-10 pt-32 sm:pt-36 lg:pt-44">
-        <div className="flex items-center justify-between pb-5">
-          <span className="kicker kicker-accent">
-            <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-accent" />
-            The platform
-          </span>
-          <span className="mono-label hidden sm:block">GTM · Factory · Innovation</span>
-        </div>
-
-        <div className="max-w-3xl pt-12">
-          <h1 className="display">Every station. One operating layer.</h1>
-          <p className="lead mt-6">
-            LabGenie puts an AI agent across every operational station, reading your specs and acting
-            on them, on top of the ERP you already run.
-          </p>
-        </div>
-
-        <div className="mt-12">
-          <StationMap />
-        </div>
-      </section>
+      {/* Hero: the live operations console — "One agent. Every station." */}
+      <OperationsCanvas />
 
       <section className="container-x">
         {STATIONS.map(({ Mockup, ...s }) => (
