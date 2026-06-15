@@ -1,0 +1,29 @@
+{
+  "visible": true,
+  "eyebrow": "Open roles",
+  "title": "Roles we are hiring for.",
+  "lead": "A short list, on purpose. We hire deliberately and move quickly once we meet the right person. Every role works close to the product and close to the customer.",
+  "roles": [
+    {
+      "title": "Product Manager",
+      "tag": "India · Product",
+      "blurb": "Own a core part of the product alongside a senior team that already knows this domain cold. You will turn real manufacturer workflows into shipped features and decide what we build at the earliest stage."
+    },
+    {
+      "title": "GTM Engineer",
+      "tag": "Europe · Go-to-market",
+      "blurb": "Build the motion that gets LabGenie in front of European F&B manufacturers. You pair technical depth with commercial instinct, working directly with the founders to find what resonates and make it repeatable."
+    },
+    {
+      "title": "Customer Success",
+      "tag": "India · Customer",
+      "blurb": "Bring early customers onto LabGenie and keep them succeeding on it. You sit between the people running the plants and the team building the product, and your read on customers shapes the roadmap."
+    },
+    {
+      "title": "Product Designer",
+      "tag": "India / Remote · Design",
+      "blurb": "Define how LabGenie looks and feels from the start. You design instrumentation that reads as precise and calm, partnering with engineers and the founders to set the bar for everything that follows."
+    }
+  ],
+  "footnote": "Do not see your role? If you are exceptional at what you do and want to help build LabGenie early, reach out anyway."
+}

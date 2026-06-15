@@ -8,17 +8,52 @@ import Combobox from "@/components/Combobox";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// Plain text fields. Country + phone are custom comboboxes below.
-const fields = [
-  { name: "name", label: "Full name", type: "text", required: true, placeholder: "Jane Doe", half: true },
-  { name: "email", label: "Work email", type: "email", required: true, placeholder: "jane@company.com", half: true },
-  { name: "company", label: "Company", type: "text", required: false, placeholder: "Your manufacturing company", half: true },
-  { name: "teamSize", label: "Team size / interest", type: "text", required: false, placeholder: "20 scientists", half: true },
-];
+// All labels, placeholders, validation messages, and button/success/error copy
+// are editable via Keystatic (singleton "contactForm"); these defaults keep the
+// form working if a field is blank.
+const DEFAULTS = {
+  nameLabel: "Full name",
+  namePlaceholder: "Jane Doe",
+  emailLabel: "Work email",
+  emailPlaceholder: "jane@company.com",
+  companyLabel: "Company",
+  companyPlaceholder: "Your manufacturing company",
+  teamSizeLabel: "Team size / interest",
+  teamSizePlaceholder: "20 scientists",
+  countryLabel: "Country",
+  countryPlaceholder: "Search or select your country",
+  phoneLabel: "Phone",
+  phonePlaceholder: "555 000 0000",
+  messageLabel: "What are you hoping to solve?",
+  messagePlaceholder: "Tell us about your spec-reconciliation or sales-ops workflow today.",
+  submitLabel: "Request a demo",
+  sendingLabel: "Sending…",
+  successTitle: "Thanks — we'll be in touch.",
+  successBody:
+    "A member of our team will reach out within one business day. In the meantime, feel free to email us directly at",
+  errorText: "Something went wrong. Email us at",
+  vName: "Enter your name.",
+  vEmailRequired: "Enter your work email.",
+  vEmailInvalid: "Please enter a valid email.",
+  vPhoneCode: "Select your country dialing code.",
+  vPhoneInvalid: "Enter a valid phone number.",
+  vMessage: "Tell us what you're hoping to solve.",
+};
 
 // Submits the lead to /api/contact, which forwards a rich message to Slack
 // server-side. The Slack webhook URL is never exposed to the browser.
-export default function ContactForm() {
+export default function ContactForm({ copy, email }) {
+  const t = { ...DEFAULTS, ...(copy || {}) };
+  const contactEmail = email || site.email;
+
+  // Plain text fields. Country + phone are custom comboboxes below.
+  const fields = [
+    { name: "name", label: t.nameLabel, type: "text", required: true, placeholder: t.namePlaceholder, half: true },
+    { name: "email", label: t.emailLabel, type: "email", required: true, placeholder: t.emailPlaceholder, half: true },
+    { name: "company", label: t.companyLabel, type: "text", required: false, placeholder: t.companyPlaceholder, half: true },
+    { name: "teamSize", label: t.teamSizeLabel, type: "text", required: false, placeholder: t.teamSizePlaceholder, half: true },
+  ];
+
   const [status, setStatus] = useState("idle"); // idle | submitting | success | error
   const [values, setValues] = useState({
     name: "", email: "", company: "", teamSize: "", message: "",
@@ -75,7 +110,7 @@ export default function ContactForm() {
   function checkEmail() {
     const v = values.email.trim();
     if (v && !EMAIL_RE.test(v)) {
-      setErrors((er) => ({ ...er, email: "Please enter a valid email." }));
+      setErrors((er) => ({ ...er, email: t.vEmailInvalid }));
     }
   }
 
@@ -89,17 +124,15 @@ export default function ContactForm() {
   // entered) a dialing code plus a plausible digit count. Server re-validates.
   function validate() {
     const e = {};
-    if (!values.name.trim()) e.name = "Enter your name.";
-    if (!values.email.trim()) e.email = "Enter your work email.";
-    else if (!EMAIL_RE.test(values.email.trim()))
-      e.email = "Please enter a valid email.";
+    if (!values.name.trim()) e.name = t.vName;
+    if (!values.email.trim()) e.email = t.vEmailRequired;
+    else if (!EMAIL_RE.test(values.email.trim())) e.email = t.vEmailInvalid;
     if (phone.trim()) {
       const digits = phone.replace(/\D/g, "");
-      if (!dial) e.phone = "Select your country dialing code.";
-      else if (digits.length < 6 || digits.length > 15)
-        e.phone = "Enter a valid phone number.";
+      if (!dial) e.phone = t.vPhoneCode;
+      else if (digits.length < 6 || digits.length > 15) e.phone = t.vPhoneInvalid;
     }
-    if (!values.message.trim()) e.message = "Tell us what you're hoping to solve.";
+    if (!values.message.trim()) e.message = t.vMessage;
     return e;
   }
 
@@ -143,11 +176,10 @@ export default function ContactForm() {
             <path d="M6 12.5l4 4 8-9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
-        <h3 className="mt-6 text-2xl">Thanks — we&apos;ll be in touch.</h3>
+        <h3 className="mt-6 text-2xl">{t.successTitle}</h3>
         <p className="mt-3 max-w-sm text-sm text-muted">
-          A member of our team will reach out within one business day. In the
-          meantime, feel free to email us directly at{" "}
-          <a href={`mailto:${site.email}`} className="text-accent-text">{site.email}</a>.
+          {t.successBody}{" "}
+          <a href={`mailto:${contactEmail}`} className="text-accent-text">{contactEmail}</a>.
         </p>
       </motion.div>
     );
@@ -188,21 +220,21 @@ export default function ContactForm() {
         {/* Country — searchable combobox */}
         <div className="sm:col-span-2">
           <label htmlFor="country" className="mb-2 block text-sm font-medium text-text">
-            Country
+            {t.countryLabel}
           </label>
           <Combobox
             id="country"
             options={countryOptions}
             selected={country}
             onSelect={chooseCountry}
-            placeholder="Search or select your country"
+            placeholder={t.countryPlaceholder}
           />
         </div>
 
         {/* Phone — dialing-code combobox + number */}
         <div className="sm:col-span-2">
           <label htmlFor="phone" className="mb-2 block text-sm font-medium text-text">
-            Phone
+            {t.phoneLabel}
           </label>
           <div className="flex gap-2.5">
             <Combobox
@@ -222,7 +254,7 @@ export default function ContactForm() {
               name="phone"
               type="tel"
               inputMode="tel"
-              placeholder="555 000 0000"
+              placeholder={t.phonePlaceholder}
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
@@ -244,7 +276,7 @@ export default function ContactForm() {
 
         <div className="sm:col-span-2">
           <label htmlFor="message" className="mb-2 block text-sm font-medium text-text">
-            What are you hoping to solve?
+            {t.messageLabel}
             <span className="ml-1 text-accent-text">*</span>
           </label>
           <textarea
@@ -254,7 +286,7 @@ export default function ContactForm() {
             required
             value={values.message}
             onChange={update("message")}
-            placeholder="Tell us about your spec-reconciliation or sales-ops workflow today."
+            placeholder={t.messagePlaceholder}
             aria-invalid={errors.message ? true : undefined}
             aria-describedby={errors.message ? "message-error" : undefined}
             className={`w-full resize-none rounded-xl border bg-bg-elev/60 px-4 py-3 text-sm text-text placeholder:text-dim transition-colors focus:outline-none ${
@@ -275,7 +307,7 @@ export default function ContactForm() {
           disabled={status === "submitting"}
           className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {status === "submitting" ? "Sending…" : "Request a demo"}
+          {status === "submitting" ? t.sendingLabel : t.submitLabel}
         </button>
         <AnimatePresence>
           {status === "error" && (
@@ -284,7 +316,7 @@ export default function ContactForm() {
               animate={{ opacity: 1 }}
               className="text-sm text-danger"
             >
-              Something went wrong. Email us at {site.email}.
+              {t.errorText} {contactEmail}.
             </motion.span>
           )}
         </AnimatePresence>

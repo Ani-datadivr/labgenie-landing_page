@@ -1,0 +1,32 @@
+{
+  "visible": true,
+  "eyebrow": "The team",
+  "title": "Built by people who've sat across the table from F&B manufacturers.",
+  "members": [
+    {
+      "name": "Sunny",
+      "role": "Founder & CEO",
+      "bio": "Pioneered Dataiku's India presence and led product marketing at RapidMiner and Dataiku before founding Datadivr."
+    },
+    {
+      "name": "Gautham",
+      "role": "CTO",
+      "bio": "Architect behind every LabGenie deployment in production, from the Synthite RFP Matcher to ShelfSmart. Owns the agent infrastructure."
+    },
+    {
+      "name": "Andrew",
+      "role": "Head of Operations",
+      "bio": "A decade of US experience in AI, product, and consulting across CPG, retail, pharma, and financial services."
+    },
+    {
+      "name": "Siva",
+      "role": "Forward-Deployed Engineer",
+      "bio": "AI engineer and startup builder. Founding engineer across mobility and commerce startups, MVP to launch."
+    },
+    {
+      "name": "Isha",
+      "role": "Strategy & GTM",
+      "bio": "Runs strategic operations and go-to-market from the founder's office — the link between customers and product priorities."
+    }
+  ]
+}

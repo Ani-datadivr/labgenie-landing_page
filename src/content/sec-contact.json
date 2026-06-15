@@ -1,0 +1,13 @@
+{
+  "visible": true,
+  "title": "Reviewing LabGenie with your security team?",
+  "bullets": [
+    "Security documentation under NDA",
+    "Architecture and data-flow review",
+    "Subprocessor and residency details"
+  ],
+  "primaryLabel": "Request security documentation",
+  "secondaryLabel": "Talk to our security team",
+  "securityEmail": "security@labgenie.ai",
+  "generalNote": "General questions: hello@labgenie.ai"
+}

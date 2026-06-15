@@ -1,0 +1,19 @@
+{
+  "visible": true,
+  "eyebrow": "Who buys LabGenie",
+  "title": "The pain shows up in the corner office.",
+  "items": [
+    {
+      "role": "COO",
+      "pain": "Operations run on email threads and tribal knowledge across disconnected stations."
+    },
+    {
+      "role": "Head of Quality",
+      "pain": "Every batch burns days checking quality certificates against three different customer spec formats."
+    },
+    {
+      "role": "Head of Procurement",
+      "pain": "Buying decisions lag the market because data lives in silos."
+    }
+  ]
+}

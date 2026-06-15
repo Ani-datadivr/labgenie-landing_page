@@ -1,0 +1,12 @@
+{
+  "visible": true,
+  "eyebrow": "Our story",
+  "paragraphs": [
+    "For the last three years, Datadivr worked closely with F&B manufacturers across the industry, Synthite, Mane, McCormick, and many of the names on our partner wall. We sat with their quality, sales, and procurement teams, learned how each one runs, and felt the same friction everywhere: messy certificates of analysis, spec reconciliation that drags on for days, and quality, sales, and procurement kept in separate silos that never quite agree.",
+    "Along the way we learned what actually moves the needle on a plant floor, and what is just software overhead dressed up as progress. That distinction is the whole point. LabGenie is the product of that experience: an AI operating system that turns hard-won domain knowledge into one chat-native agent built for the way these manufacturers really work.",
+    "Datadivr is moving from hands-on services to a product company, and LabGenie is our flagship. We are not adapting a generic AI tool to a market we just discovered. We are shipping the system we already spent years learning to build by hand."
+  ],
+  "figureCaption": "Three years on floors like this became LabGenie.",
+  "asideTitle": "Why this matters",
+  "asideText": "Generic AI can summarize a document. It cannot tell you whether a batch meets a customer's outgoing spec, because it has never read ten thousand of them."
+}

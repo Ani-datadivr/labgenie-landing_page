@@ -591,7 +591,7 @@ function LabGenieNode({ position, routeTarget, routeResult, thinking, notice, ch
    OperationsCanvas — orchestrator (default export)
    ========================================================================== */
 
-export default function OperationsCanvas() {
+export default function OperationsCanvas({ title, sub } = {}) {
   const canvasRef = useRef(null);
   const nodeRef = useRef(null);
   const erpRef = useRef(null);
@@ -951,15 +951,21 @@ export default function OperationsCanvas() {
               Live, try it
             </span>
           </span>
-          <h1 className={styles.title}>One agent. Every station.</h1>
-          <p className={`${styles.sub} max-[899px]:hidden`}>
-            This is the real product, running live. Ask LabGenie a question or open any station to watch it
-            work, a quick glimpse of how it reads your operation on top of the ERP you already have.
-          </p>
-          <p className={`${styles.sub} min-[900px]:hidden`}>
-            The real product, running live. Tap a prompt to ask LabGenie and watch it answer, a glimpse of
-            how it runs your operation.
-          </p>
+          <h1 className={styles.title}>{title?.trim() || "One agent. Every station."}</h1>
+          {sub?.trim() ? (
+            <p className={styles.sub}>{sub}</p>
+          ) : (
+            <>
+              <p className={`${styles.sub} max-[899px]:hidden`}>
+                This is the real product, running live. Ask LabGenie a question or open any station to watch it
+                work, a quick glimpse of how it reads your operation on top of the ERP you already have.
+              </p>
+              <p className={`${styles.sub} min-[900px]:hidden`}>
+                The real product, running live. Tap a prompt to ask LabGenie and watch it answer, a glimpse of
+                how it runs your operation.
+              </p>
+            </>
+          )}
         </header>
       </div>
 

@@ -1,0 +1,23 @@
+{
+  "visible": true,
+  "logosNote": "Works with the systems you already run",
+  "eyebrow": "How it connects",
+  "title": "Read where your data lives. Write back what you can trust.",
+  "steps": [
+    {
+      "step": "01",
+      "title": "Read",
+      "body": "Ingest quality certificates, spec sheets, and incoming requests from PDF, Excel, email, and your ERP."
+    },
+    {
+      "step": "02",
+      "title": "Check",
+      "body": "Match and compare across raw-material, internal, and customer requirements."
+    },
+    {
+      "step": "03",
+      "title": "Write back",
+      "body": "Populate compliance documentation and route work back into your systems."
+    }
+  ]
+}

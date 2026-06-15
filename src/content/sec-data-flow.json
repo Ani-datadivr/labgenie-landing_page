@@ -1,0 +1,18 @@
+{
+  "visible": true,
+  "eyebrow": "How your data is handled",
+  "steps": [
+    {
+      "name": "Encrypted in transit",
+      "note": "Uploaded over HTTPS, HSTS enforced."
+    },
+    {
+      "name": "Isolated per tenant",
+      "note": "Your data sits in its own schema."
+    },
+    {
+      "name": "Processed by compliance-grade AI",
+      "note": "You keep ownership of your data."
+    }
+  ]
+}

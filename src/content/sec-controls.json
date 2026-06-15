@@ -1,0 +1,22 @@
+{
+  "visible": true,
+  "eyebrow": "Live today",
+  "items": [
+    {
+      "name": "Tenant isolation",
+      "note": "Each customer in its own database schema."
+    },
+    {
+      "name": "Role-based access",
+      "note": "JWT auth, least-privilege roles."
+    },
+    {
+      "name": "Encrypted in transit",
+      "note": "HTTPS enforced, HSTS configured."
+    },
+    {
+      "name": "Compliance-grade AI",
+      "note": "AI vetted to meet regulatory standards."
+    }
+  ]
+}

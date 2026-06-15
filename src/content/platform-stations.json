@@ -1,0 +1,55 @@
+{
+  "visible": true,
+  "items": [
+    {
+      "name": "Quality Agent",
+      "status": "Live",
+      "headline": "RFP specification matching",
+      "body": "The Quality Agent matches customer RFP specifications against your product information sheets in minutes. A two-day review becomes a five-minute task.",
+      "points": [
+        "Instantly compare customer specs against your full product catalog",
+        "Surface non-conformities and gaps before they reach the customer",
+        "Free senior QC staff from routine document work for higher-value decisions"
+      ]
+    },
+    {
+      "name": "Sales Agent",
+      "status": "Live",
+      "headline": "Intelligent sales response",
+      "body": "Match inbound customer queries to the right SKUs using your full ERP history, in minutes.",
+      "points": [
+        "Parse unstructured customer emails and extract product requirements",
+        "Match queries against full ERP history with confidence scores",
+        "Hand off between sales and quality teams without losing context"
+      ]
+    },
+    {
+      "name": "Procurement",
+      "status": "In build",
+      "headline": "Buy smarter on volatile inputs.",
+      "body": "Live price feeds, demand signals, and forward risk scores on spices, oleoresins, and naturals. Reverse auctions run directly over WhatsApp and email.",
+      "points": []
+    },
+    {
+      "name": "Production",
+      "status": "In build",
+      "headline": "Connect demand to the factory floor.",
+      "body": "Shift planning, one shared production plan, and live equipment-effectiveness visibility, so what sales commits and what the plant delivers are finally the same number.",
+      "points": []
+    },
+    {
+      "name": "Formulation",
+      "status": "In build",
+      "headline": "Protect your formulation IP.",
+      "body": "Reverse engineer formulations, capture reformulation reasoning, and track samples to commercial conversion. Your flavorists' knowledge stays in the system.",
+      "points": []
+    },
+    {
+      "name": "Market Intelligence",
+      "status": "Roadmap",
+      "headline": "Know what's coming before your competition does.",
+      "body": "Trend signals, competitive tracking, and ingredient market shifts, surfaced automatically as a morning briefing instead of a data dump.",
+      "points": []
+    }
+  ]
+}

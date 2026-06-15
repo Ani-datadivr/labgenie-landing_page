@@ -76,11 +76,22 @@ Re-run `push-vercel-env.sh` after the §3 wizard adds the GitHub App values to `
      `KEYSTATIC_GITHUB_CLIENT_SECRET`, and `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
      (paste them into `.env.local` and re-run `scripts/push-vercel-env.sh`, or add
      in the dashboard), then **redeploy**.
-  5. Now `/keystatic` on the live site lets approved GitHub users edit content;
-     each save is a commit to the repo, which auto-redeploys.
+  5. Now `/keystatic` on the live site lets approved GitHub users edit content.
+
+- **Draft → Preview → Publish (recommended).** So editors never change the live
+  site by accident, set up a `staging` draft branch and a Preview button:
+  1. Create it once: `git branch staging main && git push -u origin staging`.
+     Vercel auto-builds it to a `*-git-staging-*.vercel.app` URL.
+  2. Add `NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL` to Vercel (Prod **and** Preview) —
+     copy the real `*-git-staging-*` host from **Vercel → Deployments**. The config
+     wires it into `storage.previewUrl`, so Keystatic shows a **Preview** link.
+  3. Editors switch the Keystatic branch to **`staging`**, Save (commits to the
+     draft — live site untouched), click **Preview** to see the staging deploy with
+     their changes, then **Create pull request** and merge `staging → main` to
+     publish. See `KEYSTATIC.md` and `EDITOR_GUIDE.md`.
 
 - Editing locally still works with zero setup at `localhost:3000/keystatic`
-  (writes the JSON files directly). See `KEYSTATIC.md`.
+  (writes the JSON files directly; the running page is the live preview). See `KEYSTATIC.md`.
 
 ---
 

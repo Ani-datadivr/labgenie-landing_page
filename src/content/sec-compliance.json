@@ -1,0 +1,21 @@
+{
+  "visible": true,
+  "title": "Our compliance program.",
+  "intro": "We are pre-certification. Reports and current attestation status are available under NDA.",
+  "inProgress": [
+    "SOC 2 Type II",
+    "GDPR",
+    "India DPDPA",
+    "CCPA / CPRA",
+    "EU AI Act"
+  ],
+  "planned": [
+    "ISO 27001",
+    "PCI DSS",
+    "FSMA 204",
+    "FSSAI",
+    "FDA 21 CFR 11",
+    "WCAG 2.1 AA"
+  ],
+  "footnote": "The medallions are our own visual treatment, not official seals. Each official seal appears once its audit completes."
+}

@@ -10,16 +10,26 @@ import Logo from "./Logo";
 // indicator under the active item. Labels on desktop, icons on mobile. Logo and
 // the primary CTA sit fixed in the top corners; the pill floats top on desktop
 // and bottom on mobile.
-const NAV = [
-  { name: "Platform", url: "/platform", icon: LayoutGrid },
-  { name: "Manufacturers", url: "/manufacturers", icon: Factory },
-  { name: "Integrations", url: "/integrations", icon: Workflow },
-  { name: "Security", url: "/security", icon: ShieldCheck },
-  { name: "About", url: "/about", icon: Building2 },
-  { name: "Careers", url: "/careers", icon: Briefcase },
+//
+// Link labels/links + the CTA are editable via Keystatic (singleton "navbar");
+// the icons (shown on mobile) stay in code and are matched to the links by order.
+const ICONS = [LayoutGrid, Factory, Workflow, ShieldCheck, Building2, Briefcase];
+
+const DEFAULT_LINKS = [
+  { name: "Platform", url: "/platform" },
+  { name: "Manufacturers", url: "/manufacturers" },
+  { name: "Integrations", url: "/integrations" },
+  { name: "Security", url: "/security" },
+  { name: "About", url: "/about" },
+  { name: "Careers", url: "/careers" },
 ];
 
-export default function Navbar() {
+export default function Navbar({ links, ctaLabel, ctaHref }) {
+  const NAV = (links?.length ? links : DEFAULT_LINKS).map((l, i) => ({
+    ...l,
+    icon: ICONS[i] || ICONS[ICONS.length - 1],
+  }));
+  const cta = { label: ctaLabel || "Request a demo", href: ctaHref || "/contact" };
   const pathname = usePathname();
   const active =
     NAV.find((i) => i.url === pathname)?.name ??
@@ -39,10 +49,10 @@ export default function Navbar() {
 
       {/* Primary CTA — fixed top-right */}
       <Link
-        href="/contact"
+        href={cta.href}
         className="btn btn-primary fixed right-4 top-3 z-50 min-h-[44px] !px-4 text-[13px] sm:right-6"
       >
-        Request a demo
+        {cta.label}
       </Link>
 
       {/* Tubelight pill nav. transform-gpu pins it to its own compositor layer so

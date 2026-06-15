@@ -1,45 +1,178 @@
 import { config, fields, singleton } from "@keystatic/core";
 
-// Storage kind:
-//   • GitHub mode once the GitHub App creds exist (KEYSTATIC_GITHUB_CLIENT_ID) —
-//     this is the prod editing path; edits commit to the repo.
-//   • Local files otherwise — dev editing with zero setup, AND it keeps
-//     `next build` passing on Vercel before the App exists (GitHub mode REQUIRES
-//     the creds at build time, or the build errors).
-//   • To run Keystatic's one-time "Create GitHub App" wizard locally, force
-//     GitHub mode in dev with `KEYSTATIC_STORAGE=github npm run dev` (dev doesn't
-//     do the build-time validation). See DEPLOY.md §3.
+// =============================================================================
+// LabGenie CMS — every page, every section, edited by a non-technical editor.
+//
+// One singleton per visual section, grouped by page in the sidebar (see
+// `ui.navigation`). Each section starts with a "Show on the website" toggle, so
+// an unneeded section is switched off (reversible — nothing is deleted). Lists
+// (FAQs, stations, team, roles, badges, nav/footer links) add/remove/reorder
+// freely. Text only — visuals, icons, and animations stay in code, so an editor
+// can never break the layout. Page lead sections also carry SEO (browser tab +
+// Google snippet).
+//
+// Storage:
+//   • GitHub mode on Vercel (KEYSTATIC_GITHUB_CLIENT_ID present) — the prod
+//     editing path. Editors work on the `staging` branch (draft), Preview the
+//     staging deploy, then publish by merging staging → main. See DEPLOY.md §3.
+//   • Local files in dev — zero-setup editing; the running localhost site is the
+//     live preview. Also keeps `next build` green before the GitHub App exists.
 // The reader (src/lib/cms.js) reads committed files either way, so the rendered
 // site is unaffected by the storage kind.
+// =============================================================================
+
 const useGitHub =
   Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID) ||
   process.env.KEYSTATIC_STORAGE === "github";
+
+// Preview link shown on every editing screen in GitHub mode. Points at the
+// staging-branch Vercel deploy so an editor sees the full site with their
+// pending changes before publishing. Override the host with
+// NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL once the real Vercel URL is known.
+const previewUrl =
+  process.env.NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL ||
+  "https://labgenie-landing-page-git-{branch}-ani-datadivr.vercel.app/{slug}";
+
 const storage = useGitHub
   ? ({
       kind: "github",
       repo: { owner: "Ani-datadivr", name: "labgenie-landing_page" },
+      previewUrl,
     } as const)
   : ({ kind: "local" } as const);
+
+// ---- Reusable field helpers (factories → fresh descriptor each call) --------
+
+// "Show this section" toggle. Ticked by default; untick to hide the whole
+// section from the live page without deleting anything.
+const showToggle = () =>
+  fields.checkbox({
+    label: "Show this section on the website",
+    description:
+      "Untick to hide this whole section from the live page. Nothing is deleted — tick it again to bring it back.",
+    defaultValue: true,
+  });
+
+// Per-page SEO. Lives on each page's top/lead section.
+const seoField = () =>
+  fields.object(
+    {
+      title: fields.text({
+        label: "Browser tab title",
+        description:
+          "Shows in the browser tab and as the blue link in Google. Best around 60 characters. Leave blank to use the site default.",
+        validation: { length: { max: 70 } },
+      }),
+      description: fields.text({
+        label: "Search description",
+        description:
+          "The grey summary under the title in Google search results. Best around 150 characters.",
+        multiline: true,
+        validation: { length: { max: 200 } },
+      }),
+    },
+    { label: "SEO — browser tab & Google", description: "How this page looks in a browser tab and in search results." }
+  );
+
+// A standard "eyebrow / heading / sub" header trio used by inner pages.
+const headerFields = () => ({
+  eyebrow: fields.text({
+    label: "Eyebrow (small label above the title)",
+    validation: { length: { max: 40 } },
+  }),
+  title: fields.text({
+    label: "Page title",
+    multiline: true,
+    validation: { isRequired: true, length: { max: 120 } },
+  }),
+  sub: fields.text({
+    label: "Sub-headline",
+    multiline: true,
+    validation: { length: { max: 320 } },
+  }),
+});
+
+// A closing call-to-action band (FinalCTA): eyebrow + title + sub.
+const finalCtaFields = () => ({
+  eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+  title: fields.text({
+    label: "Heading",
+    multiline: true,
+    validation: { isRequired: true, length: { max: 120 } },
+  }),
+  sub: fields.text({
+    label: "Sub-headline",
+    multiline: true,
+    validation: { length: { max: 260 } },
+  }),
+});
 
 export default config({
   storage,
   ui: {
     brand: { name: "LabGenie CMS" },
+    // The sidebar is grouped by page, top-to-bottom, so a first-time editor
+    // works down each page the way a visitor reads it.
+    navigation: {
+      "Home page": [
+        "home",
+        "problem",
+        "productVision",
+        "differentiation",
+        "proofShowcase",
+        "faqs",
+        "closingCta",
+      ],
+      "Platform page": ["platformIntro", "platformStations", "platformCta"],
+      "For Manufacturers page": [
+        "mfHeader",
+        "mfBuyers",
+        "mfDaily",
+        "mfHowWeWork",
+        "mfCta",
+      ],
+      "About page": [
+        "aboutHeader",
+        "aboutStory",
+        "aboutTeam",
+        "aboutPrinciples",
+        "aboutNumbers",
+        "aboutCta",
+      ],
+      "Security page": [
+        "secHeader",
+        "secControls",
+        "secCompliance",
+        "secDataFlow",
+        "secResponsibleAi",
+        "secContact",
+        "secCta",
+      ],
+      "Careers page": [
+        "careersHeader",
+        "careersHowWeWork",
+        "careersRoles",
+        "careersCta",
+      ],
+      "Integrations page": ["intHeader", "intHowItConnects", "intCta"],
+      "Contact page": ["contactHeader", "contactProgram", "contactForm"],
+      "Site-wide": ["navbar", "footer", "siteSettings"],
+    },
   },
-  // Sidebar order matches the homepage top-to-bottom so editors can work down
-  // the page. Every field is text-only with help text + length limits, so a
-  // non-technical editor can publish directly without being able to break the
-  // layout (anything structural/visual stays in code). In GitHub mode a Save
-  // commits straight to the repo and the site rebuilds — no approval step.
   singletons: {
+    // =========================================================================
+    // HOME PAGE
+    // =========================================================================
     home: singleton({
-      label: "1 · Hero",
+      label: "Hero",
       path: "src/content/home",
       format: { data: "json" },
       schema: {
+        visible: showToggle(),
         titleLead: fields.text({
           label: "Headline — lead",
-          description: "First part of the big hero headline (default color). Keep it short — about 3–6 words.",
+          description:
+            "First part of the big hero headline (default color). Keep it short — about 3–6 words.",
           multiline: true,
           validation: { isRequired: true, length: { max: 60 } },
         }),
@@ -72,15 +205,16 @@ export default config({
           description: "e.g. /platform or #operations",
           validation: { length: { max: 200 } },
         }),
+        seo: seoField(),
       },
     }),
 
-    // ---- Homepage sections (text-only; visuals/animations stay in code) ----
     problem: singleton({
-      label: "2 · Problem",
+      label: "Problem",
       path: "src/content/problem",
       format: { data: "json" },
       schema: {
+        visible: showToggle(),
         title: fields.text({
           label: "Section heading",
           multiline: true,
@@ -94,12 +228,14 @@ export default config({
             }),
             stat: fields.text({
               label: "Big stat (text)",
-              description: "Shown as-is, e.g. “1.5–2 days”. Leave blank if using the animated count below.",
+              description:
+                "Shown as-is, e.g. “1.5–2 days”. Leave blank if using the animated count below.",
               validation: { length: { max: 24 } },
             }),
             countTo: fields.integer({
               label: "Animated count (optional)",
-              description: "If set, the stat counts up to this number instead of showing the text above. Leave empty for a text stat.",
+              description:
+                "If set, the stat counts up to this number instead of showing the text above. Leave empty for a text stat.",
               validation: { isRequired: false },
             }),
             countSuffix: fields.text({
@@ -114,7 +250,8 @@ export default config({
           }),
           {
             label: "Cards",
-            description: "Three cards work best on the layout. Each uses either a text stat or an animated count.",
+            description:
+              "Three cards work best on the layout. Each uses either a text stat or an animated count.",
             itemLabel: (props) => props.fields.area.value || "Card",
           }
         ),
@@ -125,11 +262,13 @@ export default config({
         }),
       },
     }),
+
     productVision: singleton({
-      label: "3 · Product Vision",
+      label: "Product Vision",
       path: "src/content/product-vision",
       format: { data: "json" },
       schema: {
+        visible: showToggle(),
         kicker: fields.text({
           label: "Kicker (small label above heading)",
           validation: { length: { max: 24 } },
@@ -150,11 +289,13 @@ export default config({
         }),
       },
     }),
+
     differentiation: singleton({
-      label: "4 · Why LabGenie",
+      label: "Why LabGenie",
       path: "src/content/differentiation",
       format: { data: "json" },
       schema: {
+        visible: showToggle(),
         kicker: fields.text({
           label: "Kicker (small label above heading)",
           validation: { length: { max: 24 } },
@@ -197,11 +338,13 @@ export default config({
         }),
       },
     }),
+
     proofShowcase: singleton({
-      label: "5 · Proof",
+      label: "Proof",
       path: "src/content/proof-showcase",
       format: { data: "json" },
       schema: {
+        visible: showToggle(),
         kicker: fields.text({
           label: "Kicker (small label above heading)",
           validation: { length: { max: 24 } },
@@ -213,17 +356,51 @@ export default config({
         }),
         sub: fields.text({
           label: "Sub-headline",
-          description: "The customer cases, quotes, and animated visuals below are managed in code.",
           multiline: true,
           validation: { length: { max: 260 } },
         }),
+        cases: fields.array(
+          fields.object({
+            tab: fields.text({
+              label: "Tab name (customer)",
+              validation: { isRequired: true, length: { max: 40 } },
+            }),
+            tabSub: fields.text({
+              label: "Tab sub-label",
+              validation: { length: { max: 40 } },
+            }),
+            descriptor: fields.text({
+              label: "Descriptor line",
+              multiline: true,
+              validation: { length: { max: 120 } },
+            }),
+            quote: fields.text({
+              label: "Quote / paragraph",
+              description: "Shown as the customer quote or case paragraph.",
+              multiline: true,
+              validation: { length: { max: 400 } },
+            }),
+            points: fields.array(
+              fields.text({ label: "Point", validation: { length: { max: 140 } } }),
+              { label: "Bullet points", itemLabel: (props) => props.value || "Point" }
+            ),
+          }),
+          {
+            label: "Customer cases",
+            description:
+              "The two flagship cases. Animated visuals and numbers stay in code; this is the text around them.",
+            itemLabel: (props) => props.fields.tab.value || "Case",
+          }
+        ),
       },
     }),
+
     faqs: singleton({
-      label: "6 · FAQ",
+      label: "FAQ",
       path: "src/content/faqs",
       format: { data: "json" },
       schema: {
+        visible: showToggle(),
         items: fields.array(
           fields.object({
             question: fields.text({
@@ -238,17 +415,20 @@ export default config({
           }),
           {
             label: "Questions",
-            description: "Add, remove, or reorder questions. Drag the handle to reorder.",
+            description:
+              "Add, remove, or reorder questions. Drag the handle to reorder.",
             itemLabel: (props) => props.fields.question.value || "Question",
           }
         ),
       },
     }),
+
     closingCta: singleton({
-      label: "7 · Closing CTA",
+      label: "Closing CTA",
       path: "src/content/closing-cta",
       format: { data: "json" },
       schema: {
+        visible: showToggle(),
         title: fields.text({
           label: "Heading",
           multiline: true,
@@ -266,6 +446,919 @@ export default config({
         secondaryLabel: fields.text({
           label: "Secondary button — label",
           validation: { length: { max: 28 } },
+        }),
+      },
+    }),
+
+    // =========================================================================
+    // PLATFORM PAGE
+    // =========================================================================
+    platformIntro: singleton({
+      label: "Page intro & SEO",
+      path: "src/content/platform-intro",
+      format: { data: "json" },
+      schema: {
+        title: fields.text({
+          label: "Console heading",
+          description:
+            "Shown on the interactive operations console at the top of the page.",
+          multiline: true,
+          validation: { length: { max: 120 } },
+        }),
+        sub: fields.text({
+          label: "Console sub-headline",
+          multiline: true,
+          validation: { length: { max: 240 } },
+        }),
+        seo: seoField(),
+      },
+    }),
+
+    platformStations: singleton({
+      label: "Stations",
+      path: "src/content/platform-stations",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        items: fields.array(
+          fields.object({
+            name: fields.text({
+              label: "Station name",
+              validation: { isRequired: true, length: { max: 40 } },
+            }),
+            status: fields.text({
+              label: "Status (Live / In build / Roadmap)",
+              validation: { length: { max: 20 } },
+            }),
+            headline: fields.text({
+              label: "Headline",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 90 } },
+            }),
+            body: fields.text({
+              label: "Description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 320 } },
+            }),
+            points: fields.array(
+              fields.text({ label: "Point", validation: { length: { max: 160 } } }),
+              {
+                label: "Bullet points (optional)",
+                itemLabel: (props) => props.value || "Point",
+              }
+            ),
+          }),
+          {
+            label: "Stations",
+            description:
+              "Each station's illustration/mockup stays in code and is matched by order. Reorder carefully.",
+            itemLabel: (props) => props.fields.name.value || "Station",
+          }
+        ),
+      },
+    }),
+
+    platformCta: singleton({
+      label: "Final CTA",
+      path: "src/content/platform-cta",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...finalCtaFields() },
+    }),
+
+    // =========================================================================
+    // FOR MANUFACTURERS PAGE
+    // =========================================================================
+    mfHeader: singleton({
+      label: "Page header & SEO",
+      path: "src/content/mf-header",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...headerFields(), seo: seoField() },
+    }),
+
+    mfBuyers: singleton({
+      label: "Economic buyers",
+      path: "src/content/mf-buyers",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 120 } },
+        }),
+        items: fields.array(
+          fields.object({
+            role: fields.text({
+              label: "Role",
+              validation: { isRequired: true, length: { max: 40 } },
+            }),
+            pain: fields.text({
+              label: "Pain point",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 220 } },
+            }),
+          }),
+          { label: "Buyers", itemLabel: (props) => props.fields.role.value || "Buyer" }
+        ),
+      },
+    }),
+
+    mfDaily: singleton({
+      label: "Daily users",
+      path: "src/content/mf-daily",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 120 } },
+        }),
+        items: fields.array(
+          fields.object({
+            role: fields.text({
+              label: "Role",
+              validation: { isRequired: true, length: { max: 40 } },
+            }),
+            win: fields.text({
+              label: "Win",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 220 } },
+            }),
+          }),
+          { label: "Users", itemLabel: (props) => props.fields.role.value || "User" }
+        ),
+      },
+    }),
+
+    mfHowWeWork: singleton({
+      label: "How we work",
+      path: "src/content/mf-how-we-work",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 140 } },
+        }),
+        traits: fields.array(
+          fields.object({
+            title: fields.text({
+              label: "Trait title",
+              validation: { isRequired: true, length: { max: 60 } },
+            }),
+            note: fields.text({
+              label: "Trait description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 200 } },
+            }),
+          }),
+          {
+            label: "Traits",
+            description: "Icons are assigned in code by order.",
+            itemLabel: (props) => props.fields.title.value || "Trait",
+          }
+        ),
+      },
+    }),
+
+    mfCta: singleton({
+      label: "Final CTA",
+      path: "src/content/mf-cta",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...finalCtaFields() },
+    }),
+
+    // =========================================================================
+    // ABOUT PAGE
+    // =========================================================================
+    aboutHeader: singleton({
+      label: "Page header & SEO",
+      path: "src/content/about-header",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...headerFields(), seo: seoField() },
+    }),
+
+    aboutStory: singleton({
+      label: "Our story",
+      path: "src/content/about-story",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        paragraphs: fields.array(
+          fields.text({
+            label: "Paragraph",
+            multiline: true,
+            validation: { length: { max: 600 } },
+          }),
+          { label: "Story paragraphs", itemLabel: () => "Paragraph" }
+        ),
+        figureCaption: fields.text({
+          label: "Photo caption",
+          validation: { length: { max: 120 } },
+        }),
+        asideTitle: fields.text({
+          label: "Aside — title",
+          validation: { length: { max: 40 } },
+        }),
+        asideText: fields.text({
+          label: "Aside — text",
+          multiline: true,
+          validation: { length: { max: 260 } },
+        }),
+      },
+    }),
+
+    aboutTeam: singleton({
+      label: "Team",
+      path: "src/content/about-team",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 140 } },
+        }),
+        members: fields.array(
+          fields.object({
+            name: fields.text({
+              label: "Name",
+              validation: { isRequired: true, length: { max: 40 } },
+            }),
+            role: fields.text({
+              label: "Role",
+              validation: { length: { max: 60 } },
+            }),
+            bio: fields.text({
+              label: "Bio",
+              multiline: true,
+              validation: { length: { max: 240 } },
+            }),
+          }),
+          {
+            label: "Members",
+            description: "Photos are matched in code by name.",
+            itemLabel: (props) => props.fields.name.value || "Member",
+          }
+        ),
+      },
+    }),
+
+    aboutPrinciples: singleton({
+      label: "Principles",
+      path: "src/content/about-principles",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 140 } },
+        }),
+        items: fields.array(
+          fields.object({
+            name: fields.text({
+              label: "Principle",
+              validation: { isRequired: true, length: { max: 80 } },
+            }),
+            note: fields.text({
+              label: "Description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 300 } },
+            }),
+          }),
+          {
+            label: "Principles",
+            description: "Icons are assigned in code by order.",
+            itemLabel: (props) => props.fields.name.value || "Principle",
+          }
+        ),
+      },
+    }),
+
+    aboutNumbers: singleton({
+      label: "By the numbers",
+      path: "src/content/about-numbers",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 120 } },
+        }),
+        facts: fields.array(
+          fields.object({
+            stat: fields.text({
+              label: "Stat",
+              validation: { isRequired: true, length: { max: 40 } },
+            }),
+            label: fields.text({
+              label: "Label",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 120 } },
+            }),
+          }),
+          {
+            label: "Facts",
+            description: "Icons are assigned in code by order.",
+            itemLabel: (props) => props.fields.stat.value || "Fact",
+          }
+        ),
+      },
+    }),
+
+    aboutCta: singleton({
+      label: "Closing CTA",
+      path: "src/content/about-cta",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { isRequired: true, length: { max: 120 } },
+        }),
+        sub: fields.text({
+          label: "Sub-headline",
+          multiline: true,
+          validation: { length: { max: 240 } },
+        }),
+        primaryLabel: fields.text({
+          label: "Primary button — label",
+          validation: { length: { max: 28 } },
+        }),
+        primaryHref: fields.text({
+          label: "Primary button — link",
+          validation: { length: { max: 200 } },
+        }),
+        secondaryLabel: fields.text({
+          label: "Secondary button — label",
+          validation: { length: { max: 28 } },
+        }),
+        secondaryHref: fields.text({
+          label: "Secondary button — link",
+          validation: { length: { max: 200 } },
+        }),
+      },
+    }),
+
+    // =========================================================================
+    // SECURITY PAGE
+    // =========================================================================
+    secHeader: singleton({
+      label: "Page header & SEO",
+      path: "src/content/sec-header",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...headerFields(), seo: seoField() },
+    }),
+
+    secControls: singleton({
+      label: "Controls live today",
+      path: "src/content/sec-controls",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        items: fields.array(
+          fields.object({
+            name: fields.text({
+              label: "Control name",
+              validation: { isRequired: true, length: { max: 60 } },
+            }),
+            note: fields.text({
+              label: "Description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 160 } },
+            }),
+          }),
+          {
+            label: "Controls",
+            description: "Icons are assigned in code by order.",
+            itemLabel: (props) => props.fields.name.value || "Control",
+          }
+        ),
+      },
+    }),
+
+    secCompliance: singleton({
+      label: "Compliance program",
+      path: "src/content/sec-compliance",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 90 } },
+        }),
+        intro: fields.text({
+          label: "Intro paragraph",
+          multiline: true,
+          validation: { length: { max: 260 } },
+        }),
+        inProgress: fields.array(
+          fields.text({
+            label: "Standard",
+            validation: { isRequired: true, length: { max: 40 } },
+          }),
+          {
+            label: "Actively pursuing",
+            description: "Badge label only; the medallion art is assigned in code.",
+            itemLabel: (props) => props.value || "Standard",
+          }
+        ),
+        planned: fields.array(
+          fields.text({
+            label: "Standard",
+            validation: { isRequired: true, length: { max: 40 } },
+          }),
+          {
+            label: "On the roadmap",
+            description: "Badge label only; the medallion art is assigned in code.",
+            itemLabel: (props) => props.value || "Standard",
+          }
+        ),
+        footnote: fields.text({
+          label: "Footnote",
+          multiline: true,
+          validation: { length: { max: 240 } },
+        }),
+      },
+    }),
+
+    secDataFlow: singleton({
+      label: "How data is handled",
+      path: "src/content/sec-data-flow",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        steps: fields.array(
+          fields.object({
+            name: fields.text({
+              label: "Step name",
+              validation: { isRequired: true, length: { max: 60 } },
+            }),
+            note: fields.text({
+              label: "Description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 160 } },
+            }),
+          }),
+          {
+            label: "Steps",
+            description: "Step numbers and icons are assigned in code by order.",
+            itemLabel: (props) => props.fields.name.value || "Step",
+          }
+        ),
+      },
+    }),
+
+    secResponsibleAi: singleton({
+      label: "Responsible AI",
+      path: "src/content/sec-responsible-ai",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 90 } },
+        }),
+        body: fields.text({
+          label: "Paragraph",
+          multiline: true,
+          validation: { length: { max: 320 } },
+        }),
+        points: fields.array(
+          fields.object({
+            name: fields.text({
+              label: "Point title",
+              validation: { isRequired: true, length: { max: 60 } },
+            }),
+            note: fields.text({
+              label: "Description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 160 } },
+            }),
+          }),
+          {
+            label: "Points",
+            description: "Icons are assigned in code by order.",
+            itemLabel: (props) => props.fields.name.value || "Point",
+          }
+        ),
+      },
+    }),
+
+    secContact: singleton({
+      label: "Security contact",
+      path: "src/content/sec-contact",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 90 } },
+        }),
+        bullets: fields.array(
+          fields.text({ label: "Bullet", validation: { length: { max: 80 } } }),
+          { label: "Bullets", itemLabel: (props) => props.value || "Bullet" }
+        ),
+        primaryLabel: fields.text({
+          label: "Primary button — label",
+          validation: { length: { max: 40 } },
+        }),
+        secondaryLabel: fields.text({
+          label: "Secondary button — label",
+          validation: { length: { max: 40 } },
+        }),
+        securityEmail: fields.text({
+          label: "Security email",
+          validation: { length: { max: 80 } },
+        }),
+        generalNote: fields.text({
+          label: "General-questions note",
+          validation: { length: { max: 120 } },
+        }),
+      },
+    }),
+
+    secCta: singleton({
+      label: "Final CTA",
+      path: "src/content/sec-cta",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...finalCtaFields() },
+    }),
+
+    // =========================================================================
+    // CAREERS PAGE
+    // =========================================================================
+    careersHeader: singleton({
+      label: "Page header & SEO",
+      path: "src/content/careers-header",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...headerFields(), seo: seoField() },
+    }),
+
+    careersHowWeWork: singleton({
+      label: "How we work",
+      path: "src/content/careers-how-we-work",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 140 } },
+        }),
+        lead: fields.text({
+          label: "Lead paragraph",
+          multiline: true,
+          validation: { length: { max: 360 } },
+        }),
+        values: fields.array(
+          fields.object({
+            title: fields.text({
+              label: "Value title",
+              validation: { isRequired: true, length: { max: 60 } },
+            }),
+            body: fields.text({
+              label: "Description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 300 } },
+            }),
+          }),
+          {
+            label: "Values",
+            description: "Icons are assigned in code by order.",
+            itemLabel: (props) => props.fields.title.value || "Value",
+          }
+        ),
+      },
+    }),
+
+    careersRoles: singleton({
+      label: "Open roles",
+      path: "src/content/careers-roles",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 90 } },
+        }),
+        lead: fields.text({
+          label: "Lead paragraph",
+          multiline: true,
+          validation: { length: { max: 320 } },
+        }),
+        roles: fields.array(
+          fields.object({
+            title: fields.text({
+              label: "Role title",
+              validation: { isRequired: true, length: { max: 60 } },
+            }),
+            tag: fields.text({
+              label: "Location · Team",
+              validation: { length: { max: 60 } },
+            }),
+            blurb: fields.text({
+              label: "Description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 400 } },
+            }),
+          }),
+          {
+            label: "Roles",
+            itemLabel: (props) => props.fields.title.value || "Role",
+          }
+        ),
+        footnote: fields.text({
+          label: "Footnote (after the list)",
+          multiline: true,
+          validation: { length: { max: 240 } },
+        }),
+      },
+    }),
+
+    careersCta: singleton({
+      label: "Closing CTA",
+      path: "src/content/careers-cta",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { isRequired: true, length: { max: 120 } },
+        }),
+        sub: fields.text({
+          label: "Sub-headline",
+          multiline: true,
+          validation: { length: { max: 240 } },
+        }),
+        secondaryLabel: fields.text({
+          label: "Secondary button — label",
+          validation: { length: { max: 28 } },
+        }),
+      },
+    }),
+
+    // =========================================================================
+    // INTEGRATIONS PAGE
+    // =========================================================================
+    intHeader: singleton({
+      label: "Page header & SEO",
+      path: "src/content/int-header",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...headerFields(), seo: seoField() },
+    }),
+
+    intHowItConnects: singleton({
+      label: "How it connects",
+      path: "src/content/int-how-it-connects",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        logosNote: fields.text({
+          label: "Logos strip note",
+          validation: { length: { max: 80 } },
+        }),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        title: fields.text({
+          label: "Heading",
+          multiline: true,
+          validation: { length: { max: 120 } },
+        }),
+        steps: fields.array(
+          fields.object({
+            step: fields.text({
+              label: "Step number",
+              validation: { length: { max: 8 } },
+            }),
+            title: fields.text({
+              label: "Step title",
+              validation: { isRequired: true, length: { max: 40 } },
+            }),
+            body: fields.text({
+              label: "Description",
+              multiline: true,
+              validation: { isRequired: true, length: { max: 200 } },
+            }),
+          }),
+          {
+            label: "Steps",
+            itemLabel: (props) => props.fields.title.value || "Step",
+          }
+        ),
+      },
+    }),
+
+    intCta: singleton({
+      label: "Final CTA",
+      path: "src/content/int-cta",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...finalCtaFields() },
+    }),
+
+    // =========================================================================
+    // CONTACT PAGE
+    // =========================================================================
+    contactHeader: singleton({
+      label: "Page header & SEO",
+      path: "src/content/contact-header",
+      format: { data: "json" },
+      schema: { visible: showToggle(), ...headerFields(), seo: seoField() },
+    }),
+
+    contactProgram: singleton({
+      label: "Design partner panel",
+      path: "src/content/contact-program",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(),
+        eyebrow: fields.text({ label: "Eyebrow", validation: { length: { max: 40 } } }),
+        intro: fields.text({
+          label: "Intro paragraph",
+          multiline: true,
+          validation: { length: { max: 320 } },
+        }),
+        benefits: fields.array(
+          fields.text({ label: "Benefit", validation: { length: { max: 120 } } }),
+          { label: "Benefits", itemLabel: (props) => props.value || "Benefit" }
+        ),
+        emailPrompt: fields.text({
+          label: "“Prefer email?” prompt",
+          validation: { length: { max: 40 } },
+        }),
+        email: fields.text({
+          label: "Contact email",
+          validation: { length: { max: 80 } },
+        }),
+      },
+    }),
+
+    contactForm: singleton({
+      label: "Form labels",
+      path: "src/content/contact-form",
+      format: { data: "json" },
+      schema: {
+        nameLabel: fields.text({ label: "Name — label", validation: { length: { max: 40 } } }),
+        namePlaceholder: fields.text({ label: "Name — placeholder", validation: { length: { max: 60 } } }),
+        emailLabel: fields.text({ label: "Email — label", validation: { length: { max: 40 } } }),
+        emailPlaceholder: fields.text({ label: "Email — placeholder", validation: { length: { max: 60 } } }),
+        companyLabel: fields.text({ label: "Company — label", validation: { length: { max: 40 } } }),
+        companyPlaceholder: fields.text({ label: "Company — placeholder", validation: { length: { max: 60 } } }),
+        teamSizeLabel: fields.text({ label: "Team size — label", validation: { length: { max: 40 } } }),
+        teamSizePlaceholder: fields.text({ label: "Team size — placeholder", validation: { length: { max: 60 } } }),
+        countryLabel: fields.text({ label: "Country — label", validation: { length: { max: 40 } } }),
+        countryPlaceholder: fields.text({ label: "Country — placeholder", validation: { length: { max: 60 } } }),
+        phoneLabel: fields.text({ label: "Phone — label", validation: { length: { max: 40 } } }),
+        phonePlaceholder: fields.text({ label: "Phone — placeholder", validation: { length: { max: 60 } } }),
+        messageLabel: fields.text({ label: "Message — label", validation: { length: { max: 60 } } }),
+        messagePlaceholder: fields.text({ label: "Message — placeholder", validation: { length: { max: 120 } } }),
+        submitLabel: fields.text({ label: "Submit button", validation: { length: { max: 28 } } }),
+        sendingLabel: fields.text({ label: "Submit button — sending", validation: { length: { max: 28 } } }),
+        successTitle: fields.text({ label: "Success — title", validation: { length: { max: 60 } } }),
+        successBody: fields.text({
+          label: "Success — message",
+          multiline: true,
+          validation: { length: { max: 240 } },
+        }),
+        errorText: fields.text({
+          label: "Error message (before the email)",
+          multiline: true,
+          validation: { length: { max: 160 } },
+        }),
+        vName: fields.text({ label: "Validation — name missing", validation: { length: { max: 80 } } }),
+        vEmailRequired: fields.text({ label: "Validation — email missing", validation: { length: { max: 80 } } }),
+        vEmailInvalid: fields.text({ label: "Validation — email invalid", validation: { length: { max: 80 } } }),
+        vPhoneCode: fields.text({ label: "Validation — dialing code missing", validation: { length: { max: 80 } } }),
+        vPhoneInvalid: fields.text({ label: "Validation — phone invalid", validation: { length: { max: 80 } } }),
+        vMessage: fields.text({ label: "Validation — message missing", validation: { length: { max: 80 } } }),
+      },
+    }),
+
+    // =========================================================================
+    // SITE-WIDE
+    // =========================================================================
+    navbar: singleton({
+      label: "Navigation bar",
+      path: "src/content/navbar",
+      format: { data: "json" },
+      schema: {
+        links: fields.array(
+          fields.object({
+            name: fields.text({
+              label: "Label",
+              validation: { isRequired: true, length: { max: 24 } },
+            }),
+            url: fields.text({
+              label: "Link",
+              validation: { isRequired: true, length: { max: 120 } },
+            }),
+          }),
+          {
+            label: "Nav links",
+            description: "Icons (shown on mobile) are assigned in code by order.",
+            itemLabel: (props) => props.fields.name.value || "Link",
+          }
+        ),
+        ctaLabel: fields.text({
+          label: "Top-right button — label",
+          validation: { length: { max: 28 } },
+        }),
+        ctaHref: fields.text({
+          label: "Top-right button — link",
+          validation: { length: { max: 120 } },
+        }),
+      },
+    }),
+
+    footer: singleton({
+      label: "Footer",
+      path: "src/content/footer",
+      format: { data: "json" },
+      schema: {
+        tagline: fields.text({
+          label: "Tagline (under the logo)",
+          multiline: true,
+          validation: { length: { max: 160 } },
+        }),
+        groups: fields.array(
+          fields.object({
+            title: fields.text({
+              label: "Column title",
+              validation: { isRequired: true, length: { max: 40 } },
+            }),
+            links: fields.array(
+              fields.object({
+                label: fields.text({
+                  label: "Label",
+                  validation: { isRequired: true, length: { max: 40 } },
+                }),
+                href: fields.text({
+                  label: "Link",
+                  validation: { isRequired: true, length: { max: 120 } },
+                }),
+              }),
+              { label: "Links", itemLabel: (props) => props.fields.label.value || "Link" }
+            ),
+          }),
+          {
+            label: "Columns",
+            itemLabel: (props) => props.fields.title.value || "Column",
+          }
+        ),
+        legalNote: fields.text({
+          label: "Bottom-right note",
+          validation: { length: { max: 120 } },
+        }),
+      },
+    }),
+
+    siteSettings: singleton({
+      label: "Site settings",
+      path: "src/content/site-settings",
+      format: { data: "json" },
+      schema: {
+        siteName: fields.text({
+          label: "Site name",
+          validation: { length: { max: 40 } },
+        }),
+        email: fields.text({
+          label: "Contact email",
+          validation: { length: { max: 80 } },
+        }),
+        domain: fields.text({
+          label: "Domain",
+          validation: { length: { max: 80 } },
+        }),
+        defaultSeoTitle: fields.text({
+          label: "Default browser tab title",
+          description: "Used on pages without their own SEO title.",
+          validation: { length: { max: 70 } },
+        }),
+        defaultSeoDescription: fields.text({
+          label: "Default search description",
+          multiline: true,
+          validation: { length: { max: 200 } },
         }),
       },
     }),

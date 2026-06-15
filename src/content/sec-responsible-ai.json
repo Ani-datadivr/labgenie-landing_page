@@ -1,0 +1,20 @@
+{
+  "visible": true,
+  "eyebrow": "Responsible AI",
+  "title": "Classified Limited Risk under the EU AI Act.",
+  "body": "LabGenie informs decisions, it doesn't make them, which keeps it in the EU AI Act's lightest tier, with transparency our core obligation.",
+  "points": [
+    {
+      "name": "Advises, you decide",
+      "note": "LabGenie recommends; people make the call."
+    },
+    {
+      "name": "AI, clearly disclosed",
+      "note": "We're rolling out labels on every AI-generated output."
+    },
+    {
+      "name": "Compliance-grade only",
+      "note": "We only use AI that meets regulatory and data-protection standards."
+    }
+  ]
+}

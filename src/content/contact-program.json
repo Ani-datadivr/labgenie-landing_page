@@ -1,0 +1,15 @@
+{
+  "visible": true,
+  "eyebrow": "Design partner program",
+  "intro": "We're onboarding a small group of design partners who shape LabGenie as we build it. Partners get direct influence over the roadmap and hands-on support from the founding team.",
+  "benefits": [
+    "Direct line to the founding and product team",
+    "We prioritize the features your workflows need",
+    "Hands-on help structuring your data and reading the insights",
+    "We build the integration to your ERP",
+    "Early access to the platform before public launch",
+    "Recognition as a launch reference customer (with your approval)"
+  ],
+  "emailPrompt": "Prefer email?",
+  "email": "hello@labgenie.ai"
+}

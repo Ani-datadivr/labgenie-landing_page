@@ -1,0 +1,19 @@
+{
+  "visible": true,
+  "eyebrow": "Who uses it daily",
+  "title": "The win shows up on the floor.",
+  "items": [
+    {
+      "role": "QA analyst",
+      "win": "Reconciles three spec formats in minutes, not days."
+    },
+    {
+      "role": "Sales ops",
+      "win": "Inbound inquiries arrive pre-triaged and routed."
+    },
+    {
+      "role": "Procurement manager",
+      "win": "Asks one question and gets a cross-functional answer."
+    }
+  ]
+}

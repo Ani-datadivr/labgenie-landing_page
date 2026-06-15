@@ -1,0 +1,27 @@
+{
+  "visible": true,
+  "eyebrow": "How we work",
+  "title": "Manufacturers don't just use LabGenie. They like working with us.",
+  "traits": [
+    {
+      "title": "We answer on time",
+      "note": "Need a hand? You get a real person quickly, not a ticket number and a week of silence."
+    },
+    {
+      "title": "We check in",
+      "note": "We stay close even when everything is running smoothly, not just when something breaks."
+    },
+    {
+      "title": "No jargon, ever",
+      "note": "We speak your team's language. No acronyms thrown around to sound clever or sell harder."
+    },
+    {
+      "title": "Effortless onboarding",
+      "note": "We do the heavy lifting, so going live feels smooth, never like another IT project."
+    },
+    {
+      "title": "We learn from you",
+      "note": "Your team teaches us how the floor really runs, and the product keeps getting sharper for it."
+    }
+  ]
+}

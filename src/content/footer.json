@@ -1,0 +1,23 @@
+{
+  "tagline": "The F&B manufacturing platform that actually speaks your language.",
+  "groups": [
+    {
+      "title": "Product",
+      "links": [
+        { "label": "Platform", "href": "/platform" },
+        { "label": "For Manufacturers", "href": "/manufacturers" },
+        { "label": "Integrations", "href": "/integrations" },
+        { "label": "Security", "href": "/security" }
+      ]
+    },
+    {
+      "title": "Company",
+      "links": [
+        { "label": "About", "href": "/about" },
+        { "label": "Careers", "href": "/careers" },
+        { "label": "Request a demo", "href": "/contact" }
+      ]
+    }
+  ],
+  "legalNote": "Dairy · Beverage · Ingredients · Flavors · Specialty F&B"
+}

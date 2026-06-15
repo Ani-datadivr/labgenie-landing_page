@@ -1,0 +1,12 @@
+{
+  "links": [
+    { "name": "Platform", "url": "/platform" },
+    { "name": "Manufacturers", "url": "/manufacturers" },
+    { "name": "Integrations", "url": "/integrations" },
+    { "name": "Security", "url": "/security" },
+    { "name": "About", "url": "/about" },
+    { "name": "Careers", "url": "/careers" }
+  ],
+  "ctaLabel": "Request a demo",
+  "ctaHref": "/contact"
+}

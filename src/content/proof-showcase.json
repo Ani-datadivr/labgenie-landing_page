@@ -1,5 +1,30 @@
 {
+  "visible": true,
   "kicker": "Proof",
   "title": "Trusted by the manufacturers who set the standard.",
-  "sub": "Live in production at Synthite, AVT McCormick, and Mane Kancor, three of the largest names in spices, flavors, and oleoresins."
+  "sub": "Live in production at Synthite, AVT McCormick, and Mane Kancor, three of the largest names in spices, flavors, and oleoresins.",
+  "cases": [
+    {
+      "tab": "Synthite",
+      "tabSub": "RFP matching",
+      "descriptor": "World's largest spice oleoresin manufacturer · in daily production",
+      "quote": "LabGenie collapses the quality-document checking that defines our quality and sales operations from days into minutes.",
+      "points": [
+        "Compares every parameter against your product information sheets",
+        "Flags exact matches, near-matches, and gaps with reasoning",
+        "1000+ inbound requests handled without a single manual sort"
+      ]
+    },
+    {
+      "tab": "Mane Kancor",
+      "tabSub": "Blend optimization",
+      "descriptor": "World's sixth-largest flavor & fragrance company · paying customer",
+      "quote": "Every blend has to land on an exact target. LabGenie learns each blend's history with your own ML models and recommends the raw-material and additive ratios before the batch runs. When a result comes back out of spec, it works out exactly what to add to bring it back to target.",
+      "points": [
+        "Learns each blend's history with your ML models",
+        "Recommends the raw-material and additive ratios up front",
+        "When a batch misses spec, says exactly what to add to hit it"
+      ]
+    }
+  ]
 }

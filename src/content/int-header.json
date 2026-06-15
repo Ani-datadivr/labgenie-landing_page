@@ -1,0 +1,10 @@
+{
+  "visible": true,
+  "eyebrow": "Integrations",
+  "title": "Sits on top of the systems you already run.",
+  "sub": "LabGenie connects to your ERP and document systems. It reads your spec sheets and quality certificates where they already live, and writes back compliance paperwork you can trust.",
+  "seo": {
+    "title": "Integrations",
+    "description": "LabGenie connects to the ERP, lab, and quality systems you already run, reading quality certificates and spec sheets where they live and writing back trusted compliance paperwork."
+  }
+}

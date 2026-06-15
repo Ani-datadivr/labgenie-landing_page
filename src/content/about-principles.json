@@ -1,0 +1,23 @@
+{
+  "visible": true,
+  "eyebrow": "What we believe",
+  "title": "Principles we carried from the field into the product.",
+  "items": [
+    {
+      "name": "Domain truth over hype",
+      "note": "We speak moisture, total ash, curcumin, and quality-document checking precisely. Specificity is trust; vagueness reads as not understanding the problem."
+    },
+    {
+      "name": "Show the work",
+      "note": "Every match and every flag is traceable to the spec that produced it. The agent demonstrates its reasoning instead of asking you to take it on faith."
+    },
+    {
+      "name": "Built with manufacturers, not for them",
+      "note": "The product was shaped on real plant floors, against real documents, with the QA, sales, and procurement teams who run on it."
+    },
+    {
+      "name": "Speed is the proof",
+      "note": "Checking that once took days now lands in minutes. We measure ourselves by the work the floor no longer has to do by hand."
+    }
+  ]
+}

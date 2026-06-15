@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import StationFeature from "@/components/stations/StationFeature";
 import FinalCTA from "@/components/FinalCTA";
+import { readSections, isVisible, buildMetadata } from "@/lib/cms";
 
 // Heaviest interactive component (graph logic + framer + icon set). Its own chunk
 // so it doesn't weigh down the rest of the platform page; still SSR'd.
@@ -12,13 +13,18 @@ import ProductionMockup from "@/components/stations/mockups/ProductionMockup";
 import FormulationMockup from "@/components/stations/mockups/FormulationMockup";
 import MarketIntelMockup from "@/components/stations/mockups/MarketIntelMockup";
 
-export const metadata = {
-  title: "Platform",
-  description:
-    "An AI agent across every operational station: quality, sales, procurement, production, formulation, and market intelligence. LabGenie reads your specs and acts on them, on top of the ERP you already run.",
-};
+// Station visuals stay in code, matched to the CMS stations by order. If an
+// editor adds a station beyond these, it simply renders without a mockup.
+const MOCKUPS = [
+  QaMockup,
+  SalesMockup,
+  ProcurementMockup,
+  ProductionMockup,
+  FormulationMockup,
+  MarketIntelMockup,
+];
 
-const STATIONS = [
+const DEFAULT_STATIONS = [
   {
     name: "Quality Agent",
     status: "Live",
@@ -29,7 +35,6 @@ const STATIONS = [
       "Surface non-conformities and gaps before they reach the customer",
       "Free senior QC staff from routine document work for higher-value decisions",
     ],
-    Mockup: QaMockup,
   },
   {
     name: "Sales Agent",
@@ -41,61 +46,92 @@ const STATIONS = [
       "Match queries against full ERP history with confidence scores",
       "Hand off between sales and quality teams without losing context",
     ],
-    Mockup: SalesMockup,
   },
   {
     name: "Procurement",
     status: "In build",
     headline: "Buy smarter on volatile inputs.",
     body: "Live price feeds, demand signals, and forward risk scores on spices, oleoresins, and naturals. Reverse auctions run directly over WhatsApp and email.",
-    Mockup: ProcurementMockup,
-    flip: false,
   },
   {
     name: "Production",
     status: "In build",
     headline: "Connect demand to the factory floor.",
     body: "Shift planning, one shared production plan, and live equipment-effectiveness visibility, so what sales commits and what the plant delivers are finally the same number.",
-    Mockup: ProductionMockup,
-    flip: true,
   },
   {
     name: "Formulation",
     status: "In build",
     headline: "Protect your formulation IP.",
     body: "Reverse engineer formulations, capture reformulation reasoning, and track samples to commercial conversion. Your flavorists' knowledge stays in the system.",
-    Mockup: FormulationMockup,
-    flip: false,
   },
   {
     name: "Market Intelligence",
     status: "Roadmap",
     headline: "Know what's coming before your competition does.",
     body: "Trend signals, competitive tracking, and ingredient market shifts, surfaced automatically as a morning briefing instead of a data dump.",
-    Mockup: MarketIntelMockup,
-    flip: true,
   },
 ];
 
-export default function PlatformPage() {
+const SEO_FALLBACK = {
+  title: "Platform",
+  description:
+    "An AI agent across every operational station: quality, sales, procurement, production, formulation, and market intelligence. LabGenie reads your specs and acts on them, on top of the ERP you already run.",
+};
+
+export async function generateMetadata() {
+  const { platformIntro } = await readSections(["platformIntro"]);
+  return buildMetadata(platformIntro?.seo, {
+    fallbackTitle: SEO_FALLBACK.title,
+    fallbackDescription: SEO_FALLBACK.description,
+  });
+}
+
+export default async function PlatformPage() {
+  const { platformIntro, platformStations, platformCta } = await readSections([
+    "platformIntro",
+    "platformStations",
+    "platformCta",
+  ]);
+
+  const stations =
+    platformStations?.items?.length ? platformStations.items : DEFAULT_STATIONS;
+
   return (
     <>
       {/* Hero: the live operations console — "One agent. Every station." */}
-      <OperationsCanvas />
+      <OperationsCanvas title={platformIntro?.title} sub={platformIntro?.sub} />
 
-      <section className="container-x">
-        {STATIONS.map(({ Mockup, ...s }) => (
-          <StationFeature key={s.name} {...s}>
-            <Mockup />
-          </StationFeature>
-        ))}
-      </section>
+      {isVisible(platformStations) && (
+        <section className="container-x">
+          {stations.map((s, i) => {
+            const Mockup = MOCKUPS[i];
+            return (
+              <StationFeature
+                key={s.name || i}
+                name={s.name}
+                status={s.status}
+                headline={s.headline}
+                body={s.body}
+                points={s.points?.length ? s.points : undefined}
+              >
+                {Mockup ? <Mockup /> : null}
+              </StationFeature>
+            );
+          })}
+        </section>
+      )}
 
-      <FinalCTA
-        eyebrow="Get started"
-        title="See every station working on your data."
-        sub="Start with one workflow, quality or sales, and watch LabGenie run on top of the ERP you already use within weeks."
-      />
+      {isVisible(platformCta) && (
+        <FinalCTA
+          eyebrow={platformCta?.eyebrow || "Get started"}
+          title={platformCta?.title || "See every station working on your data."}
+          sub={
+            platformCta?.sub ||
+            "Start with one workflow, quality or sales, and watch LabGenie run on top of the ERP you already use within weeks."
+          }
+        />
+      )}
     </>
   );
 }

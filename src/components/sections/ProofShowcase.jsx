@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Sparkles, CheckCircle2, AlertTriangle } from "lucide-react";
-import { designPartner } from "@/lib/content";
 import Reveal from "../Reveal";
 import SynthiteMark from "../SynthiteMark";
 
@@ -14,31 +13,45 @@ import SynthiteMark from "../SynthiteMark";
 const EASE = [0.16, 1, 0.3, 1];
 const AUTO_MS = 7000;
 
-const CASES = [
-  {
-    id: "synthite",
-    tab: "Synthite",
-    tabSub: "RFP matching",
-    descriptor: "World's largest spice oleoresin manufacturer · in daily production",
-  },
-  {
-    id: "mane",
-    tab: "Mane Kancor",
-    tabSub: "Blend optimization",
-    descriptor: "World's sixth-largest flavor & fragrance company · paying customer",
-  },
-];
-
-// Header copy is editable via Keystatic (singleton "proofShowcase"); the
-// customer cases, quotes, and animated visuals below stay in code.
+// Header copy AND the per-case text (tab, descriptor, quote, bullet points) are
+// editable via Keystatic (singleton "proofShowcase"). The customer marks/logos
+// and the animated proof visuals below stay in code, matched to each case by
+// order (case 0 → Synthite visual, case 1 → Mane blend-correction animation).
 const DEFAULTS = {
   kicker: "Proof",
   title: "Trusted by the manufacturers who set the standard.",
   sub: "Live in production at Synthite, AVT McCormick, and Mane Kancor, three of the largest names in spices, flavors, and oleoresins.",
+  cases: [
+    {
+      tab: "Synthite",
+      tabSub: "RFP matching",
+      descriptor: "World's largest spice oleoresin manufacturer · in daily production",
+      quote:
+        "LabGenie collapses the quality-document checking that defines our quality and sales operations from days into minutes.",
+      points: [
+        "Compares every parameter against your product information sheets",
+        "Flags exact matches, near-matches, and gaps with reasoning",
+        "1000+ inbound requests handled without a single manual sort",
+      ],
+    },
+    {
+      tab: "Mane Kancor",
+      tabSub: "Blend optimization",
+      descriptor: "World's sixth-largest flavor & fragrance company · paying customer",
+      quote:
+        "Every blend has to land on an exact target. LabGenie learns each blend's history with your own ML models and recommends the raw-material and additive ratios before the batch runs. When a result comes back out of spec, it works out exactly what to add to bring it back to target.",
+      points: [
+        "Learns each blend's history with your ML models",
+        "Recommends the raw-material and additive ratios up front",
+        "When a batch misses spec, says exactly what to add to hit it",
+      ],
+    },
+  ],
 };
 
 export default function ProofShowcase({ copy }) {
   const c = { ...DEFAULTS, ...(copy || {}) };
+  const cases = (c.cases?.length ? c.cases : DEFAULTS.cases).slice(0, 2);
   const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -47,20 +60,20 @@ export default function ProofShowcase({ copy }) {
   // auto-advance, unless paused (hover/focus) or reduced motion
   useEffect(() => {
     if (reduce || paused) return;
-    const t = setTimeout(() => setActive((a) => (a + 1) % CASES.length), AUTO_MS);
+    const t = setTimeout(() => setActive((a) => (a + 1) % cases.length), AUTO_MS);
     return () => clearTimeout(t);
-  }, [active, paused, reduce]);
+  }, [active, paused, reduce, cases.length]);
 
   const onKeyDown = (e) => {
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
     e.preventDefault();
     const dir = e.key === "ArrowRight" ? 1 : -1;
-    const next = (active + dir + CASES.length) % CASES.length;
+    const next = (active + dir + cases.length) % cases.length;
     setActive(next);
     tabRefs.current[next]?.focus();
   };
 
-  const current = CASES[active];
+  const current = cases[active];
 
   return (
     <section className="container-x py-20 lg:py-28">
@@ -96,15 +109,15 @@ export default function ProofShowcase({ copy }) {
             onKeyDown={onKeyDown}
             className="flex flex-wrap gap-2"
           >
-            {CASES.map((c, i) => {
+            {cases.map((cs, i) => {
               const on = i === active;
               return (
                 <button
-                  key={c.id}
+                  key={i}
                   ref={(el) => (tabRefs.current[i] = el)}
                   role="tab"
                   type="button"
-                  id={`proof-tab-${c.id}`}
+                  id={`proof-tab-${i}`}
                   aria-selected={on}
                   aria-controls="proof-panel"
                   tabIndex={on ? 0 : -1}
@@ -120,10 +133,10 @@ export default function ProofShowcase({ copy }) {
                   )}
                   <span className="relative z-10 flex items-baseline gap-2">
                     <span className={`font-display text-[15px] font-semibold tracking-tight ${on ? "text-text" : "text-muted"}`}>
-                      {c.tab}
+                      {cs.tab}
                     </span>
                     <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
-                      {c.tabSub}
+                      {cs.tabSub}
                     </span>
                   </span>
                   {/* auto-advance progress, only on the active tab */}
@@ -147,7 +160,7 @@ export default function ProofShowcase({ copy }) {
           <div
             id="proof-panel"
             role="tabpanel"
-            aria-labelledby={`proof-tab-${current.id}`}
+            aria-labelledby={`proof-tab-${active}`}
             className="panel relative mt-4 overflow-hidden"
           >
             <div
@@ -160,14 +173,18 @@ export default function ProofShowcase({ copy }) {
             />
             <AnimatePresence mode="wait">
               <motion.div
-                key={current.id}
+                key={active}
                 initial={{ opacity: 0, x: 28 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -28 }}
                 transition={{ duration: 0.42, ease: EASE }}
                 className="relative grid min-h-[20rem] gap-8 p-8 sm:p-10 lg:grid-cols-2 lg:gap-12"
               >
-                {current.id === "synthite" ? <SynthiteCase reduce={reduce} /> : <ManeCase reduce={reduce} />}
+                {active === 0 ? (
+                  <SynthiteCase data={current} />
+                ) : (
+                  <ManeCase data={current} reduce={reduce} />
+                )}
               </motion.div>
             </AnimatePresence>
           </div>
@@ -179,16 +196,16 @@ export default function ProofShowcase({ copy }) {
 
 /* ---------------------------------------------------------------- Synthite */
 
-function SynthiteCase() {
+function SynthiteCase({ data }) {
   return (
     <>
       <div className="flex flex-col">
         <div className="flex items-center gap-3">
           <SynthiteMark className="h-6" />
         </div>
-        <p className="mono-label mt-3">{CASES[0].descriptor}</p>
+        <p className="mono-label mt-3">{data.descriptor}</p>
         <blockquote className="mt-6 font-display text-xl font-medium leading-snug tracking-tight text-text sm:text-2xl">
-          &ldquo;{designPartner.quote}&rdquo;
+          &ldquo;{data.quote}&rdquo;
         </blockquote>
       </div>
 
@@ -201,11 +218,7 @@ function SynthiteCase() {
         </div>
 
         <ul className="mt-8 space-y-3">
-          {[
-            "Compares every parameter against your product information sheets",
-            "Flags exact matches, near-matches, and gaps with reasoning",
-            "1000+ inbound requests handled without a single manual sort",
-          ].map((p) => (
+          {(data.points || []).map((p) => (
             <li key={p} className="flex items-start gap-3 text-[15px] leading-relaxed text-muted">
               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
               {p}
@@ -219,24 +232,17 @@ function SynthiteCase() {
 
 /* ------------------------------------------------------------------- Mane */
 
-function ManeCase({ reduce }) {
+function ManeCase({ data, reduce }) {
   return (
     <>
       <div className="flex flex-col">
-        <span className="font-display text-xl font-semibold tracking-tight text-text">Mane Kancor</span>
-        <p className="mono-label mt-3">{CASES[1].descriptor}</p>
+        <span className="font-display text-xl font-semibold tracking-tight text-text">{data.tab}</span>
+        <p className="mono-label mt-3">{data.descriptor}</p>
         <p className="mt-6 text-[15px] leading-relaxed text-muted sm:text-base">
-          Every blend has to land on an exact target. LabGenie learns each blend&apos;s history with
-          your own ML models and recommends the raw-material and additive ratios before the batch
-          runs. When a result comes back out of spec, it works out exactly what to add to bring it
-          back to target.
+          {data.quote}
         </p>
         <ul className="mt-6 space-y-3">
-          {[
-            "Learns each blend's history with your ML models",
-            "Recommends the raw-material and additive ratios up front",
-            "When a batch misses spec, says exactly what to add to hit it",
-          ].map((p) => (
+          {(data.points || []).map((p) => (
             <li key={p} className="flex items-start gap-3 text-[15px] leading-relaxed text-muted">
               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
               {p}

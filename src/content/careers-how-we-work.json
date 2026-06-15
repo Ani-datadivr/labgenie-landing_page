@@ -1,0 +1,24 @@
+{
+  "visible": true,
+  "eyebrow": "How we work",
+  "title": "A few exceptional people, building something real together.",
+  "lead": "You work directly with some of the best minds in the F&B and AI space, on a product that is already in the hands of real manufacturers. The team is small enough that what you own matters, and senior enough that you learn fast.",
+  "values": [
+    {
+      "title": "A senior team, already in place",
+      "body": "The people building LabGenie have done this before, in F&B and in AI. You join a small group of operators and engineers who hold a high bar and share it openly."
+    },
+    {
+      "title": "Shape the earliest product",
+      "body": "We are at the start of building, which means the decisions you make now define what LabGenie becomes. You own real surfaces end to end, not slices handed down a chain."
+    },
+    {
+      "title": "Close to real customers",
+      "body": "You work directly with the F&B manufacturers who run on LabGenie, across dairy, beverage, ingredients, flavors, and more. Their work is the brief, and your work reaches them."
+    },
+    {
+      "title": "Your work ships",
+      "body": "Short loops, few layers, fast decisions. What you build this week is in front of customers soon after, and you see exactly how it lands."
+    }
+  ]
+}
