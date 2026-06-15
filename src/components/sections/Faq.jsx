@@ -34,9 +34,13 @@ const FAQS = [
 ];
 
 export default function Faq({ items }) {
-  // Editable copy comes from Keystatic (singleton "faqs"); fall back to the
-  // built-in list if none is passed or it's empty.
-  const faqs = items?.length ? items : FAQS;
+  // Editable copy comes from Keystatic (singleton "faqs"), which stores
+  // { question, answer }; the built-in fallback uses { q, a }. Normalize both to
+  // { q, a } so either source renders correctly.
+  const faqs = (items?.length ? items : FAQS).map((it) => ({
+    q: it.question ?? it.q,
+    a: it.answer ?? it.a,
+  }));
   // Start fully collapsed — every item reads as just a question at first glance.
   const [open, setOpen] = useState(-1);
 
@@ -60,7 +64,7 @@ export default function Faq({ items }) {
           {faqs.map((item, i) => {
             const isOpen = open === i;
             return (
-              <li key={item.q}>
+              <li key={item.q || i}>
                 <button
                   type="button"
                   id={`faq-q-${i}`}

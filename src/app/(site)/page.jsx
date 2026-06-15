@@ -5,7 +5,15 @@ import Differentiation from "@/components/sections/Differentiation";
 import ProofShowcase from "@/components/sections/ProofShowcase";
 import Faq from "@/components/sections/Faq";
 import ClosingCTA from "@/components/sections/ClosingCTA";
-import { getHomeHero, getFaqs } from "@/lib/cms";
+import {
+  getHomeHero,
+  getFaqs,
+  getProblem,
+  getProductVision,
+  getDifferentiation,
+  getProofShowcase,
+  getClosingCta,
+} from "@/lib/cms";
 
 // The homepage builds credibility section by section: the pain, the platform
 // vision, the lineage that earns the technical buyer, then one combined proof
@@ -15,16 +23,25 @@ import { getHomeHero, getFaqs } from "@/lib/cms";
 // Hero + FAQ copy is read (server-side) from Keystatic-managed content and
 // passed down; everything else still renders its built-in copy for now.
 export default async function HomePage() {
-  const [hero, faqs] = await Promise.all([getHomeHero(), getFaqs()]);
+  const [hero, faqs, problem, productVision, differentiation, proofShowcase, closingCta] =
+    await Promise.all([
+      getHomeHero(),
+      getFaqs(),
+      getProblem(),
+      getProductVision(),
+      getDifferentiation(),
+      getProofShowcase(),
+      getClosingCta(),
+    ]);
   return (
     <>
       <Hero copy={hero} />
-      <Problem />
-      <ProductVision />
-      <Differentiation />
-      <ProofShowcase />
+      <Problem copy={problem} />
+      <ProductVision copy={productVision} />
+      <Differentiation copy={differentiation} />
+      <ProofShowcase copy={proofShowcase} />
       <Faq items={faqs} />
-      <ClosingCTA />
+      <ClosingCTA copy={closingCta} />
     </>
   );
 }

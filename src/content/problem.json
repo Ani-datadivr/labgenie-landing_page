@@ -1,0 +1,27 @@
+{
+  "title": "Your ERP stores the data. Your team still does the work by hand.",
+  "cards": [
+    {
+      "area": "Quality",
+      "stat": "1.5–2 days",
+      "countTo": null,
+      "countSuffix": "",
+      "body": "Per request. Matching each customer spec against your product information sheets, by hand."
+    },
+    {
+      "area": "Sales",
+      "stat": "",
+      "countTo": 1000,
+      "countSuffix": "+ requests",
+      "body": "Manually sorted. Slowly routed. Most never reach the lab in time."
+    },
+    {
+      "area": "Procurement",
+      "stat": "Volatile inputs",
+      "countTo": null,
+      "countSuffix": "",
+      "body": "No live prices. Buying decisions on spices and oleoresins made on gut feel."
+    }
+  ],
+  "closing": "This is the gap between your ERP and your operation. LabGenie closes it."
+}

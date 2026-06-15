@@ -29,7 +29,16 @@ const CASES = [
   },
 ];
 
-export default function ProofShowcase() {
+// Header copy is editable via Keystatic (singleton "proofShowcase"); the
+// customer cases, quotes, and animated visuals below stay in code.
+const DEFAULTS = {
+  kicker: "Proof",
+  title: "Trusted by the manufacturers who set the standard.",
+  sub: "Live in production at Synthite, AVT McCormick, and Mane Kancor, three of the largest names in spices, flavors, and oleoresins.",
+};
+
+export default function ProofShowcase({ copy }) {
+  const c = { ...DEFAULTS, ...(copy || {}) };
   const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -58,14 +67,13 @@ export default function ProofShowcase() {
       <div className="max-w-3xl">
         <Reveal className="flex items-center gap-3">
           <span className="h-px w-7 bg-accent/60" />
-          <span className="kicker kicker-accent">Proof</span>
+          <span className="kicker kicker-accent">{c.kicker}</span>
         </Reveal>
         <Reveal as="h2" delay={0.05} variant="blur" className="mt-5 text-3xl sm:text-4xl">
-          Trusted by the manufacturers who set the standard.
+          {c.title}
         </Reveal>
         <Reveal as="p" delay={0.12} className="lead mt-4">
-          Live in production at Synthite, AVT McCormick, and Mane Kancor, three of the largest
-          names in spices, flavors, and oleoresins.
+          {c.sub}
         </Reveal>
       </div>
 

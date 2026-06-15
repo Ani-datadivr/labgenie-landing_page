@@ -23,3 +23,19 @@ export async function getFaqs() {
     return null;
   }
 }
+
+// Generic single-section reader: returns the singleton's data or null so a
+// missing/malformed file never breaks render (components keep their defaults).
+async function readSingleton(name) {
+  try {
+    return (await reader.singletons[name].read()) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export const getProblem = () => readSingleton("problem");
+export const getProductVision = () => readSingleton("productVision");
+export const getDifferentiation = () => readSingleton("differentiation");
+export const getProofShowcase = () => readSingleton("proofShowcase");
+export const getClosingCta = () => readSingleton("closingCta");
