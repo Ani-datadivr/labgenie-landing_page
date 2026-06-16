@@ -116,11 +116,11 @@ buyer roles, the design-partner quote, etc. You rarely need to touch JSX to chan
 words. Station/module labels live in **`src/lib/operations.js`** (keep them in
 sync with the chat router).
 
-Some content (the hero headline/CTAs and the FAQ) is also editable through a UI:
-**Keystatic CMS at `/keystatic`**. Storage auto-switches: locally it writes the
-JSON in `src/content/` (zero setup); on Vercel it uses **Keystatic Cloud** once
-`NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` is set, where editors are invited by email
-(no GitHub account needed). See [`KEYSTATIC.md`](./KEYSTATIC.md) and
+Every section is also editable through a UI: **Keystatic CMS at `/keystatic`**.
+Storage auto-switches with no env var: `npm run dev` writes the JSON in
+`src/content/` (zero setup); any production build (Vercel) uses **Keystatic Cloud**
+(slug hardcoded in `keystatic.config.tsx`), where editors are invited by email (no
+GitHub account needed). See [`KEYSTATIC.md`](./KEYSTATIC.md) and
 [`DEPLOY.md`](./DEPLOY.md) §3.
 
 ---
@@ -141,10 +141,10 @@ JSON in `src/content/` (zero setup); on Vercel it uses **Keystatic Cloud** once
 ## TODO before launch
 - [ ] Add real `GEMINI_API_KEY` and `SLACK_WEBHOOK_URL` (in `.env.local` locally,
       and in Vercel env for prod — `DEPLOY.md`).
-- [ ] Do the one-time Keystatic Cloud setup (create team + project at
-      keystatic.cloud, connect the repo, allow the Vercel domain), then add
-      `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` to Vercel so on-prod content editing
-      works (`DEPLOY.md` §3).
+- [ ] Do the one-time Keystatic Cloud setup (dashboard only: confirm the project
+      `website-designers/labgenie-landing` is connected to the repo, allow the Vercel
+      domain, invite editors) so on-prod content editing works — no env var needed
+      (`DEPLOY.md` §3).
 - [ ] Verify the partner ticker links and swap placeholder ERP wordmarks (Infor,
       Ramco) for official logos.
 - [ ] Replace the original compliance medallions with real seals as audits

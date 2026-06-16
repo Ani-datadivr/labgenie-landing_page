@@ -100,7 +100,11 @@ contact-to-Slack) degrade gracefully (see §3).
 | `GEMINI_API_KEY` | "Ask LabGenie" chat in the Operations Dashboard (`/api/labgenie-route`) | Get one at aistudio.google.com/apikey. **Real keys start with `AIzaSy…`.** |
 | `GEMINI_MODEL` | same | Optional. Defaults to `gemini-2.5-flash-lite`. |
 | `SLACK_WEBHOOK_URL` | `/contact` form (`/api/contact`) | Posts each lead to Slack, server-side only. |
-| `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` | `/keystatic` editing on the live site (Keystatic Cloud mode) | Your `team/project` slug from keystatic.cloud (e.g. `labgenie/landing-page`). **Public, non-secret.** Unset → zero-setup local-file mode (see `DEPLOY.md` §3). |
+
+> `/keystatic` editing needs **no env var**: Keystatic Cloud turns on automatically
+> in production and the project slug `website-designers/labgenie-landing` is hardcoded
+> in `keystatic.config.tsx`. `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` is an optional
+> override only (project rename). See `DEPLOY.md` §3.
 
 **Graceful degradation (verified):** with no `GEMINI_API_KEY`, the chat route
 returns `{reply:null, error:"unconfigured"}` and the UI falls back to instant
@@ -112,9 +116,9 @@ fallback. Neither crashes.
 `main`, import the repo on Vercel (Next.js auto-detected), then either paste the
 vars above into Vercel's env settings or run `bash scripts/push-vercel-env.sh`
 (after `vercel link`) to push them all from `.env.local`. Keystatic storage
-**auto-switches**: local files in dev (var unset), **Keystatic Cloud** on Vercel
-once `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` is set (Cloud installs its own GitHub
-App — no secret keys). See `DEPLOY.md` §3 / `KEYSTATIC.md`.
+**auto-switches**: local files under `npm run dev`, **Keystatic Cloud** in any
+production build (no env var — slug hardcoded; Cloud installs its own GitHub App, no
+secret keys). See `DEPLOY.md` §3 / `KEYSTATIC.md`.
 
 ---
 
@@ -307,10 +311,11 @@ homepage this cycle; the homepage uses `AppDashboard`). Driven by
   a11y-wise; consider labels if first-time-user clarity matters.
 - Convert the remaining card grids (Careers, homepage Problem) to the editorial row pattern.
 - Set the production domain in `layout.jsx`, `robots.js`, `sitemap.js`.
-- **Finish Keystatic on-prod editing:** after the first Vercel deploy, do the
-  one-time Keystatic Cloud setup (create team + project at keystatic.cloud, connect
-  the repo, allow the Vercel domain) and add `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT`
-  to Vercel, then redeploy (`DEPLOY.md` §3). Until then the live site still renders
+- **Finish Keystatic on-prod editing:** one-time Keystatic Cloud setup in the
+  dashboard only — confirm the project `website-designers/labgenie-landing` is
+  connected to the repo, add the Vercel domain to its allowed list, invite editors
+  (`DEPLOY.md` §3). No Vercel env var or redeploy step — Cloud auto-enables in the
+  production build. Until the dashboard setup is done the live site still renders
   content fine; only the on-prod editor is unconfigured.
 - **Deploying:** full walkthrough in `DEPLOY.md`; one-shot env push via
   `scripts/push-vercel-env.sh`.

@@ -10,8 +10,8 @@ finalized copy into another repo, it travels with it — nothing is re-entered.
 
 > **Secrets note:** the values below are set as **environment variables** on the
 > host (Vercel/Render). Never commit them to the repo. `.env.local` is gitignored.
-> The one Keystatic var (`NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT`) is **public and
-> non-secret** — there are no Keystatic secret keys.
+> **Keystatic needs no env var** — Cloud turns on automatically in production and the
+> project slug is hardcoded in `keystatic.config.tsx`; there are no Keystatic keys.
 
 ---
 
@@ -21,12 +21,12 @@ finalized copy into another repo, it travels with it — nothing is re-entered.
 |---|---|
 | `SLACK_WEBHOOK_URL` | Your Slack incoming webhook (contact form → Slack lead) |
 | `GEMINI_API_KEY` | Create at https://aistudio.google.com/apikey (starts `AIzaSy…`). A dev `AQ.…` token will NOT authenticate in prod |
-| `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` | Your Keystatic Cloud project slug, shown as `team/project` (e.g. `labgenie/landing-page`) at https://keystatic.cloud. Public, non-secret |
 
-Keystatic storage **auto-switches**: with `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT`
-unset it writes JSON straight to local files (zero-setup dev); when it's set it
-uses Keystatic Cloud. Keystatic Cloud installs its own GitHub App on the repo for
-you, so there are no client IDs/secrets/app slugs to manage.
+Keystatic needs **no environment variable**. Storage **auto-switches** in
+`keystatic.config.tsx`: a production build (Vercel) uses Keystatic Cloud (project
+`website-designers/labgenie-landing`, hardcoded), and `npm run dev` writes JSON
+straight to local files (zero-setup dev). Keystatic Cloud installs its own GitHub
+App on the repo for you, so there are no client IDs/secrets/app slugs to manage.
 
 ---
 
@@ -37,15 +37,15 @@ you, so there are no client IDs/secrets/app slugs to manage.
 1. Push the site to the repo; Vercel auto-deploys the sandbox.
 2. Vercel → project → **Settings → Environment Variables** (set for Production +
    Preview): `SLACK_WEBHOOK_URL`, `GEMINI_API_KEY`.
-3. **One-time Keystatic Cloud setup** (see `DEPLOY.md` §3 / `KEYSTATIC.md`):
-   - At https://keystatic.cloud, create a **team** (free, up to 3 users) and a
-     **project** inside it.
-   - **Connect the project** to the GitHub repo `Ani-datadivr/labgenie-landing_page`
-     (Keystatic installs its own GitHub App — you manage no keys).
+3. **One-time Keystatic Cloud setup** (dashboard only — see `DEPLOY.md` §3 /
+   `KEYSTATIC.md`):
+   - At https://keystatic.cloud, the **team + project
+     `website-designers/labgenie-landing`** exist and the project is **connected** to
+     the GitHub repo `Ani-datadivr/labgenie-landing_page` (Keystatic installs its own
+     GitHub App — you manage no keys).
    - **Add your Vercel domain(s)** to the project's allowed-domains list
      (the `*.vercel.app` URL plus any custom domain).
-   - Add `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT=team/project` to Vercel env vars
-     (Production + Preview) → **Redeploy.**
+   - No Vercel env var to add — Cloud turns on automatically in the production build.
 4. **Invite the editor by email** from the Keystatic Cloud dashboard — no GitHub
    account needed.
 5. Send them the `/keystatic` link + `EDITOR_GUIDE.md`. Review on the sandbox until

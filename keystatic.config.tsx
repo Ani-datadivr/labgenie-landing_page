@@ -12,23 +12,29 @@ import { config, fields, singleton } from "@keystatic/core";
 // Google snippet).
 //
 // Storage:
-//   • Keystatic Cloud on Vercel — the editing path for non-technical editors.
-//     They're invited by email at keystatic.cloud (no GitHub account needed) and
-//     Save commits straight to this repo, which redeploys the Vercel sandbox.
-//     Turned on by setting NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT to your
-//     "team/project" slug from keystatic.cloud. See DEPLOY.md.
-//   • Local files in dev — zero-setup editing; the running localhost site is the
-//     live preview. Keeps `next build` green with no env vars set.
-// The reader (src/lib/cms.js) reads committed files either way, so the rendered
-// site is unaffected by the storage kind.
+//   • Keystatic Cloud on the deployed site (production build) — the editing path
+//     for non-technical editors. They're invited by email at keystatic.cloud (no
+//     GitHub account needed) and Save commits straight to this repo, which
+//     redeploys the Vercel sandbox. No host env vars or secret keys required.
+//   • Local files in `npm run dev` — zero-setup editing; the running localhost
+//     site is the live preview, and a developer never has to log in to edit.
+// The reader (src/lib/cms.js) reads the committed JSON in `src/content/` either
+// way, so the rendered site is unaffected by the storage kind.
 // =============================================================================
 
-// Your Keystatic Cloud project slug, e.g. "labgenie/landing-page". Set this in
-// Vercel (Production + Preview) to put the deployed /keystatic into Cloud mode.
-// Unset locally → local-file mode, so dev needs no accounts or env vars.
-const cloudProject = process.env.NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT;
+// Keystatic Cloud project slug (keystatic.cloud → your project). Hardcoded so the
+// deployed editor "just works" with no Vercel env var; override with
+// NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT if the project is ever renamed.
+const CLOUD_PROJECT =
+  process.env.NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT ||
+  "website-designers/labgenie-landing";
 
-const storage = cloudProject
+// Cloud on a production build (Vercel, or `npm run build && npm start`); local
+// files in `npm run dev`. NODE_ENV is inlined by Next on both client and server,
+// so the admin UI and the reader agree on the storage kind.
+const useCloud = process.env.NODE_ENV === "production";
+
+const storage = useCloud
   ? ({ kind: "cloud" } as const)
   : ({ kind: "local" } as const);
 
@@ -109,7 +115,7 @@ const finalCtaFields = () => ({
 
 export default config({
   storage,
-  ...(cloudProject ? { cloud: { project: cloudProject } } : {}),
+  ...(useCloud ? { cloud: { project: CLOUD_PROJECT } } : {}),
   ui: {
     brand: { name: "LabGenie CMS" },
     // The sidebar is grouped by page, top-to-bottom, so a first-time editor

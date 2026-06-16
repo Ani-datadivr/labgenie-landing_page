@@ -48,27 +48,27 @@ Commit those files like any other change.
 
 ## Switching to Cloud mode (editors invited by email)
 
-Storage auto-switches: it uses **local** files until `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT`
-is set, then uses **Keystatic Cloud** (edits commit to `Ani-datadivr/labgenie-landing_page`
-via Keystatic Cloud's own GitHub App — you don't manage any OAuth keys). See the
-`storage` block in `keystatic.config.tsx`.
+Storage auto-switches in `keystatic.config.tsx`: a **production build** (Vercel, or
+`npm run build && npm start`) uses **Keystatic Cloud**; `npm run dev` uses **local**
+files. The gate is `NODE_ENV === "production"`, and the Cloud project slug
+`website-designers/labgenie-landing` is **hardcoded** — so there's **no env var to
+set**. Cloud edits commit to `Ani-datadivr/labgenie-landing_page` via Keystatic
+Cloud's own GitHub App; you don't manage any OAuth keys.
 
-One-time Keystatic Cloud setup:
+> Optional: `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` overrides the hardcoded slug if the
+> Cloud project is ever renamed. Not needed for normal operation.
 
-1. At https://keystatic.cloud, create a **team** (free, ≤3 users) and a **project**
-   inside it, then **connect the project to this GitHub repo**. Keystatic installs its
-   GitHub App on the repo for you.
-2. Copy the project slug, shown as **`team/project`** (e.g. `labgenie/landing-page`).
-3. In the Cloud project settings, **add your deployed domain(s)** to the allowed list
+One-time Keystatic Cloud setup (dashboard only):
+
+1. At https://keystatic.cloud, the **team + project `website-designers/labgenie-landing`**
+   exist and the project is **connected to this GitHub repo** (Keystatic installs its
+   GitHub App on the repo for you).
+2. In the Cloud project settings, **add your deployed domain(s)** to the allowed list
    (`*.vercel.app` + any custom domain). `localhost:3000` is allowed for local testing.
-4. Set one public env var on your host (Vercel → Prod + Preview), then redeploy:
-   ```
-   NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT=team/project
-   ```
-5. **Invite editors by email** from the Cloud dashboard — no GitHub account needed.
+3. **Invite editors by email** from the Cloud dashboard — no GitHub account needed.
 
-Once that env var exists, `/keystatic` requires a Keystatic Cloud sign-in. Leaving it
-unset (e.g. on a dev laptop) keeps `/keystatic` in zero-setup local-file mode.
+On the deployed site `/keystatic` then requires a Keystatic Cloud sign-in; on a dev
+laptop (`npm run dev`) it stays in zero-setup local-file mode.
 
 ## How saving works (direct, no draft branch)
 
