@@ -11,8 +11,8 @@ smooth scroll.
 > motion system, tokens, OperationsCanvas internals).
 >
 > **Deploying?** [`DEPLOY.md`](./DEPLOY.md) is the Vercel walkthrough (env vars,
-> the one-command `scripts/push-vercel-env.sh`, and the Keystatic GitHub-App
-> setup so on-prod editing works).
+> the one-command `scripts/push-vercel-env.sh`, and the Keystatic Cloud setup so
+> on-prod editing works).
 
 ---
 
@@ -117,8 +117,10 @@ words. Station/module labels live in **`src/lib/operations.js`** (keep them in
 sync with the chat router).
 
 Some content (the hero headline/CTAs and the FAQ) is also editable through a UI:
-**Keystatic CMS at `/keystatic`**. Locally it writes the JSON in `src/content/`;
-on Vercel it commits via a GitHub App. See [`KEYSTATIC.md`](./KEYSTATIC.md) and
+**Keystatic CMS at `/keystatic`**. Storage auto-switches: locally it writes the
+JSON in `src/content/` (zero setup); on Vercel it uses **Keystatic Cloud** once
+`NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` is set, where editors are invited by email
+(no GitHub account needed). See [`KEYSTATIC.md`](./KEYSTATIC.md) and
 [`DEPLOY.md`](./DEPLOY.md) §3.
 
 ---
@@ -139,9 +141,10 @@ on Vercel it commits via a GitHub App. See [`KEYSTATIC.md`](./KEYSTATIC.md) and
 ## TODO before launch
 - [ ] Add real `GEMINI_API_KEY` and `SLACK_WEBHOOK_URL` (in `.env.local` locally,
       and in Vercel env for prod — `DEPLOY.md`).
-- [ ] Run the Keystatic "Create GitHub App" wizard once on the deployed
-      `/keystatic`, then add the `KEYSTATIC_GITHUB_*` vars to Vercel so on-prod
-      content editing works (`DEPLOY.md` §3).
+- [ ] Do the one-time Keystatic Cloud setup (create team + project at
+      keystatic.cloud, connect the repo, allow the Vercel domain), then add
+      `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` to Vercel so on-prod content editing
+      works (`DEPLOY.md` §3).
 - [ ] Verify the partner ticker links and swap placeholder ERP wordmarks (Infor,
       Ramco) for official logos.
 - [ ] Replace the original compliance medallions with real seals as audits

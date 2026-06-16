@@ -12,33 +12,24 @@ import { config, fields, singleton } from "@keystatic/core";
 // Google snippet).
 //
 // Storage:
-//   • GitHub mode on Vercel (KEYSTATIC_GITHUB_CLIENT_ID present) — the prod
-//     editing path. Editors work on the `staging` branch (draft), Preview the
-//     staging deploy, then publish by merging staging → main. See DEPLOY.md §3.
+//   • Keystatic Cloud on Vercel — the editing path for non-technical editors.
+//     They're invited by email at keystatic.cloud (no GitHub account needed) and
+//     Save commits straight to this repo, which redeploys the Vercel sandbox.
+//     Turned on by setting NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT to your
+//     "team/project" slug from keystatic.cloud. See DEPLOY.md.
 //   • Local files in dev — zero-setup editing; the running localhost site is the
-//     live preview. Also keeps `next build` green before the GitHub App exists.
+//     live preview. Keeps `next build` green with no env vars set.
 // The reader (src/lib/cms.js) reads committed files either way, so the rendered
 // site is unaffected by the storage kind.
 // =============================================================================
 
-const useGitHub =
-  Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID) ||
-  process.env.KEYSTATIC_STORAGE === "github";
+// Your Keystatic Cloud project slug, e.g. "labgenie/landing-page". Set this in
+// Vercel (Production + Preview) to put the deployed /keystatic into Cloud mode.
+// Unset locally → local-file mode, so dev needs no accounts or env vars.
+const cloudProject = process.env.NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT;
 
-// Preview link shown on every editing screen in GitHub mode. Points at the
-// staging-branch Vercel deploy so an editor sees the full site with their
-// pending changes before publishing. Override the host with
-// NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL once the real Vercel URL is known.
-const previewUrl =
-  process.env.NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL ||
-  "https://labgenie-landing-page-git-{branch}-ani-datadivr.vercel.app/{slug}";
-
-const storage = useGitHub
-  ? ({
-      kind: "github",
-      repo: { owner: "Ani-datadivr", name: "labgenie-landing_page" },
-      previewUrl,
-    } as const)
+const storage = cloudProject
+  ? ({ kind: "cloud" } as const)
   : ({ kind: "local" } as const);
 
 // ---- Reusable field helpers (factories → fresh descriptor each call) --------
@@ -118,6 +109,7 @@ const finalCtaFields = () => ({
 
 export default config({
   storage,
+  ...(cloudProject ? { cloud: { project: cloudProject } } : {}),
   ui: {
     brand: { name: "LabGenie CMS" },
     // The sidebar is grouped by page, top-to-bottom, so a first-time editor

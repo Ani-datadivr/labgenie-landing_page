@@ -32,10 +32,7 @@ explicitly. If you add them after the first deploy, **redeploy** to apply.
 | `GEMINI_API_KEY` | A real Google AI Studio key (starts with `AIzaSy…`) | The "Ask LabGenie" chat in the Operations Dashboard |
 | `GEMINI_MODEL` | `gemini-2.5-flash` (optional) | Chat model override |
 | `SLACK_WEBHOOK_URL` | Your Slack incoming webhook URL | Contact form → Slack lead |
-| `KEYSTATIC_SECRET` | a random 32-byte hex (`openssl rand -hex 32`) | `/keystatic` editor session signing |
-| `KEYSTATIC_GITHUB_CLIENT_ID` | from the GitHub App wizard (§3) | `/keystatic` editing on the live site |
-| `KEYSTATIC_GITHUB_CLIENT_SECRET` | from the GitHub App wizard (§3) | same |
-| `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` | from the GitHub App wizard (§3) | same |
+| `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` | your `team/project` slug from keystatic.cloud (§3) | `/keystatic` editing on the live site |
 
 ### One-command env push (CLI)
 Instead of pasting each value in the dashboard, you can push everything from your
@@ -45,7 +42,8 @@ npm i -g vercel && vercel login && vercel link   # one time, pick the project
 bash scripts/push-vercel-env.sh                  # pushes every var to Prod + Preview
 vercel --prod                                     # deploy
 ```
-Re-run `push-vercel-env.sh` after the §3 wizard adds the GitHub App values to `.env.local`.
+Keystatic Cloud (§3) needs no secret keys here — just the one public
+`NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` slug, which you can add in the dashboard.
 
 > **Gemini:** the token used in local dev (`AQ.Ab8…`) is **not** a standard API
 > key and will not authenticate. Generate one at
@@ -58,40 +56,35 @@ Re-run `push-vercel-env.sh` after the §3 wizard adds the GitHub App values to `
 
 ---
 
-## 3. Keystatic on Vercel (content editing)
+## 3. Keystatic on Vercel (content editing) — Cloud mode
+
+This is a **review sandbox**: editors edit here on Vercel, you review on the Vercel
+URL, then you copy the approved `src/content/*.json` into the real (Render) repo.
+Editors log in by **email invite — no GitHub account needed.**
 
 - **The live site always renders correctly** — content lives in `src/content/`
   (committed to git) and is read at build time, independent of storage mode.
-- Storage is now **GitHub mode automatically on Vercel** (and local files in dev),
-  so on-prod editing is wired. To finish it, mint the GitHub App once:
+- **One-time Keystatic Cloud setup:**
 
-  1. Deploy first (with at least `KEYSTATIC_SECRET` set).
-  2. Open `https://<your-app>.vercel.app/keystatic`. Keystatic shows a
-     **"Create GitHub App"** button (because the app isn't registered yet).
-  3. Click it and approve on GitHub. GitHub creates the App on
-     `Ani-datadivr/labgenie-landing_page` and redirects back; Keystatic then
-     **shows you** `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`,
-     and the app slug.
-  4. Add those three to Vercel as `KEYSTATIC_GITHUB_CLIENT_ID`,
-     `KEYSTATIC_GITHUB_CLIENT_SECRET`, and `NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
-     (paste them into `.env.local` and re-run `scripts/push-vercel-env.sh`, or add
-     in the dashboard), then **redeploy**.
-  5. Now `/keystatic` on the live site lets approved GitHub users edit content.
+  1. Go to https://keystatic.cloud → sign in → **create a team** (free, up to 3 users).
+  2. **Create a project** inside the team and **connect it to the GitHub repo**
+     `Ani-datadivr/labgenie-landing_page` (Keystatic installs its own GitHub App on
+     the repo for you — you don't manage any OAuth keys).
+  3. Note the project slug shown as **`team/project`** (e.g. `labgenie/landing-page`).
+  4. In the project's settings, **add your Vercel domain(s)** to the allowed list
+     (the `*.vercel.app` production URL, plus any custom domain). `localhost:3000`
+     is allowed for local testing.
+  5. In **Vercel → Settings → Environment Variables**, add
+     `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT = team/project` for **Production + Preview**,
+     then **redeploy**.
+  6. **Invite your 1–2 editors by email** from the Keystatic Cloud dashboard.
 
-- **Draft → Preview → Publish (recommended).** So editors never change the live
-  site by accident, set up a `staging` draft branch and a Preview button:
-  1. Create it once: `git branch staging main && git push -u origin staging`.
-     Vercel auto-builds it to a `*-git-staging-*.vercel.app` URL.
-  2. Add `NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL` to Vercel (Prod **and** Preview) —
-     copy the real `*-git-staging-*` host from **Vercel → Deployments**. The config
-     wires it into `storage.previewUrl`, so Keystatic shows a **Preview** link.
-  3. Editors switch the Keystatic branch to **`staging`**, Save (commits to the
-     draft — live site untouched), click **Preview** to see the staging deploy with
-     their changes, then **Create pull request** and merge `staging → main` to
-     publish. See `KEYSTATIC.md` and `EDITOR_GUIDE.md`.
-
-- Editing locally still works with zero setup at `localhost:3000/keystatic`
-  (writes the JSON files directly; the running page is the live preview). See `KEYSTATIC.md`.
+- After the redeploy, `/keystatic` on the live site asks editors to sign in to
+  Keystatic Cloud (email), and **Save commits straight to `main`** → Vercel rebuilds
+  in ~1 min → the change shows on the Vercel URL for you to review. No branches, no PRs.
+- Editing locally still works with **zero setup** at `localhost:3000/keystatic` when
+  `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` is unset (writes the JSON files directly; the
+  running page is the live preview). See `KEYSTATIC.md`.
 
 ---
 
