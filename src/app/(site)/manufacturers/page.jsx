@@ -11,7 +11,7 @@ import { readSections, isVisible, buildMetadata } from "@/lib/cms";
 const TRAIT_ICONS = [Clock, HeartHandshake, Languages, Rocket, GraduationCap];
 
 const SEO_FALLBACK = {
-  title: "For F&B Manufacturers",
+  title: "Customers",
   description:
     "Built for mid-to-large B2B ingredient manufacturers — flavors, spices, oleoresins, and specialty ingredients. For the people who supply the world's brands.",
 };
@@ -40,7 +40,7 @@ export default async function ManufacturersPage() {
     <>
       {isVisible(mfHeader) && (
         <PageHeader
-          eyebrow={mfHeader?.eyebrow || "For F&B manufacturers"}
+          eyebrow={mfHeader?.eyebrow || "Our customers"}
           title={mfHeader?.title || "Built for the suppliers of the world's biggest brands."}
           sub={mfHeader?.sub}
         />
@@ -58,56 +58,61 @@ export default async function ManufacturersPage() {
         </section>
       )}
 
-      {/* Economic buyers */}
-      {isVisible(mfBuyers) && (
+      {/* Who benefits — the economic buyers (the pain) and the daily users (the
+          win), merged into one section */}
+      {(isVisible(mfBuyers) || isVisible(mfDaily)) && (
         <section className="container-x py-12">
           <Reveal>
-            <p className="eyebrow">{mfBuyers?.eyebrow || "Who buys LabGenie"}</p>
+            <p className="eyebrow">{mfBuyers?.eyebrow || "Who benefits from LabGenie"}</p>
             <h2 className="mt-3 max-w-2xl text-3xl sm:text-4xl">
-              {mfBuyers?.title || "The pain shows up in the corner office."}
+              {mfBuyers?.title || "The pain shows up in the corner office. The win shows up on the floor."}
             </h2>
           </Reveal>
-          <Stagger className="mt-8 divide-y divide-border border-t border-border">
-            {(mfBuyers?.items || []).map((b) => (
-              <StaggerItem
-                key={b.role}
-                variant="left"
-                as="div"
-                className="grid gap-1.5 py-6 sm:grid-cols-[220px_1fr] sm:gap-10"
-              >
-                <span className="font-mono text-[12px] uppercase tracking-[0.16em] text-accent-text">{b.role}</span>
-                <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{b.pain}</p>
-              </StaggerItem>
-            ))}
-          </Stagger>
-        </section>
-      )}
 
-      {/* Daily users */}
-      {isVisible(mfDaily) && (
-        <section className="container-x py-12">
-          <Reveal>
-            <p className="eyebrow">{mfDaily?.eyebrow || "Who uses it daily"}</p>
-            <h2 className="mt-3 max-w-2xl text-3xl sm:text-4xl">
-              {mfDaily?.title || "The win shows up on the floor."}
-            </h2>
-          </Reveal>
-          <Stagger className="mt-8 divide-y divide-border border-t border-border">
-            {(mfDaily?.items || []).map((d) => (
-              <StaggerItem
-                key={d.role}
-                variant="left"
-                as="div"
-                className="grid gap-1.5 py-6 sm:grid-cols-[220px_1fr] sm:gap-10"
-              >
-                <span className="flex items-center gap-2.5 font-medium text-text">
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                  {d.role}
-                </span>
-                <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{d.win}</p>
-              </StaggerItem>
-            ))}
-          </Stagger>
+          {isVisible(mfBuyers) && (
+            <>
+              <Reveal>
+                <p className="mono-label mt-10">In the corner office</p>
+              </Reveal>
+              <Stagger className="mt-3 divide-y divide-border border-t border-border">
+                {(mfBuyers?.items || []).map((b) => (
+                  <StaggerItem
+                    key={b.role}
+                    variant="left"
+                    as="div"
+                    className="grid gap-1.5 py-6 sm:grid-cols-[220px_1fr] sm:gap-10"
+                  >
+                    <span className="font-mono text-[12px] uppercase tracking-[0.16em] text-accent-text">{b.role}</span>
+                    <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{b.pain}</p>
+                  </StaggerItem>
+                ))}
+              </Stagger>
+            </>
+          )}
+
+          {isVisible(mfDaily) && (
+            <>
+              <Reveal>
+                <p className="mono-label mt-12">On the floor</p>
+              </Reveal>
+              <Stagger className="mt-3 divide-y divide-border border-t border-border">
+                {(mfDaily?.items || []).map((d) => (
+                  <StaggerItem
+                    key={d.role}
+                    variant="left"
+                    as="div"
+                    className="grid gap-1.5 py-6 sm:grid-cols-[220px_1fr] sm:gap-10"
+                  >
+                    <span className="flex items-center gap-2.5 font-medium text-text">
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      {d.role}
+                    </span>
+                    <p className="max-w-2xl text-[15px] leading-relaxed text-muted sm:text-base">{d.win}</p>
+                  </StaggerItem>
+                ))}
+              </Stagger>
+            </>
+          )}
         </section>
       )}
 
@@ -152,10 +157,7 @@ export default async function ManufacturersPage() {
         <FinalCTA
           eyebrow={mfCta?.eyebrow || "Get started"}
           title={mfCta?.title || "Built for your plant, not a generic demo."}
-          sub={
-            mfCta?.sub ||
-            "Show us the workflow that eats your team's week. We'll show you what it looks like solved on your own data."
-          }
+          sub={mfCta?.sub ?? ""}
         />
       )}
     </>

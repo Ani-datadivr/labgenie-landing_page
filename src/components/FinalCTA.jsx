@@ -27,8 +27,8 @@ export default function FinalCTA({
         <div className="relative mx-auto max-w-3xl">
           <span className="kicker kicker-accent">{eyebrow}</span>
           <h2 className="display mt-6 text-balance text-[clamp(2.2rem,5vw,3.75rem)]">{title}</h2>
-          <p className="lead mx-auto mt-6">{sub}</p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          {sub ? <p className="lead mx-auto mt-6">{sub}</p> : null}
+          <div className={`flex flex-wrap items-center justify-center gap-3 ${sub ? "mt-10" : "mt-8"}`}>
             <Link href={finalCta.primary.href} className="btn btn-primary">
               {finalCta.primary.label}
               <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden="true">

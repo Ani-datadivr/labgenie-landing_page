@@ -29,6 +29,7 @@ import {
 import { STATIONS as STATION_DATA } from "@/lib/operations";
 import styles from "./OperationsCanvas.module.css";
 import MobileDemo from "./MobileDemo";
+import Logo from "../Logo";
 
 /* ============================================================================
    DATA MODEL — catalogue lives in @/lib/operations (shared with the Gemini
@@ -944,28 +945,12 @@ export default function OperationsCanvas({ title, sub } = {}) {
     <section id="operations" className={styles.section}>
       <div className="container-x">
         <header className={styles.header}>
-          <span className="inline-flex items-center gap-2">
-            <span className={styles.eyebrow}>The platform</span>
-            <span className="inline-flex animate-pulse-glow items-center gap-1.5 rounded-full border border-[#4ade80]/45 bg-[#4ade80]/[0.12] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-[#4ade80]">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" aria-hidden="true" />
-              Live, try it
-            </span>
-          </span>
+          <span className={styles.eyebrow}>The platform</span>
           <h1 className={styles.title}>{title?.trim() || "One agent. Every station."}</h1>
-          {sub?.trim() ? (
-            <p className={styles.sub}>{sub}</p>
-          ) : (
-            <>
-              <p className={`${styles.sub} max-[899px]:hidden`}>
-                This is the real product, running live. Ask LabGenie a question or open any station to watch it
-                work, a quick glimpse of how it reads your operation on top of the ERP you already have.
-              </p>
-              <p className={`${styles.sub} min-[900px]:hidden`}>
-                The real product, running live. Tap a prompt to ask LabGenie and watch it answer, a glimpse of
-                how it runs your operation.
-              </p>
-            </>
-          )}
+          <p className={styles.sub}>
+            {sub?.trim() ||
+              "The AI layer that sits on top of your existing ERP and connects every station. Click around to see how information flows — from quality to sales to the factory floor."}
+          </p>
         </header>
       </div>
 
@@ -976,12 +961,8 @@ export default function OperationsCanvas({ title, sub } = {}) {
             <span /><span /><span />
           </span>
           <span className={styles.winTitle}>
-            <span className={styles.winMark} aria-hidden="true" />
+            <Logo showWordmark={false} className="text-text [&>svg]:!h-[18px] [&>svg]:!w-[18px]" />
             LabGenie · Operations
-          </span>
-          <span className={styles.winStatus}>
-            <span className={styles.winPulse} aria-hidden="true" />
-            Live
           </span>
         </div>
         <div ref={canvasRef} className={styles.canvas}>

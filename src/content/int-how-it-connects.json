@@ -1,8 +1,8 @@
 {
   "visible": true,
-  "logosNote": "Works with the systems you already run",
+  "logosNote": "",
   "eyebrow": "How it connects",
-  "title": "Read where your data lives. Write back what you can trust.",
+  "title": "Read where your data lives. Turn it into answers you can trust.",
   "steps": [
     {
       "step": "01",
@@ -16,8 +16,8 @@
     },
     {
       "step": "03",
-      "title": "Write back",
-      "body": "Populate compliance documentation and route work back into your systems."
+      "title": "Surface",
+      "body": "Surface the matches, gaps, and recommendations to your team — read-only insight, never written back to your ERP."
     }
   ]
 }

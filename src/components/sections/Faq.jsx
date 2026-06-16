@@ -27,16 +27,12 @@ const FAQS = [
     q: "What if we only need one station, not the whole platform?",
     a: "Each agent works independently. Most customers start with one, usually the one solving their loudest pain, whether that's RFP matching, sales query routing, or compliance reporting. You expand when you see results. There's no requirement to deploy the full platform on day one.",
   },
-  {
-    q: "How is LabGenie priced?",
-    a: "We price on value created, not seats or usage. The starting point is a small percentage of the measurable value LabGenie generates, whether that's hours saved, RFPs won, reduced waste, or faster turnarounds. For new customers we run a three-month proof of concept at a fixed fee so we can measure the actual impact together, then move to value-based pricing once the numbers are real. No long lock-ins, no per-user surprises.",
-  },
 ];
 
 const DEFAULTS = {
   kicker: "Questions",
   heading: "The things buyers ask before a demo.",
-  intro: "Straight answers on timelines, security, pricing, and fit. Anything else, ask us directly.",
+  intro: "Straight answers on timelines, security, and fit. Anything else, ask us directly.",
 };
 
 export default function Faq({ copy }) {

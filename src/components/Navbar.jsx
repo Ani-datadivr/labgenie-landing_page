@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { LayoutGrid, Factory, Workflow, ShieldCheck, Building2, Briefcase } from "lucide-react";
+import { Home, LayoutGrid, Factory, Workflow, ShieldCheck, Building2, Briefcase } from "lucide-react";
 import Logo from "./Logo";
+
+const MotionLink = motion(Link);
 
 // Tubelight pill navigation: a centered glass pill with an animated "lamp"
 // indicator under the active item. Labels on desktop, icons on mobile. Logo and
@@ -17,7 +19,7 @@ const ICONS = [LayoutGrid, Factory, Workflow, ShieldCheck, Building2, Briefcase]
 
 const DEFAULT_LINKS = [
   { name: "Platform", url: "/platform" },
-  { name: "Manufacturers", url: "/manufacturers" },
+  { name: "Customers", url: "/manufacturers" },
   { name: "Integrations", url: "/integrations" },
   { name: "Security", url: "/security" },
   { name: "About", url: "/about" },
@@ -61,6 +63,22 @@ export default function Navbar({ links, ctaLabel, ctaHref }) {
           throttled, then takes the full glass treatment from sm: up. */}
       <nav className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transform-gpu sm:bottom-auto sm:top-4">
         <div className="flex items-center gap-1 rounded-full border border-border bg-bg/90 px-1 py-1 shadow-panel backdrop-blur-md sm:bg-bg/60 sm:backdrop-blur-xl">
+          {/* Home button — routes to the homepage with a springy press animation. */}
+          <MotionLink
+            href="/"
+            aria-label="Home"
+            aria-current={pathname === "/" ? "page" : undefined}
+            whileTap={{ scale: 0.8, rotate: -10 }}
+            whileHover={{ scale: 1.08 }}
+            transition={{ type: "spring", stiffness: 500, damping: 17 }}
+            className={`relative flex min-h-[44px] min-w-[44px] cursor-pointer items-center justify-center rounded-full px-3 py-2 transition-colors sm:px-4 ${
+              pathname === "/" ? "text-accent-text" : "text-muted hover:text-text"
+            }`}
+          >
+            <Home size={18} strokeWidth={2.25} aria-hidden="true" />
+          </MotionLink>
+          {/* divider between Home and the section links */}
+          <span aria-hidden="true" className="mx-0.5 h-5 w-px shrink-0 bg-border-strong" />
           {NAV.map((item) => {
             const Icon = item.icon;
             const isActive = active === item.name;

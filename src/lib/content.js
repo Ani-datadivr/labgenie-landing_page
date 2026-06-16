@@ -161,7 +161,7 @@ export const designPartner = {
 export const integrations = {
   eyebrow: "Integrations",
   title: "Sits on top of the systems you already run.",
-  sub: "LabGenie connects to your ERP and document systems. It reads your spec sheets and quality certificates where they already live, and writes back compliance paperwork you can trust.",
+  sub: "LabGenie connects to your ERP and document systems. It reads your spec sheets and quality certificates where they already live, and turns them into answers you can trust.",
   erps: ["SAP", "Oracle NetSuite", "Microsoft Dynamics 365", "Infor", "Sage", "Odoo"],
   categories: [
     { name: "ERP & MRP", note: "SAP, Oracle, Dynamics, Infor, Sage, Odoo." },

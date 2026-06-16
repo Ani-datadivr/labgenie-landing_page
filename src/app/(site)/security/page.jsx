@@ -27,13 +27,14 @@ import { readSections, isVisible, buildMetadata } from "@/lib/cms";
 const SEO_FALLBACK = {
   title: "Security & compliance",
   description:
-    "How LabGenie protects F&B data: tenant-isolated storage, role-based access, and encryption in transit today, with SOC 2, GDPR, DPDPA, and EU AI Act work in progress. Honest status on every framework.",
+    "How LabGenie protects F&B data: tenant-isolated storage, role-based access, and encryption in transit, with SOC 2 and GDPR aligned and compliant and DPDPA, CCPA, and EU AI Act in audit. Honest status on every framework.",
 };
 
 // Status taxonomy stays in code: meaning never rests on colour alone (label + dot).
 const STATUS = {
+  compliant: { label: "Compliant", style: "border-accent/45 bg-accent/10 text-accent-text" },
   live: { label: "Live", style: "border-accent/45 bg-accent/10 text-accent-text" },
-  progress: { label: "In progress", style: "border-[#fb923c]/45 bg-[#fb923c]/12 text-[#fb923c]" },
+  progress: { label: "In audit", style: "border-[#fb923c]/45 bg-[#fb923c]/12 text-[#fb923c]" },
   planned: { label: "Planned", style: "border-border bg-white/[0.04] text-muted" },
 };
 
@@ -139,7 +140,7 @@ export default async function SecurityPage() {
             <span className="h-px w-7 bg-accent/60" />
             <span className="kicker kicker-accent">{secControls?.eyebrow || "Live today"}</span>
           </Reveal>
-          <Stagger className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+          <Stagger className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
             {(secControls?.items || []).map(({ name, note }, i) => {
               const Icon = CONTROL_ICONS[i] || CONTROL_ICONS[CONTROL_ICONS.length - 1];
               return (
@@ -179,27 +180,50 @@ export default async function SecurityPage() {
             </div>
           </div>
 
-          {/* In progress */}
-          <Reveal className="mt-10 flex items-center gap-3">
-            <span className="kicker">Actively pursuing</span>
-            <StatusTag status="progress" />
-          </Reveal>
-          <Stagger className="mt-5 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
-            {(secCompliance?.inProgress || []).map((standard) => (
-              <BadgeCard key={standard} standard={standard} status="progress" />
-            ))}
-          </Stagger>
+          {/* Compliant */}
+          {secCompliance?.compliant?.length > 0 && (
+            <>
+              <Reveal className="mt-10 flex items-center gap-3">
+                <span className="kicker">Aligned &amp; compliant</span>
+                <StatusTag status="compliant" />
+              </Reveal>
+              <Stagger className="mt-5 grid max-w-md grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border">
+                {secCompliance.compliant.map((standard) => (
+                  <BadgeCard key={standard} standard={standard} status="compliant" />
+                ))}
+              </Stagger>
+            </>
+          )}
 
-          {/* Planned */}
-          <Reveal className="mt-10 flex items-center gap-3">
-            <span className="kicker">On our roadmap</span>
-            <StatusTag status="planned" />
-          </Reveal>
-          <Stagger className="mt-5 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-6">
-            {(secCompliance?.planned || []).map((standard) => (
-              <BadgeCard key={standard} standard={standard} status="planned" />
-            ))}
-          </Stagger>
+          {/* In audit */}
+          {secCompliance?.inProgress?.length > 0 && (
+            <>
+              <Reveal className="mt-10 flex items-center gap-3">
+                <span className="kicker">In audit</span>
+                <StatusTag status="progress" />
+              </Reveal>
+              <Stagger className="mt-5 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 md:grid-cols-3">
+                {secCompliance.inProgress.map((standard) => (
+                  <BadgeCard key={standard} standard={standard} status="progress" />
+                ))}
+              </Stagger>
+            </>
+          )}
+
+          {/* Roadmap (optional — hidden when empty) */}
+          {secCompliance?.planned?.length > 0 && (
+            <>
+              <Reveal className="mt-10 flex items-center gap-3">
+                <span className="kicker">On our roadmap</span>
+                <StatusTag status="planned" />
+              </Reveal>
+              <Stagger className="mt-5 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-6">
+                {secCompliance.planned.map((standard) => (
+                  <BadgeCard key={standard} standard={standard} status="planned" />
+                ))}
+              </Stagger>
+            </>
+          )}
 
           <p className="mt-6 text-sm leading-relaxed text-muted">
             {secCompliance?.footnote ||
@@ -311,7 +335,7 @@ export default async function SecurityPage() {
                     <Link href="/contact" className="btn btn-primary">
                       {secContact?.primaryLabel || "Request security documentation"}
                     </Link>
-                    <Link href="/contact" className="btn btn-ghost">
+                    <Link href="/contact" className="btn btn-orange">
                       {secContact?.secondaryLabel || "Talk to our security team"}
                     </Link>
                   </div>

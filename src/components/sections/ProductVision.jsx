@@ -34,10 +34,8 @@ export default function ProductVision({ copy }) {
       </div>
 
       <Reveal className="mt-8 flex flex-wrap items-center gap-3">
-        <Link href="/platform" className="btn btn-ghost font-mono text-[13px]">
-          <span className="text-dim">{"["}</span>
+        <Link href="/platform" className="btn btn-flush-dark">
           {c.ctaLabel}
-          <span className="text-dim">{"]"}</span>
         </Link>
       </Reveal>
     </section>

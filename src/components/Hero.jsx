@@ -31,12 +31,12 @@ function useIsMobile(query = "(max-width: 639px)") {
 // blank). Editable copy is sourced from Keystatic (singleton "home") and passed
 // in as `copy` from the server page.
 const DEFAULTS = {
-  titleLead: "The end-to-end platform for",
-  titleAccent: "F&B manufacturers.",
+  titleLead: "One platform for every team in",
+  titleAccent: "F&B manufacturing",
   sub: "LabGenie connects your quality, sales, procurement, and production workflows through one AI layer, on top of the ERP you already run.",
   primaryLabel: "Get early access",
   primaryHref: "/contact",
-  secondaryLabel: "See it in action",
+  secondaryLabel: "Watch it work",
   secondaryHref: "/platform",
 };
 
@@ -122,10 +122,8 @@ export default function Hero({ copy }) {
             {c.primaryLabel}
             <Arrow />
           </Link>
-          <Link href={c.secondaryHref} className="btn btn-ghost font-mono text-[13px]">
-            <span className="text-dim">{"["}</span>
+          <Link href={c.secondaryHref} className="btn btn-flush-dark">
             {c.secondaryLabel}
-            <span className="text-dim">{"]"}</span>
           </Link>
         </motion.div>
 

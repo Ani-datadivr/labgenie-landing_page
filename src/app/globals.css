@@ -293,6 +293,43 @@ h1, h2, h3, h4 {
     .btn-orange::before { transition: none; }
   }
 
+  /* Ghost button whose fill flushes up in glowing black on hover: ghost at rest,
+     a deep near-black fill rises from the bottom, the label flips to white, and a
+     luminous ring + cool glow lift it off the dark page. Used for the hero
+     "Watch it work" and the "Explore every station" actions. */
+  .btn-flush-dark {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    border: 1px solid var(--border-strong);
+    background: transparent;
+    color: var(--text);
+    transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .btn-flush-dark::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, #1c2230, #05070b);
+    transform: translateY(101%);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-flush-dark:hover,
+  .btn-flush-dark:focus-visible {
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 0 26px -4px rgba(120, 170, 255, 0.42), 0 14px 44px -10px rgba(0, 0, 0, 0.9);
+  }
+  .btn-flush-dark:hover::before,
+  .btn-flush-dark:focus-visible::before {
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-flush-dark::before { transition: none; }
+  }
+
   /* Station status accents: live (green) / building (amber) / roadmap (grey). */
   .status-live { color: #4ade80; }
   .status-build { color: #fb923c; }

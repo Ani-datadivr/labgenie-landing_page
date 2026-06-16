@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import { Sparkles, CheckCircle2 } from "lucide-react";
+import Logo from "../Logo";
 
 const EASE = [0.16, 1, 0.3, 1];
 
@@ -72,12 +73,8 @@ export default function MobileDemo() {
             <span className="h-2.5 w-2.5 rounded-full bg-surface-2" />
           </span>
           <span className="mx-auto flex items-center gap-2 font-mono text-[11px] tracking-wide text-muted">
-            <span className="h-3 w-3 rounded bg-gradient-to-br from-accent to-accent-2" aria-hidden="true" />
+            <Logo showWordmark={false} className="text-text [&>svg]:!h-4 [&>svg]:!w-4" />
             LabGenie · Operations
-          </span>
-          <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-[#4ade80]">
-            <span className="live-dot h-1.5 w-1.5 text-[#4ade80]" aria-hidden="true" />
-            Live
           </span>
         </div>
 

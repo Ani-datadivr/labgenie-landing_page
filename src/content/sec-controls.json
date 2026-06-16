@@ -13,10 +13,6 @@
     {
       "name": "Encrypted in transit",
       "note": "HTTPS enforced, HSTS configured."
-    },
-    {
-      "name": "Compliance-grade AI",
-      "note": "AI vetted to meet regulatory standards."
     }
   ]
 }

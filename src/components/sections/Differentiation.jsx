@@ -8,18 +8,17 @@ const DEFAULTS = {
   kicker: "Why LabGenie",
   title: "Built from the inside, not the outside looking in.",
   intro:
-    "LabGenie is the product Datadivr built after years of F&B consulting, the same team, now shipping software instead of slide decks.",
+    "We've worked closely with some of the largest food, spice, and ingredient companies in the world. The same manual workflows kept holding teams back, no matter the size or scale. LabGenie was born out of that experience.",
   yearsLabel: "Years working inside",
   yearsText: "some of the largest spice, flavor, and oleoresin manufacturers in the world.",
-  leadIn:
-    "LabGenie was built out of Datadivr, a consulting firm that spent years working inside some of the biggest names in spices, flavors, and oleoresins. So it already knows:",
+  leadIn: "So LabGenie isn't starting from scratch. It already knows:",
   knows: [
     "what a real quality spec looks like, in whatever format a customer sends it",
     "how ingredient procurement actually works when input prices move every day",
     "why the same product drifts batch to batch, and why that matters at release",
   ],
   closing:
-    "A generic AI tool has none of this. LabGenie has years of domain knowledge, embedded in every agent.",
+    "Most AI tools don't understand any of this. LabGenie has years of domain knowledge, embedded in every agent.",
 };
 
 export default function Differentiation({ copy }) {

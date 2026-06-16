@@ -948,13 +948,24 @@ export default config({
           multiline: true,
           validation: { length: { max: 260 } },
         }),
+        compliant: fields.array(
+          fields.text({
+            label: "Standard",
+            validation: { isRequired: true, length: { max: 40 } },
+          }),
+          {
+            label: "Aligned & compliant",
+            description: "Badge label only; the medallion art is assigned in code.",
+            itemLabel: (props) => props.value || "Standard",
+          }
+        ),
         inProgress: fields.array(
           fields.text({
             label: "Standard",
             validation: { isRequired: true, length: { max: 40 } },
           }),
           {
-            label: "Actively pursuing",
+            label: "In audit",
             description: "Badge label only; the medallion art is assigned in code.",
             itemLabel: (props) => props.value || "Standard",
           }

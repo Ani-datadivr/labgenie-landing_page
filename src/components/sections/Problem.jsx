@@ -10,7 +10,7 @@ import Reveal, { Stagger, StaggerItem } from "../Reveal";
 const ICONS = [Beaker, Inbox, LineChart];
 
 const DEFAULTS = {
-  title: "Your ERP stores the data. Your team still does the work by hand.",
+  title: "The data exists. The process doesn't.",
   cards: [
     { area: "Quality", stat: "1.5–2 days", body: "Per request. Matching each customer spec against your product information sheets, by hand." },
     { area: "Sales", countTo: 1000, countSuffix: "+ requests", body: "Manually sorted. Slowly routed. Most never reach the lab in time." },

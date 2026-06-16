@@ -8,7 +8,8 @@
       "tab": "Synthite",
       "tabSub": "RFP matching",
       "descriptor": "World's largest spice oleoresin manufacturer · in daily production",
-      "quote": "LabGenie collapses the quality-document checking that defines our quality and sales operations from days into minutes.",
+      "quote": "The Quality Agent turned what used to be a two-day comparison into a five-minute task. My team spends their time on actual quality decisions now, not paperwork.",
+      "attribution": "Asst. General Manager – Quality Assurance, Synthite Industries",
       "points": [
         "Compares every parameter against your product information sheets",
         "Flags exact matches, near-matches, and gaps with reasoning",
@@ -21,12 +22,12 @@
     {
       "tab": "Mane Kancor",
       "tabSub": "Blend optimization",
-      "descriptor": "World's sixth-largest flavor & fragrance company · paying customer",
-      "quote": "Every blend has to land on an exact target. LabGenie learns each blend's history with your own ML models and recommends the raw-material and additive ratios before the batch runs. When a result comes back out of spec, it works out exactly what to add to bring it back to target.",
+      "descriptor": "World's sixth-largest flavor & fragrance company",
+      "quote": "A sales order comes in with a target spec. LabGenie evaluates your available input lots and optimizes the blend to hit that target on the first run — exact lots, exact quantities, no trial and error.",
       "points": [
-        "Learns each blend's history with your ML models",
-        "Recommends the raw-material and additive ratios up front",
-        "When a batch misses spec, says exactly what to add to hit it"
+        "Pulls the target spec from your sales order",
+        "Optimizes the blend across available lots based on their specs and quantities",
+        "When a batch still drifts, tells you exactly what to adjust to bring it back"
       ],
       "statLabel": "",
       "statBefore": "",

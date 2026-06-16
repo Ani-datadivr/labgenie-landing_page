@@ -1,11 +1,11 @@
 {
-  "tagline": "The F&B manufacturing platform that actually speaks your language.",
+  "tagline": "Built inside the industry. Now powering it.",
   "groups": [
     {
       "title": "Product",
       "links": [
         { "label": "Platform", "href": "/platform" },
-        { "label": "For Manufacturers", "href": "/manufacturers" },
+        { "label": "Customers", "href": "/manufacturers" },
         { "label": "Integrations", "href": "/integrations" },
         { "label": "Security", "href": "/security" }
       ]
@@ -15,7 +15,22 @@
       "links": [
         { "label": "About", "href": "/about" },
         { "label": "Careers", "href": "/careers" },
-        { "label": "Request a demo", "href": "/contact" }
+        { "label": "Contact", "href": "/contact" }
+      ]
+    },
+    {
+      "title": "Resources",
+      "links": [
+        { "label": "FAQs", "href": "/#faq" },
+        { "label": "Privacy", "href": "#" },
+        { "label": "Terms", "href": "#" }
+      ]
+    },
+    {
+      "title": "Connect",
+      "links": [
+        { "label": "LinkedIn", "href": "https://www.linkedin.com/company/datadivr/?viewAsMember=true" },
+        { "label": "X", "href": "https://x.com/datadivr_ai" }
       ]
     }
   ],

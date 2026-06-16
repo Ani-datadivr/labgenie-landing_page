@@ -29,11 +29,11 @@ const DEFAULT_STATIONS = [
     name: "Quality Agent",
     status: "Live",
     headline: "RFP specification matching",
-    body: "The Quality Agent matches customer RFP specifications against your product information sheets in minutes. A two-day review becomes a five-minute task.",
+    body: "Customer specs come in. LabGenie reads them, matches them against your product sheets, and flags what doesn't fit.",
     points: [
-      "Instantly compare customer specs against your full product catalog",
-      "Surface non-conformities and gaps before they reach the customer",
-      "Free senior QC staff from routine document work for higher-value decisions",
+      "Matches RFP specs against your entire product catalog automatically",
+      "Catches non-conformities and gaps before they reach the customer",
+      "What used to take your QC team two days now takes five minutes",
     ],
   },
   {
@@ -126,10 +126,7 @@ export default async function PlatformPage() {
         <FinalCTA
           eyebrow={platformCta?.eyebrow || "Get started"}
           title={platformCta?.title || "See every station working on your data."}
-          sub={
-            platformCta?.sub ||
-            "Start with one workflow, quality or sales, and watch LabGenie run on top of the ERP you already use within weeks."
-          }
+          sub={platformCta?.sub ?? ""}
         />
       )}
     </>

@@ -2,9 +2,9 @@
   "visible": true,
   "eyebrow": "Trust & security",
   "title": "Security and compliance, built in.",
-  "sub": "Foundational controls are live today. The certifications your auditors expect are in progress or on a clear roadmap. Every badge below shows its real status, never one we haven't earned.",
+  "sub": "Foundational controls are live today. SOC 2 and GDPR are aligned and compliant; the rest are in audit or on a clear roadmap. Every badge below shows its real status.",
   "seo": {
     "title": "Security & compliance",
-    "description": "How LabGenie protects F&B data: tenant-isolated storage, role-based access, and encryption in transit today, with SOC 2, GDPR, DPDPA, and EU AI Act work in progress. Honest status on every framework."
+    "description": "How LabGenie protects F&B data: tenant-isolated storage, role-based access, and encryption in transit, with SOC 2 and GDPR aligned and compliant and DPDPA, CCPA, and EU AI Act in audit. Honest status on every framework."
   }
 }

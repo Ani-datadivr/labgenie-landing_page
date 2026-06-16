@@ -37,11 +37,6 @@ export default function ClosingCTA({ copy }) {
                 <path d="M3 8h9M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </Link>
-            <Link href="/contact" className="btn btn-ghost font-mono text-[13px]">
-              <span className="text-dim">{"["}</span>
-              {c.secondaryLabel}
-              <span className="text-dim">{"]"}</span>
-            </Link>
           </div>
         </Reveal>
 

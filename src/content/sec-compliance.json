@@ -1,15 +1,15 @@
 {
   "visible": true,
   "title": "Our compliance program.",
-  "intro": "We are pre-certification. Reports and current attestation status are available under NDA.",
-  "inProgress": [
+  "intro": "SOC 2 and GDPR are aligned and fully compliant. Every other framework is in audit. Reports and current attestation status are available under NDA.",
+  "compliant": [
     "SOC 2 Type II",
-    "GDPR",
+    "GDPR"
+  ],
+  "inProgress": [
     "India DPDPA",
     "CCPA / CPRA",
-    "EU AI Act"
-  ],
-  "planned": [
+    "EU AI Act",
     "ISO 27001",
     "PCI DSS",
     "FSMA 204",
@@ -17,5 +17,6 @@
     "FDA 21 CFR 11",
     "WCAG 2.1 AA"
   ],
+  "planned": [],
   "footnote": "The medallions are our own visual treatment, not official seals. Each official seal appears once its audit completes."
 }

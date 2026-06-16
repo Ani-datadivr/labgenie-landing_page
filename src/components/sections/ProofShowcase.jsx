@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Sparkles, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Sparkles, CheckCircle2 } from "lucide-react";
 import Reveal from "../Reveal";
 import SynthiteMark from "../SynthiteMark";
 
@@ -16,7 +16,7 @@ const AUTO_MS = 7000;
 // Header copy AND the per-case text (tab, descriptor, quote, bullet points) are
 // editable via Keystatic (singleton "proofShowcase"). The customer marks/logos
 // and the animated proof visuals below stay in code, matched to each case by
-// order (case 0 → Synthite visual, case 1 → Mane blend-correction animation).
+// order (case 0 → Synthite visual, case 1 → Mane blend-optimization snapshot).
 const DEFAULTS = {
   kicker: "Proof",
   title: "Trusted by the manufacturers who set the standard.",
@@ -27,7 +27,8 @@ const DEFAULTS = {
       tabSub: "RFP matching",
       descriptor: "World's largest spice oleoresin manufacturer · in daily production",
       quote:
-        "LabGenie collapses the quality-document checking that defines our quality and sales operations from days into minutes.",
+        "The Quality Agent turned what used to be a two-day comparison into a five-minute task. My team spends their time on actual quality decisions now, not paperwork.",
+      attribution: "Asst. General Manager – Quality Assurance, Synthite Industries",
       points: [
         "Compares every parameter against your product information sheets",
         "Flags exact matches, near-matches, and gaps with reasoning",
@@ -37,13 +38,13 @@ const DEFAULTS = {
     {
       tab: "Mane Kancor",
       tabSub: "Blend optimization",
-      descriptor: "World's sixth-largest flavor & fragrance company · paying customer",
+      descriptor: "World's sixth-largest flavor & fragrance company",
       quote:
-        "Every blend has to land on an exact target. LabGenie learns each blend's history with your own ML models and recommends the raw-material and additive ratios before the batch runs. When a result comes back out of spec, it works out exactly what to add to bring it back to target.",
+        "A sales order comes in with a target spec. LabGenie evaluates your available input lots and optimizes the blend to hit that target on the first run — exact lots, exact quantities, no trial and error.",
       points: [
-        "Learns each blend's history with your ML models",
-        "Recommends the raw-material and additive ratios up front",
-        "When a batch misses spec, says exactly what to add to hit it",
+        "Pulls the target spec from your sales order",
+        "Optimizes the blend across available lots based on their specs and quantities",
+        "When a batch still drifts, tells you exactly what to adjust to bring it back",
       ],
     },
   ],
@@ -207,6 +208,11 @@ function SynthiteCase({ data }) {
         <blockquote className="mt-6 font-display text-xl font-medium leading-snug tracking-tight text-text sm:text-2xl">
           &ldquo;{data.quote}&rdquo;
         </blockquote>
+        {data.attribution && (
+          <figcaption className="mt-4 text-[13px] leading-snug text-dim">
+            — {data.attribution}
+          </figcaption>
+        )}
       </div>
 
       <div className="flex flex-col justify-center border-border max-lg:border-t max-lg:pt-8 lg:border-l lg:pl-12">
@@ -252,91 +258,127 @@ function ManeCase({ data, reduce }) {
       </div>
 
       <div className="flex flex-col justify-center border-border max-lg:border-t max-lg:pt-8 lg:border-l lg:pl-12">
-        <BlendCorrection reduce={reduce} />
+        <BlendOptimizer reduce={reduce} />
       </div>
     </>
   );
 }
 
-// Animated QC-correction: an out-of-spec parameter (amber) corrected to target
-// (blue) by an AI-recommended addition. Plays once when the case mounts; shows
-// the resolved state immediately under reduced motion. Values are illustrative.
-function BlendCorrection({ reduce }) {
+// Animated blend-optimization snapshot: a sales order's target spec comes in,
+// LabGenie weighs the available input lots, and outputs the exact lots and
+// quantities that hit the target on the first run. Plays once when the case
+// mounts; shows the resolved blend immediately under reduced motion. Values are
+// illustrative — the workflow is sales-order spec → lot selection → blend → hit.
+const INPUT_LOTS = [
+  { id: "Lot A-204", spec: "HI 6.8", qty: "1,200 kg" },
+  { id: "Lot B-118", spec: "HI 5.4", qty: "900 kg" },
+  { id: "Lot C-337", spec: "HI 6.1", qty: "1,500 kg" },
+];
+const BLEND_OUTPUT = [
+  { id: "Lot A-204", qty: "420 kg" },
+  { id: "Lot C-337", qty: "980 kg" },
+];
+
+function BlendOptimizer({ reduce }) {
   const [step, setStep] = useState(reduce ? 2 : 0);
 
   useEffect(() => {
     if (reduce) return;
-    const t1 = setTimeout(() => setStep(1), 800);
-    const t2 = setTimeout(() => setStep(2), 1900);
+    const t1 = setTimeout(() => setStep(1), 900);
+    const t2 = setTimeout(() => setStep(2), 2100);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
     };
   }, [reduce]);
 
-  const resolved = step >= 2;
+  const solved = step >= 2;
 
   return (
     <div className="rounded-xl border border-border bg-bg/50 p-5">
+      {/* 1 · sales order in, with its target spec */}
       <div className="flex items-center justify-between">
-        <span className="mono-label">Batch QC · capsicum–paprika</span>
-        <AnimatePresence mode="wait">
-          {resolved ? (
-            <motion.span
-              key="ok"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-1.5 rounded-full bg-accent/12 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-text"
-            >
-              <CheckCircle2 size={12} strokeWidth={2.25} /> In spec
-            </motion.span>
-          ) : (
-            <motion.span
-              key="flag"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em]"
-              style={{ background: "rgba(255,180,84,0.14)", color: "var(--flag-amber)" }}
-            >
-              <AlertTriangle size={12} strokeWidth={2.25} /> Out of spec
-            </motion.span>
-          )}
-        </AnimatePresence>
+        <span className="mono-label">Sales order · SO-4471</span>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/12 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-text">
+          Target spec
+        </span>
       </div>
-
-      <div className="mt-5 flex items-baseline justify-between">
-        <span className="text-[15px] text-text">Heat index</span>
-        <span className="flex items-baseline gap-2.5 font-display text-2xl font-semibold tracking-tight">
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={resolved ? "after" : "before"}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.3, ease: EASE }}
-              style={resolved ? undefined : { color: "var(--flag-amber)" }}
-              className={resolved ? "text-accent-text" : ""}
-            >
-              {resolved ? "6.2" : "5.9"}
-            </motion.span>
-          </AnimatePresence>
-          <span className="font-mono text-xs text-dim">target 6.2</span>
+      <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-1 font-display text-lg font-semibold tracking-tight text-text">
+        <span>Heat index <span className="text-accent-text">6.2</span></span>
+        <span className="text-dim">·</span>
+        <span>
+          Capsaicin <span className="text-accent-text">3000</span>
+          <span className="ml-1 font-mono text-xs text-dim">ppm</span>
         </span>
       </div>
 
-      <AnimatePresence>
-        {step >= 1 && (
+      {/* 2 · available input lots */}
+      <div className="mt-5">
+        <span className="mono-label">Available input lots</span>
+        <ul className="mt-2 space-y-1.5">
+          {INPUT_LOTS.map((lot) => (
+            <li
+              key={lot.id}
+              className="flex items-center justify-between rounded-lg border border-border bg-surface/40 px-3 py-2 text-[13px]"
+            >
+              <span className="text-text">{lot.id}</span>
+              <span className="flex items-center gap-3 font-mono text-[12px] text-dim">
+                <span>{lot.spec}</span>
+                <span>{lot.qty}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* 3 · optimize → optimized blend out, hitting the target */}
+      <AnimatePresence mode="wait">
+        {!solved ? (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            transition={{ duration: 0.35, ease: EASE }}
-            className="overflow-hidden"
+            key="optimizing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+            className="mt-4 flex items-center gap-2.5 rounded-lg border border-border bg-surface/60 p-3 text-[13px] text-muted"
           >
-            <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-border bg-surface/60 p-3">
+            <Sparkles size={14} strokeWidth={1.9} className="shrink-0 text-accent-text" aria-hidden="true" />
+            Optimizing blend across 3 lots…
+          </motion.div>
+        ) : (
+          <motion.div
+            key="blend"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: EASE }}
+          >
+            <div className="mt-4 rounded-lg border border-accent/30 bg-accent/[0.06] p-3">
+              <div className="flex items-center justify-between">
+                <span className="mono-label">Optimized blend</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/12 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-text">
+                  <CheckCircle2 size={12} strokeWidth={2.25} /> Hits target
+                </span>
+              </div>
+              <ul className="mt-2.5 space-y-1.5">
+                {BLEND_OUTPUT.map((b) => (
+                  <li key={b.id} className="flex items-center justify-between text-[13px]">
+                    <span className="text-text">{b.id}</span>
+                    <span className="font-mono text-[12px] text-accent-text">{b.qty}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-2.5 flex items-center justify-between border-t border-border/60 pt-2 font-mono text-[12px] text-dim">
+                <span>Result</span>
+                <span className="text-text">HI 6.2 · Cap 3000 ✓</span>
+              </div>
+            </div>
+
+            {/* drift correction — the same agent names the exact fix */}
+            <div className="mt-3 flex items-start gap-2.5 rounded-lg border border-border bg-surface/60 p-3">
               <Sparkles size={14} strokeWidth={1.9} className="mt-0.5 shrink-0 text-accent-text" aria-hidden="true" />
               <span className="text-[13px] leading-relaxed text-muted">
-                Add <span className="text-text">1.5% high-heat capsicum oleoresin</span> to reach target.
+                If a batch drifts, it names the exact fix — e.g.{" "}
+                <span className="text-text">add 1.5% high-heat capsicum oleoresin</span>.
               </span>
             </div>
           </motion.div>
@@ -344,7 +386,7 @@ function BlendCorrection({ reduce }) {
       </AnimatePresence>
 
       <p className="mt-4 font-mono text-[10px] leading-relaxed tracking-wide text-dim">
-        Example values. LabGenie computes the exact adjustment from your blend history.
+        Example values. LabGenie computes the exact lots and quantities from your live inventory.
       </p>
     </div>
   );

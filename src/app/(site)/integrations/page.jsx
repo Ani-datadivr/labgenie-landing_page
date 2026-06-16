@@ -7,7 +7,7 @@ import { readSections, isVisible, buildMetadata } from "@/lib/cms";
 const SEO_FALLBACK = {
   title: "Integrations",
   description:
-    "LabGenie connects to the ERP, lab, and quality systems you already run, reading quality certificates and spec sheets where they live and writing back trusted compliance paperwork.",
+    "LabGenie connects to the ERP, lab, and quality systems you already run — reading your quality certificates and spec sheets where they live and turning them into answers your team can trust.",
 };
 
 export async function generateMetadata() {
@@ -37,11 +37,13 @@ export default async function IntegrationsPage() {
 
       {/* ERP / CRM / tool logos */}
       <section className="container-x py-12">
-        <Reveal>
-          <p className="mb-8 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
-            {intHowItConnects?.logosNote || "Works with the systems you already run"}
-          </p>
-        </Reveal>
+        {intHowItConnects?.logosNote ? (
+          <Reveal>
+            <p className="mb-8 font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
+              {intHowItConnects.logosNote}
+            </p>
+          </Reveal>
+        ) : null}
         <IntegrationLogos />
       </section>
 
@@ -52,7 +54,7 @@ export default async function IntegrationsPage() {
             <div className="panel p-8 sm:p-12">
               <p className="eyebrow">{intHowItConnects?.eyebrow || "How it connects"}</p>
               <h2 className="mt-3 max-w-2xl text-2xl sm:text-3xl">
-                {intHowItConnects?.title || "Read where your data lives. Write back what you can trust."}
+                {intHowItConnects?.title || "Read where your data lives. Turn it into answers you can trust."}
               </h2>
               <div className="mt-8 grid gap-6 sm:grid-cols-3">
                 {(intHowItConnects?.steps || []).map((s) => (
