@@ -25,8 +25,9 @@ export async function generateMetadata() {
 }
 
 export default async function ManufacturersPage() {
-  const { mfHeader, mfBuyers, mfDaily, mfHowWeWork, mfCta } = await readSections([
+  const { mfHeader, mfSegments, mfBuyers, mfDaily, mfHowWeWork, mfCta } = await readSections([
     "mfHeader",
+    "mfSegments",
     "mfBuyers",
     "mfDaily",
     "mfHowWeWork",
@@ -45,11 +46,17 @@ export default async function ManufacturersPage() {
         />
       )}
 
-      <section className="container-x py-10">
-        <Reveal>
-          <RotatingSegments />
-        </Reveal>
-      </section>
+      {isVisible(mfSegments) && (
+        <section className="container-x py-10">
+          <Reveal>
+            <RotatingSegments
+              leadIn={mfSegments?.leadIn}
+              umbrella={mfSegments?.umbrella}
+              segments={mfSegments?.segments}
+            />
+          </Reveal>
+        </section>
+      )}
 
       {/* Economic buyers */}
       {isVisible(mfBuyers) && (
@@ -140,7 +147,7 @@ export default async function ManufacturersPage() {
         </section>
       )}
 
-      <ClientTicker />
+      <ClientTicker label={mfSegments?.partnersLabel} />
       {isVisible(mfCta) && (
         <FinalCTA
           eyebrow={mfCta?.eyebrow || "Get started"}

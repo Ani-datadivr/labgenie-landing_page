@@ -33,10 +33,18 @@ const FAQS = [
   },
 ];
 
-export default function Faq({ items }) {
-  // Editable copy comes from Keystatic (singleton "faqs"), which stores
-  // { question, answer }; the built-in fallback uses { q, a }. Normalize both to
-  // { q, a } so either source renders correctly.
+const DEFAULTS = {
+  kicker: "Questions",
+  heading: "The things buyers ask before a demo.",
+  intro: "Straight answers on timelines, security, pricing, and fit. Anything else, ask us directly.",
+};
+
+export default function Faq({ copy }) {
+  // Editable copy comes from Keystatic (singleton "faqs"): the left-column
+  // heading/intro plus the items array of { question, answer }. The built-in
+  // fallback uses { q, a }. Normalize both to { q, a } so either renders.
+  const c = { ...DEFAULTS, ...(copy || {}) };
+  const items = copy?.items;
   const faqs = (items?.length ? items : FAQS).map((it) => ({
     q: it.question ?? it.q,
     a: it.answer ?? it.a,
@@ -50,13 +58,13 @@ export default function Faq({ items }) {
         <div>
           <Reveal className="flex items-center gap-3">
             <span className="h-px w-7 bg-accent/60" />
-            <span className="kicker kicker-accent">Questions</span>
+            <span className="kicker kicker-accent">{c.kicker}</span>
           </Reveal>
           <Reveal as="h2" delay={0.05} variant="blur" className="mt-5 text-3xl sm:text-4xl">
-            The things buyers ask before a demo.
+            {c.heading}
           </Reveal>
           <Reveal as="p" delay={0.1} className="lead mt-4">
-            Straight answers on timelines, security, pricing, and fit. Anything else, ask us directly.
+            {c.intro}
           </Reveal>
         </div>
 

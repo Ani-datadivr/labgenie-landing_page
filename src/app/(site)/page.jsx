@@ -37,7 +37,7 @@ export default async function HomePage() {
       {isVisible(s.productVision) && <ProductVision copy={s.productVision} />}
       {isVisible(s.differentiation) && <Differentiation copy={s.differentiation} />}
       {isVisible(s.proofShowcase) && <ProofShowcase copy={s.proofShowcase} />}
-      {isVisible(s.faqs) && <Faq items={s.faqs?.items} />}
+      {isVisible(s.faqs) && <Faq copy={s.faqs} />}
       {isVisible(s.closingCta) && <ClosingCTA copy={s.closingCta} />}
     </>
   );

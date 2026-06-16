@@ -25,7 +25,7 @@ The left sidebar is organised exactly like the website, top to bottom:
 
 - **Home page** — Hero, Problem, Product Vision, Why LabGenie, Proof, FAQ, Closing CTA
 - **Platform page** — Page intro & SEO, Stations, Final CTA
-- **For Manufacturers page** — Header, Economic buyers, Daily users, How we work, Final CTA
+- **For Manufacturers page** — Header, Industry segments & partners, Economic buyers, Daily users, How we work, Final CTA
 - **About page** — Header, Our story, Team, Principles, By the numbers, Closing CTA
 - **Security page** — Header, Controls, Compliance program, How data is handled, Responsible AI, Security contact, Final CTA
 - **Careers page** — Header, How we work, Open roles, Closing CTA
@@ -33,8 +33,9 @@ The left sidebar is organised exactly like the website, top to bottom:
 - **Contact page** — Header, Design partner panel, Form labels
 - **Site-wide** — Navigation bar, Footer, Site settings
 
-Click a section and you'll get a simple form. Every box has a label and a short note
-telling you what it's for.
+Click a section and you'll get a simple form. The very top of each form has an **ℹ️ info
+note** telling you what that section controls and what stays in code (so you always know
+what you can and can't change here). Every box also has its own short label and hint.
 
 ## 3. Make your edit
 

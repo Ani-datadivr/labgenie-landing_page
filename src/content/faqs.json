@@ -1,5 +1,8 @@
 {
   "visible": true,
+  "kicker": "Questions",
+  "heading": "The things buyers ask before a demo.",
+  "intro": "Straight answers on timelines, security, pricing, and fit. Anything else, ask us directly.",
   "items": [
     {
       "question": "How long does it take to go live?",

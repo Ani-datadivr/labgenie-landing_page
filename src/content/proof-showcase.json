@@ -13,7 +13,10 @@
         "Compares every parameter against your product information sheets",
         "Flags exact matches, near-matches, and gaps with reasoning",
         "1000+ inbound requests handled without a single manual sort"
-      ]
+      ],
+      "statLabel": "To match a customer RFP against your specs",
+      "statBefore": "1.5 days",
+      "statAfter": "5 min"
     },
     {
       "tab": "Mane Kancor",
@@ -24,7 +27,10 @@
         "Learns each blend's history with your ML models",
         "Recommends the raw-material and additive ratios up front",
         "When a batch misses spec, says exactly what to add to hit it"
-      ]
+      ],
+      "statLabel": "",
+      "statBefore": "",
+      "statAfter": ""
     }
   ]
 }

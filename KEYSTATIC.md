@@ -11,7 +11,7 @@ plus the navbar, footer, and site settings. The sidebar is grouped by page
 
 - **Home** — Hero, Problem, Product Vision, Why LabGenie, Proof, FAQ, Closing CTA
 - **Platform** — Page intro & SEO, Stations, Final CTA
-- **For Manufacturers** — Header, Economic buyers, Daily users, How we work, Final CTA
+- **For Manufacturers** — Header, Industry segments & partners, Economic buyers, Daily users, How we work, Final CTA
 - **About** — Header, Our story, Team, Principles, By the numbers, Closing CTA
 - **Security** — Header, Controls, Compliance program, Data handling, Responsible AI, Security contact, Final CTA
 - **Careers** — Header, How we work, Open roles, Closing CTA

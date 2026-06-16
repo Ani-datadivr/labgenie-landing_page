@@ -43,15 +43,24 @@ const storage = useGitHub
 
 // ---- Reusable field helpers (factories → fresh descriptor each call) --------
 
-// "Show this section" toggle. Ticked by default; untick to hide the whole
-// section from the live page without deleting anything.
-const showToggle = () =>
+// "Show this section" toggle — also the section's info box. Ticked by default;
+// untick to hide the whole section from the live page without deleting anything.
+// Pass `note` to describe what this specific section controls / what stays in code.
+const showToggle = (note?: string) =>
   fields.checkbox({
     label: "Show this section on the website",
     description:
-      "Untick to hide this whole section from the live page. Nothing is deleted — tick it again to bring it back.",
+      "ℹ️ " +
+      (note
+        ? note + " "
+        : "Edit the text in the fields below — lengths are capped so nothing can break the layout. Photos, icons, and animations stay in code. ") +
+      "Untick to hide this whole section from the live page (nothing is deleted — tick again to bring it back).",
     defaultValue: true,
   });
+
+// A leading info box for sections that have no Show/Hide toggle. Renders as help
+// text under the first field. Use `info(note)` as a field's description.
+const info = (note: string) => `ℹ️ ${note}`;
 
 // Per-page SEO. Lives on each page's top/lead section.
 const seoField = () =>
@@ -126,6 +135,7 @@ export default config({
       "Platform page": ["platformIntro", "platformStations", "platformCta"],
       "For Manufacturers page": [
         "mfHeader",
+        "mfSegments",
         "mfBuyers",
         "mfDaily",
         "mfHowWeWork",
@@ -168,7 +178,9 @@ export default config({
       path: "src/content/home",
       format: { data: "json" },
       schema: {
-        visible: showToggle(),
+        visible: showToggle(
+          "The top of the homepage — the big headline, sub-line, and two buttons. The animated product console below the buttons is a live demo and stays in code."
+        ),
         titleLead: fields.text({
           label: "Headline — lead",
           description:
@@ -344,7 +356,9 @@ export default config({
       path: "src/content/proof-showcase",
       format: { data: "json" },
       schema: {
-        visible: showToggle(),
+        visible: showToggle(
+          "The proof section: the heading, the two customer tabs, and each case's quote and bullet points. The blend-correction animation on the second tab stays in code."
+        ),
         kicker: fields.text({
           label: "Kicker (small label above heading)",
           validation: { length: { max: 24 } },
@@ -384,11 +398,27 @@ export default config({
               fields.text({ label: "Point", validation: { length: { max: 140 } } }),
               { label: "Bullet points", itemLabel: (props) => props.value || "Point" }
             ),
+            statLabel: fields.text({
+              label: "Stat caption (first tab only)",
+              description:
+                "The small line above the before→after numbers, e.g. “To match a customer RFP against your specs”. Used on the first tab only; leave blank on others.",
+              validation: { length: { max: 80 } },
+            }),
+            statBefore: fields.text({
+              label: "Stat — before (struck through)",
+              description: "e.g. “1.5 days”.",
+              validation: { length: { max: 20 } },
+            }),
+            statAfter: fields.text({
+              label: "Stat — after",
+              description: "e.g. “5 min”.",
+              validation: { length: { max: 20 } },
+            }),
           }),
           {
             label: "Customer cases",
             description:
-              "The two flagship cases. Animated visuals and numbers stay in code; this is the text around them.",
+              "The two flagship cases. The customer logos and the second tab's animation stay in code; this is the text around them.",
             itemLabel: (props) => props.fields.tab.value || "Case",
           }
         ),
@@ -400,7 +430,23 @@ export default config({
       path: "src/content/faqs",
       format: { data: "json" },
       schema: {
-        visible: showToggle(),
+        visible: showToggle(
+          "The FAQ section: the small heading on the left and the list of questions on the right. Edit both below."
+        ),
+        kicker: fields.text({
+          label: "Kicker (small label, left column)",
+          validation: { length: { max: 24 } },
+        }),
+        heading: fields.text({
+          label: "Heading (left column)",
+          multiline: true,
+          validation: { length: { max: 90 } },
+        }),
+        intro: fields.text({
+          label: "Intro line (left column)",
+          multiline: true,
+          validation: { length: { max: 200 } },
+        }),
         items: fields.array(
           fields.object({
             question: fields.text({
@@ -460,8 +506,9 @@ export default config({
       schema: {
         title: fields.text({
           label: "Console heading",
-          description:
-            "Shown on the interactive operations console at the top of the page.",
+          description: info(
+            "The heading + sub above the live operations console at the top of /platform. The console itself (the interactive demo) is built in code. Leave blank to keep the built-in wording."
+          ),
           multiline: true,
           validation: { length: { max: 120 } },
         }),
@@ -479,7 +526,9 @@ export default config({
       path: "src/content/platform-stations",
       format: { data: "json" },
       schema: {
-        visible: showToggle(),
+        visible: showToggle(
+          "The list of station feature rows. Edit each station's name, status, headline, body, and points. Each station's product illustration stays in code and is matched by order — don't reorder unless a developer re-maps the visuals."
+        ),
         items: fields.array(
           fields.object({
             name: fields.text({
@@ -533,6 +582,41 @@ export default config({
       path: "src/content/mf-header",
       format: { data: "json" },
       schema: { visible: showToggle(), ...headerFields(), seo: seoField() },
+    }),
+
+    mfSegments: singleton({
+      label: "Industry segments & partners",
+      path: "src/content/mf-segments",
+      format: { data: "json" },
+      schema: {
+        visible: showToggle(
+          "The animated line under the header (“Years of domain knowledge with manufacturers of …”) that cycles through F&B categories, plus the label above the scrolling partner logos. The partner logos themselves are images managed in code."
+        ),
+        leadIn: fields.text({
+          label: "Lead-in line",
+          description: "The fixed text before the cycling category word.",
+          validation: { length: { max: 80 } },
+        }),
+        umbrella: fields.text({
+          label: "Umbrella word (reduced-motion fallback)",
+          description:
+            "Shown in place of the animation for visitors who turn off motion, e.g. “food & beverage”.",
+          validation: { length: { max: 40 } },
+        }),
+        segments: fields.array(
+          fields.text({ label: "Category", validation: { length: { max: 40 } } }),
+          {
+            label: "F&B categories (cycled)",
+            description: "Add, remove, or reorder the words that cycle at the end of the line.",
+            itemLabel: (props) => props.value || "Category",
+          }
+        ),
+        partnersLabel: fields.text({
+          label: "Partner-logos label",
+          description: "The small caption above the scrolling logos near the bottom of the page.",
+          validation: { length: { max: 60 } },
+        }),
+      },
     }),
 
     mfBuyers: singleton({
@@ -1219,7 +1303,13 @@ export default config({
       path: "src/content/contact-form",
       format: { data: "json" },
       schema: {
-        nameLabel: fields.text({ label: "Name — label", validation: { length: { max: 40 } } }),
+        nameLabel: fields.text({
+          label: "Name — label",
+          description: info(
+            "Every label, placeholder, validation message, and button on the “Request a demo” form. The form fields, country and phone pickers, and where the lead is sent are built in code."
+          ),
+          validation: { length: { max: 40 } },
+        }),
         namePlaceholder: fields.text({ label: "Name — placeholder", validation: { length: { max: 60 } } }),
         emailLabel: fields.text({ label: "Email — label", validation: { length: { max: 40 } } }),
         emailPlaceholder: fields.text({ label: "Email — placeholder", validation: { length: { max: 60 } } }),
@@ -1276,7 +1366,9 @@ export default config({
           }),
           {
             label: "Nav links",
-            description: "Icons (shown on mobile) are assigned in code by order.",
+            description: info(
+              "The links in the top navigation bar (used across every page), plus the button on the top-right below. The icons shown on mobile are assigned in code by order."
+            ),
             itemLabel: (props) => props.fields.name.value || "Link",
           }
         ),
@@ -1298,6 +1390,9 @@ export default config({
       schema: {
         tagline: fields.text({
           label: "Tagline (under the logo)",
+          description: info(
+            "The footer (shown on every page): the tagline, the link columns, and the bottom note. The logo and the © year are handled in code."
+          ),
           multiline: true,
           validation: { length: { max: 160 } },
         }),
@@ -1340,6 +1435,9 @@ export default config({
       schema: {
         siteName: fields.text({
           label: "Site name",
+          description: info(
+            "Site-wide basics used in several places: the name in the footer copyright, the contact email, the domain shown in the footer, and the default browser-tab title / search description for any page without its own."
+          ),
           validation: { length: { max: 40 } },
         }),
         email: fields.text({

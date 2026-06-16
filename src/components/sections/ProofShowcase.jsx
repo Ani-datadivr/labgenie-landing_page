@@ -210,11 +210,11 @@ function SynthiteCase({ data }) {
       </div>
 
       <div className="flex flex-col justify-center border-border max-lg:border-t max-lg:pt-8 lg:border-l lg:pl-12">
-        <div className="mono-label">To match a customer RFP against your specs</div>
+        <div className="mono-label">{data.statLabel || "To match a customer RFP against your specs"}</div>
         <div className="mt-3 flex items-center gap-2.5 font-display text-3xl font-semibold tracking-tight">
-          <span className="text-dim line-through decoration-dim/60">1.5 days</span>
+          <span className="text-dim line-through decoration-dim/60">{data.statBefore || "1.5 days"}</span>
           <Arrow />
-          <span className="text-accent-text">5 min</span>
+          <span className="text-accent-text">{data.statAfter || "5 min"}</span>
         </div>
 
         <ul className="mt-8 space-y-3">
