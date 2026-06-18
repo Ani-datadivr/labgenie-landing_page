@@ -46,50 +46,42 @@ npm run dev
 In local mode, saving in the UI writes directly to the JSON files in `src/content/`.
 Commit those files like any other change.
 
-## Switching to GitHub mode (editors commit via GitHub)
+## Switching to Cloud mode (editors invited by email)
 
-Storage auto-switches: it uses **local** files until `KEYSTATIC_GITHUB_CLIENT_ID` is
-set, then uses **GitHub** (edits become commits/PRs on `Ani-datadivr/labgenie-landing_page`).
-See `keystatic.config.tsx`.
+Storage auto-switches in `keystatic.config.tsx`: a **production build** (Vercel, or
+`npm run build && npm start`) uses **Keystatic Cloud**; `npm run dev` uses **local**
+files. The gate is `NODE_ENV === "production"`, and the Cloud project slug
+`website-designers/labgenie-landing` is **hardcoded** — so there's **no env var to
+set**. Cloud edits commit to `Ani-datadivr/labgenie-landing_page` via Keystatic
+Cloud's own GitHub App; you don't manage any OAuth keys.
 
-One-time GitHub App setup:
+> Optional: `NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT` overrides the hardcoded slug if the
+> Cloud project is ever renamed. Not needed for normal operation.
 
-1. Temporarily force GitHub storage so Keystatic can run its setup flow — either
-   deploy the app, or run `npm start` (production mode) locally, then open `/keystatic`.
-   Keystatic shows a **"Create GitHub App"** button.
-2. Click it. Keystatic generates a GitHub App on your account/org pointed at this repo
-   and hands back four values.
-3. Put them in `.env.local` (and in your host's env for production):
-   ```
-   KEYSTATIC_GITHUB_CLIENT_ID=...
-   KEYSTATIC_GITHUB_CLIENT_SECRET=...
-   KEYSTATIC_SECRET=...                      # any long random string
-   NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG=... # the app's slug
-   ```
-4. Set the GitHub App's callback URL to `https://<your-domain>/api/keystatic/github/oauth/callback`
-   (and `http://localhost:3000/api/keystatic/github/oauth/callback` for local testing).
+One-time Keystatic Cloud setup (dashboard only):
 
-Once those env vars exist, `/keystatic` requires GitHub login. Editors need write
-access to the repo.
+1. At https://keystatic.cloud, the **team + project `website-designers/labgenie-landing`**
+   exist and the project is **connected to this GitHub repo** (Keystatic installs its
+   GitHub App on the repo for you).
+2. In the Cloud project settings, **add your deployed domain(s)** to the allowed list
+   (`*.vercel.app` + any custom domain). `localhost:3000` is allowed for local testing.
+3. **Invite editors by email** from the Cloud dashboard — no GitHub account needed.
 
-## Draft → Preview → Publish (the `staging` branch)
+On the deployed site `/keystatic` then requires a Keystatic Cloud sign-in; on a dev
+laptop (`npm run dev`) it stays in zero-setup local-file mode.
 
-So editors never change the live site by accident, they work on a draft branch and
-preview it before publishing:
+## How saving works (direct, no draft branch)
 
-1. **Create the draft branch once:** `git branch staging main && git push -u origin staging`.
-   Vercel auto-builds it to a stable preview URL (`…-git-staging-….vercel.app`).
-2. **Point the Preview button at it:** set `NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL` (in
-   Vercel env, copy the real `*-git-staging-*` host from Vercel → Deployments). The
-   config wires this into `storage.previewUrl`, so Keystatic shows a **Preview** link
-   on every editing screen.
-3. **Editor flow:** in the Keystatic top bar, switch the branch to **`staging`** → edit
-   → **Save** (commits to `staging`, live site untouched) → **Preview** (opens the
-   staging deploy with the changes) → **Create pull request** and merge `staging → main`
-   to publish. Merging to `main` triggers the production deploy.
+This deployment is a **review sandbox**, so the flow is deliberately simple:
 
-> Optional one-click publish: a small authenticated route could merge `staging → main`
-> via the GitHub API so editors never touch a PR. Not built yet — see the plan notes.
+- An editor **Saves** → Keystatic Cloud commits straight to `main` → Vercel rebuilds in
+  ~1 min → the change is visible on the sandbox URL.
+- The owner reviews on that URL and, when the copy is right, ports the approved
+  `src/content/*.json` into the real (Render) repo. Nothing here auto-publishes to the
+  public site — that copy-over is the review gate. See `MIGRATION.md`.
+
+> No `staging` branch, Preview button, or PRs are used in this setup — they'd add
+> friction with no benefit for a sandbox whose whole job is fast, easy review.
 
 ## Adding more copy to the CMS
 

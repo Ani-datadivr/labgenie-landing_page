@@ -12,33 +12,30 @@ import { config, fields, singleton } from "@keystatic/core";
 // Google snippet).
 //
 // Storage:
-//   • GitHub mode on Vercel (KEYSTATIC_GITHUB_CLIENT_ID present) — the prod
-//     editing path. Editors work on the `staging` branch (draft), Preview the
-//     staging deploy, then publish by merging staging → main. See DEPLOY.md §3.
-//   • Local files in dev — zero-setup editing; the running localhost site is the
-//     live preview. Also keeps `next build` green before the GitHub App exists.
-// The reader (src/lib/cms.js) reads committed files either way, so the rendered
-// site is unaffected by the storage kind.
+//   • Keystatic Cloud on the deployed site (production build) — the editing path
+//     for non-technical editors. They're invited by email at keystatic.cloud (no
+//     GitHub account needed) and Save commits straight to this repo, which
+//     redeploys the Vercel sandbox. No host env vars or secret keys required.
+//   • Local files in `npm run dev` — zero-setup editing; the running localhost
+//     site is the live preview, and a developer never has to log in to edit.
+// The reader (src/lib/cms.js) reads the committed JSON in `src/content/` either
+// way, so the rendered site is unaffected by the storage kind.
 // =============================================================================
 
-const useGitHub =
-  Boolean(process.env.KEYSTATIC_GITHUB_CLIENT_ID) ||
-  process.env.KEYSTATIC_STORAGE === "github";
+// Keystatic Cloud project slug (keystatic.cloud → your project). Hardcoded so the
+// deployed editor "just works" with no Vercel env var; override with
+// NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT if the project is ever renamed.
+const CLOUD_PROJECT =
+  process.env.NEXT_PUBLIC_KEYSTATIC_CLOUD_PROJECT ||
+  "website-designers/labgenie-landing";
 
-// Preview link shown on every editing screen in GitHub mode. Points at the
-// staging-branch Vercel deploy so an editor sees the full site with their
-// pending changes before publishing. Override the host with
-// NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL once the real Vercel URL is known.
-const previewUrl =
-  process.env.NEXT_PUBLIC_KEYSTATIC_PREVIEW_URL ||
-  "https://labgenie-landing-page-git-{branch}-ani-datadivr.vercel.app/{slug}";
+// Cloud on a production build (Vercel, or `npm run build && npm start`); local
+// files in `npm run dev`. NODE_ENV is inlined by Next on both client and server,
+// so the admin UI and the reader agree on the storage kind.
+const useCloud = process.env.NODE_ENV === "production";
 
-const storage = useGitHub
-  ? ({
-      kind: "github",
-      repo: { owner: "Ani-datadivr", name: "labgenie-landing_page" },
-      previewUrl,
-    } as const)
+const storage = useCloud
+  ? ({ kind: "cloud" } as const)
   : ({ kind: "local" } as const);
 
 // ---- Reusable field helpers (factories → fresh descriptor each call) --------
@@ -118,6 +115,7 @@ const finalCtaFields = () => ({
 
 export default config({
   storage,
+  ...(useCloud ? { cloud: { project: CLOUD_PROJECT } } : {}),
   ui: {
     brand: { name: "LabGenie CMS" },
     // The sidebar is grouped by page, top-to-bottom, so a first-time editor
