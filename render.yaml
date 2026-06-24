@@ -1,0 +1,43 @@
+# Render Blueprint for the LabGenie site.
+# This is a DYNAMIC Next.js app (server API routes + the /keystatic admin route),
+# so it MUST run as a Node "Web Service" — NOT a "Static Site".
+#
+# To use: in the Render dashboard choose "New +" -> "Blueprint", pick this repo,
+# and Render will create the service from this file. Then add the env vars below
+# (Render -> service -> Environment). See DEPLOY.md for what each one is for.
+services:
+  - type: web
+    name: labgenie-website
+    runtime: node
+    # 512MB (free) can OOM while building the Keystatic admin bundle.
+    # Bump to "standard" (2GB) if the build is killed with exit 137 / "out of memory".
+    # Note: free Web Services also sleep after ~15min idle (~50s cold start).
+    plan: free
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 24.16.0
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      # NODE_ENV is set to "production" by Render automatically.
+      #
+      # --- Optional feature env vars (the site builds & renders fine without them) ---
+      # Set these in the Render dashboard (don't commit secrets). See DEPLOY.md.
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        sync: false
+      - key: SLACK_WEBHOOK_URL
+        sync: false
+      - key: KEYSTATIC_SECRET
+        sync: false
+      - key: KEYSTATIC_GITHUB_CLIENT_ID
+        sync: false
+      - key: KEYSTATIC_GITHUB_CLIENT_SECRET
+        sync: false
+      - key: NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG
+        sync: false
